@@ -1,83 +1,72 @@
-package dev.shorthouse.coinwatch.data.source.remote
+package com.vizenture.forexwatch.data.source.remote
 
-import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.CoinDetailsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.CoinsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.GlobalMarketCoinStatsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.GlobalStatsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.MarketStatsApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinsApiModel
+import com.vizenture.forexwatch.data.source.remote.model.ForexChartApiModel
+import com.vizenture.forexwatch.data.source.remote.model.ForexDetailsApiModel
+import com.vizenture.forexwatch.data.source.remote.model.ForexSearchResultsApiModel
+import com.vizenture.forexwatch.data.source.remote.model.ForexPairsApiModel
+import com.vizenture.forexwatch.data.source.remote.model.FavouriteForexPairsApiModel
+import com.vizenture.forexwatch.data.source.remote.model.MarketStatsApiModel
+import com.vizenture.forexwatch.data.source.remote.model.TrendingForexPairsApiModel
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface CoinApi {
-    @GET("coins")
-    suspend fun getCoins(
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl",
-        @Query("orderBy") orderBy: String = "marketCap",
+interface ForexApi {
+    
+    @GET("forex/pairs")
+    suspend fun getForexPairs(
+        @Header("X-Terminal-Id") terminalId: String,
+        @Query("fields") fields: String = "bid,ask,spread",
+        @Query("orderBy") orderBy: String = "volume",
         @Query("timePeriod") timePeriod: String = "24h",
         @Query("orderDirection") orderDirection: String = "desc",
         @Query("limit") limit: String = "100"
-    ): Response<CoinsApiModel>
+    ): Response<ForexPairsApiModel>
 
-    @GET("coins")
-    suspend fun getFavouriteCoins(
-        @Query("uuids[]") coinIds: List<String>,
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl",
-        @Query("orderBy") orderBy: String = "marketCap",
+    @GET("forex/pairs")
+    suspend fun getFavouriteForexPairs(
+        @Header("X-Terminal-Id") terminalId: String,
+        @Query("symbols[]") symbols: List<String>,
+        @Query("fields") fields: String = "bid,ask,spread",
+        @Query("orderBy") orderBy: String = "volume",
         @Query("timePeriod") timePeriod: String = "24h",
         @Query("orderDirection") orderDirection: String = "desc",
         @Query("limit") limit: String = "100"
-    ): Response<FavouriteCoinsApiModel>
+    ): Response<FavouriteForexPairsApiModel>
 
-    @GET("coin/{coinId}")
-    suspend fun getCoinDetails(
-        @Path("coinId") coinId: String,
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl"
-    ): Response<CoinDetailsApiModel>
+    @GET("forex/pairs/{symbol}")
+    suspend fun getForexPairDetails(
+        @Header("X-Terminal-Id") terminalId: String,
+        @Path("symbol") symbol: String,
+        @Query("fields") fields: String = "bid,ask,spread,open,high,low,close"
+    ): Response<ForexDetailsApiModel>
 
-    @GET("coin/{coinId}/price-history")
-    suspend fun getCoinChart(
-        @Path("coinId") coinId: String,
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl",
-        @Query("timePeriod") chartPeriod: String = "24h"
-    ): Response<CoinChartApiModel>
+    @GET("forex/pairs/{symbol}/history")
+    suspend fun getForexPairChart(
+        @Header("X-Terminal-Id") terminalId: String,
+        @Path("symbol") symbol: String,
+        @Query("timePeriod") chartPeriod: String = "24h",
+        @Query("interval") interval: String = "1h",
+        @Query("fields") fields: String = "open,high,low,close,volume"
+    ): Response<ForexChartApiModel>
 
-    @GET("search-suggestions")
-    suspend fun getCoinSearchResults(
-        @Query("query") searchQuery: String = "",
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl"
-    ): Response<CoinSearchResultsApiModel>
+    @GET("forex/search")
+    suspend fun getForexSearchResults(
+        @Header("X-Terminal-Id") terminalId: String,
+        @Query("query") searchQuery: String = ""
+    ): Response<ForexSearchResultsApiModel>
 
-    @GET("stats/coins")
-    suspend fun getMarketStats(): Response<MarketStatsApiModel>
+    @GET("forex/stats")
+    suspend fun getMarketStats(
+        @Header("X-Terminal-Id") terminalId: String
+    ): Response<MarketStatsApiModel>
 
-    @GET("stats")
-    suspend fun getGlobalStats(
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl"
-    ): Response<GlobalStatsApiModel>
-
-    @GET("stats/coins")
-    suspend fun getGlobalMarketCoinStats(
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl",
+    @GET("forex/pairs/trending")
+    suspend fun getTrendingForexPairs(
+        @Header("X-Terminal-Id") terminalId: String,
         @Query("timePeriod") timePeriod: String = "24h",
-    ): Response<GlobalMarketCoinStatsApiModel>
-
-    @GET("indicators/fear-and-greed")
-    suspend fun getFearGreed(
-        @Query("timePeriod") timePeriod: String = "30d",
-        @Query("interval") interval: String = "day",
-    ): Response<FearGreedApiModel>
-
-    @GET("coins/trending")
-    suspend fun getTrendingCoins(
-        @Query("referenceCurrencyUuid") currencyUUID: String = "yhjMzLPhuIDl",
-        @Query("timePeriod") timePeriod: String = "24h",
-        @Query("tiers[]") tiers: List<Int> = listOf(1, 2),
-    ): Response<TrendingCoinsApiModel>
+        @Query("limit") limit: String = "10"
+    ): Response<TrendingForexPairsApiModel>
 }
