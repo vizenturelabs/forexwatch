@@ -1,10 +1,8 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
-import dev.shorthouse.coinwatch.common.Constants.MISSING_VALUE_PLACEHOLDER
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.common.Constants.MISSING_VALUE_PLACEHOLDER
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
 import java.text.AttributedCharacterIterator
 import java.text.CharacterIterator
 import java.text.DecimalFormat
@@ -13,75 +11,48 @@ import java.util.Locale
 import java.util.Currency as JavaCurrency
 
 internal object PriceFormatter {
-    fun format(amount: BigDecimal, currency: Currency, formatLocale: Locale): String {
-        val abbreviation = findAbbreviationOrNull(amount = amount)
+    
+    fun format(
+        amount: BigDecimal, 
+        currency: Currency, 
+        formatLocale: Locale, 
+        isJpyPair: Boolean = false
+    ): String {
+        val decimalPlaces = if (isJpyPair) 3 else 5
+        
+        val numberFormat = createNumberFormat(
+            formatLocale = formatLocale,
+            decimalPlaces = decimalPlaces
+        )
 
-        return if (abbreviation == null) {
-            val currencyFormat = createCurrencyFormat(
-                currency = currency,
-                formatLocale = formatLocale,
-                decimalPlaces = getAmountDecimalPlaces(amount = amount)
-            )
-
-            currencyFormat.format(amount)
-        } else {
-            val shortenedAmount = amount.divide(abbreviation.divisor, 2, roundingMode)
-
-            val currencyFormat = createCurrencyFormat(
-                currency = currency,
-                formatLocale = formatLocale,
-                decimalPlaces = 2
-            )
-
-            insertAbbreviationSuffix(
-                format = currencyFormat,
-                amount = shortenedAmount,
-                suffix = abbreviation.suffix
-            )
-        }
+        return numberFormat.format(amount)
     }
 
     fun formatMissing(currency: Currency, formatLocale: Locale): String {
-        val currencyFormat = createCurrencyFormat(
-            currency = currency,
+        val numberFormat = createNumberFormat(
             formatLocale = formatLocale,
-            decimalPlaces = 2
+            decimalPlaces = 5
         )
-        return withNumericSpan(currencyFormat, BigDecimal.ZERO) { formatted, start, end ->
+        return withNumericSpan(numberFormat, BigDecimal.ZERO) { formatted, start, end ->
             formatted.substring(0, start) + MISSING_VALUE_PLACEHOLDER + formatted.substring(end)
         } ?: defaultMissingFallback(currency, formatLocale)
     }
 
-    private fun insertAbbreviationSuffix(
-        format: DecimalFormat,
-        amount: BigDecimal,
-        suffix: String,
-    ): String {
-        return withNumericSpan(format, amount) { formatted, _, end ->
-            formatted.substring(0, end) + suffix + formatted.substring(end)
-        } ?: (format.format(amount) + suffix)
-    }
-
-    private fun findAbbreviationOrNull(amount: BigDecimal): PriceAbbreviation? {
-        if (amount < million) {
-            return null
-        }
-        val roundedAmount = amount.round(tierRoundingContext)
-        return abbreviations.firstOrNull { it.contains(roundedAmount) }
-    }
-
-    private fun createCurrencyFormat(
-        currency: Currency,
+    private fun createNumberFormat(
         formatLocale: Locale,
         decimalPlaces: Int,
     ): DecimalFormat {
-        val currencyFormat = NumberFormat.getCurrencyInstance(formatLocale) as DecimalFormat
+        // Forex exchange rates are ratios (e.g., 1.08452) rather than absolute fiat values,
+        // so getNumberInstance is used instead of getCurrencyInstance to avoid currency symbols.
+        val numberFormat = NumberFormat.getNumberInstance(formatLocale) as DecimalFormat
 
-        currencyFormat.minimumFractionDigits = decimalPlaces
-        currencyFormat.maximumFractionDigits = decimalPlaces
-        currencyFormat.currency = toJavaCurrency(currency)
+        numberFormat.minimumFractionDigits = decimalPlaces
+        numberFormat.maximumFractionDigits = decimalPlaces
+        
+        // Disable grouping separators for cleaner Forex price display (e.g., 1.08452 instead of 1.084,52 depending on locale)
+        numberFormat.isGroupingUsed = false
 
-        return currencyFormat
+        return numberFormat
     }
 
     private fun toJavaCurrency(currency: Currency): JavaCurrency {
@@ -121,46 +92,9 @@ internal object PriceFormatter {
         return toJavaCurrency(currency).getSymbol(formatLocale) + MISSING_VALUE_PLACEHOLDER
     }
 
-    private data class PriceAbbreviation(
-        val divisor: BigDecimal,
-        val exclusiveUpperBound: BigDecimal,
-        val suffix: String,
-    ) {
-        fun contains(amount: BigDecimal): Boolean {
-            return amount in divisor..<exclusiveUpperBound
-        }
-    }
-
-    private fun getAmountDecimalPlaces(amount: BigDecimal): Int =
-        if (amount in smallPriceLowerBound..smallPriceUpperBound) 6 else 2
-
-    private val million = BigDecimal("1000000")
-    private val billion = BigDecimal("1000000000")
-    private val trillion = BigDecimal("1000000000000")
-    private val quadrillion = BigDecimal("1000000000000000")
-    private val quintillion = BigDecimal("1000000000000000000")
-
-    private val smallPriceLowerBound = BigDecimal("-1.00")
-    private val smallPriceUpperBound = BigDecimal("1.00")
-
-    private val abbreviations = listOf(
-        PriceAbbreviation(divisor = million, exclusiveUpperBound = billion, suffix = "M"),
-        PriceAbbreviation(divisor = billion, exclusiveUpperBound = trillion, suffix = "B"),
-        PriceAbbreviation(divisor = trillion, exclusiveUpperBound = quadrillion, suffix = "T"),
-        PriceAbbreviation(divisor = quadrillion, exclusiveUpperBound = quintillion, suffix = "Q")
-    )
-
     private val numericFields = setOf<AttributedCharacterIterator.Attribute>(
         NumberFormat.Field.INTEGER,
         NumberFormat.Field.FRACTION,
         NumberFormat.Field.DECIMAL_SEPARATOR,
-        NumberFormat.Field.GROUPING_SEPARATOR,
     )
-
-    private val roundingMode = RoundingMode.HALF_EVEN
-
-    // Precision used to decide which abbreviation tier a value falls into.
-    // 5 significant figures means values like 999,995,000 round up into the
-    // next tier (e.g. into "$1.00B" rather than staying in "$999.99M").
-    private val tierRoundingContext = MathContext(5, roundingMode)
 }
