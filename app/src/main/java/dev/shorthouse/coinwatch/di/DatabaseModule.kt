@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.di
+package com.vizenture.forexwatch.di
 
 import android.content.Context
 import androidx.room.Room
@@ -7,8 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.coinwatch.common.Constants
-import dev.shorthouse.coinwatch.data.source.local.database.CoinDatabase
+import com.vizenture.forexwatch.common.Constants
+import com.vizenture.forexwatch.data.source.local.database.ForexDatabase
 import javax.inject.Singleton
 
 @Module
@@ -17,11 +17,11 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideCoinDatabase(@ApplicationContext context: Context): CoinDatabase {
+    fun provideForexDatabase(@ApplicationContext context: Context): ForexDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            CoinDatabase::class.java,
-            Constants.COIN_DATABASE_NAME
+            ForexDatabase::class.java,
+            Constants.FOREX_DATABASE_NAME
         )
             .fallbackToDestructiveMigration()
             .build()
