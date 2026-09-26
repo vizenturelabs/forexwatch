@@ -10,13 +10,13 @@ plugins {
 }
 
 android {
-    namespace = "dev.shorthouse.coinwatch"
+    namespace = "com.vizenture.forexwatch"
     compileSdk = 37
 
     experimentalProperties["android.experimental.enableScreenshotTest"] = true
 
     defaultConfig {
-        applicationId = "dev.shorthouse.coinwatch"
+        applicationId = "com.vizenture.forexwatch"
         minSdk = 26
         targetSdk = 37
         versionCode = 28
@@ -25,7 +25,7 @@ android {
             debugSymbolLevel = "FULL"
         }
 
-        testInstrumentationRunner = "dev.shorthouse.coinwatch.HiltTestRunner"
+        testInstrumentationRunner = "com.vizenture.forexwatch.HiltTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
