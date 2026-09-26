@@ -1,7 +1,9 @@
-package dev.shorthouse.coinwatch.ui.screen.details
+package com.vizenture.forexwatch.ui.screen.details
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,41 +26,31 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import coil3.svg.SvgDecoder
-import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.model.CoinChart
-import dev.shorthouse.coinwatch.model.CoinDetails
-import dev.shorthouse.coinwatch.ui.component.ErrorState
-import dev.shorthouse.coinwatch.ui.component.LoadingIndicator
-import dev.shorthouse.coinwatch.ui.insets.AppWindowInsets
-import dev.shorthouse.coinwatch.ui.model.ChartPeriod
-import dev.shorthouse.coinwatch.ui.preview.DetailsScreenPreviewState
-import dev.shorthouse.coinwatch.ui.preview.DetailsScreenPreviewStateProvider
-import dev.shorthouse.coinwatch.ui.screen.details.component.AboutCard
-import dev.shorthouse.coinwatch.ui.screen.details.component.CoinChartCard
-import dev.shorthouse.coinwatch.ui.screen.details.component.DetailsSection
-import dev.shorthouse.coinwatch.ui.screen.details.component.EmptyTopBar
-import dev.shorthouse.coinwatch.ui.screen.details.component.LinksCard
-import dev.shorthouse.coinwatch.ui.screen.details.component.MarketStatsCard
-import dev.shorthouse.coinwatch.ui.screen.details.component.SupplyCard
+import com.vizenture.forexwatch.R
+import com.vizenture.forexwatch.model.ForexPairChart
+import com.vizenture.forexwatch.model.ForexPairDetails
+import com.vizenture.forexwatch.ui.component.ErrorState
+import com.vizenture.forexwatch.ui.component.LoadingIndicator
+import com.vizenture.forexwatch.ui.insets.AppWindowInsets
+import com.vizenture.forexwatch.ui.model.ChartPeriod
+import com.vizenture.forexwatch.ui.preview.DetailsScreenPreviewState
+import com.vizenture.forexwatch.ui.preview.DetailsScreenPreviewStateProvider
+import com.vizenture.forexwatch.ui.screen.details.component.EmptyTopBar
+import com.vizenture.forexwatch.ui.screen.details.component.ForexMarketStatsCard
+import com.vizenture.forexwatch.ui.screen.details.component.ForexPairChartCard
 import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
+import com.vizenture.forexwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun DetailsScreen(
@@ -70,7 +62,7 @@ fun DetailsScreen(
     DetailsScreen(
         uiState = uiState,
         onNavigateUp = onNavigateUp,
-        onClickFavouriteCoin = { viewModel.toggleIsCoinFavourite() },
+        onClickFavouritePair = { viewModel.toggleIsPairFavourite() },
         onClickChartPeriod = { chartPeriod ->
             viewModel.updateChartPeriod(chartPeriod)
         }
@@ -82,7 +74,7 @@ fun DetailsScreen(
 fun DetailsScreen(
     uiState: DetailsUiState,
     onNavigateUp: () -> Unit,
-    onClickFavouriteCoin: () -> Unit,
+    onClickFavouritePair: () -> Unit,
     onClickChartPeriod: (ChartPeriod) -> Unit,
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(),
@@ -94,10 +86,10 @@ fun DetailsScreen(
             when (uiState) {
                 is DetailsUiState.Success -> {
                     DetailsTopBar(
-                        coinDetails = uiState.coinDetails,
-                        isCoinFavourite = uiState.isCoinFavourite,
+                        pairDetails = uiState.pairDetails,
+                        isPairFavourite = uiState.isPairFavourite,
                         onNavigateUp = onNavigateUp,
-                        onClickFavouriteCoin = onClickFavouriteCoin,
+                        onClickFavouritePair = onClickFavouritePair,
                         scrollBehavior = scrollBehavior
                     )
                 }
@@ -116,8 +108,8 @@ fun DetailsScreen(
         when (uiState) {
             is DetailsUiState.Success -> {
                 DetailsContent(
-                    coinDetails = uiState.coinDetails,
-                    coinChart = uiState.coinChart,
+                    pairDetails = uiState.pairDetails,
+                    pairChart = uiState.pairChart,
                     chartPeriod = uiState.chartPeriod,
                     onClickChartPeriod = onClickChartPeriod,
                     scrollState = scrollState,
@@ -142,20 +134,13 @@ fun DetailsScreen(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun DetailsTopBar(
-    coinDetails: CoinDetails,
-    isCoinFavourite: Boolean,
+    pairDetails: ForexPairDetails,
+    isPairFavourite: Boolean,
     onNavigateUp: () -> Unit,
-    onClickFavouriteCoin: () -> Unit,
+    onClickFavouritePair: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-
-    val imageBuilder = remember(context) {
-        ImageRequest.Builder(context = context)
-            .decoderFactory(factory = SvgDecoder.Factory())
-    }
-
     LargeTopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavigateUp) {
@@ -169,36 +154,41 @@ fun DetailsTopBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = coinDetails.name,
+                        text = pairDetails.symbol,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleLarge
                     )
 
                     Text(
-                        text = coinDetails.symbol,
-                        style = MaterialTheme.typography.titleSmall,
+                        text = pairDetails.name,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
 
-                AsyncImage(
-                    model = imageBuilder
-                        .data(coinDetails.imageUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
+                Box(
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                         .size(44.dp)
-                )
+                        .background(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.shapes.medium),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = pairDetails.symbol.take(3),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         },
         actions = {
-            IconButton(onClick = onClickFavouriteCoin) {
+            IconButton(onClick = onClickFavouritePair) {
                 Icon(
-                    imageVector = if (isCoinFavourite) {
+                    imageVector = if (isPairFavourite) {
                         Icons.Rounded.Favorite
                     } else {
                         Icons.Rounded.FavoriteBorder
@@ -219,15 +209,13 @@ fun DetailsTopBar(
 
 @Composable
 fun DetailsContent(
-    coinDetails: CoinDetails,
-    coinChart: CoinChart,
+    pairDetails: ForexPairDetails,
+    pairChart: ForexPairChart,
     chartPeriod: ChartPeriod,
     onClickChartPeriod: (ChartPeriod) -> Unit,
     scrollState: ScrollState,
     modifier: Modifier = Modifier,
 ) {
-    val uriHandler = LocalUriHandler.current
-
     Column(
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = modifier
@@ -235,41 +223,14 @@ fun DetailsContent(
             .verticalScroll(scrollState)
             .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
     ) {
-        CoinChartCard(
-            currentPrice = coinDetails.currentPrice,
-            coinChart = coinChart,
+        ForexPairChartCard(
+            currentPrice = pairDetails.currentPrice,
+            pairChart = pairChart,
             chartPeriod = chartPeriod,
             onClickChartPeriod = onClickChartPeriod
         )
 
-        DetailsSection(title = stringResource(R.string.card_header_about)) {
-            AboutCard(
-                description = coinDetails.description,
-                tags = coinDetails.tags,
-                listedDate = coinDetails.listedDate
-            )
-        }
-
-        DetailsSection(title = stringResource(R.string.card_header_market_stats)) {
-            MarketStatsCard(coinDetails = coinDetails)
-        }
-
-        DetailsSection(title = stringResource(R.string.card_header_supply)) {
-            SupplyCard(
-                circulatingSupply = coinDetails.circulatingSupply,
-                totalSupply = coinDetails.totalSupply,
-                maxSupply = coinDetails.maxSupply
-            )
-        }
-
-        if (coinDetails.links.isNotEmpty()) {
-            DetailsSection(title = stringResource(R.string.card_header_links)) {
-                LinksCard(
-                    links = coinDetails.links,
-                    onClickLink = { url -> uriHandler.openUri(url) }
-                )
-            }
-        }
+        ForexMarketStatsCard(pairDetails = pairDetails)
     }
 }
 
@@ -283,9 +244,8 @@ private fun DetailsScreenPreview(
     DetailsScreen(
         uiState = previewState.uiState,
         onNavigateUp = {},
-        onClickFavouriteCoin = {},
+        onClickFavouritePair = {},
         onClickChartPeriod = {},
         scrollState = rememberScrollState(initial = previewState.scrollPosition)
     )
-
 }
