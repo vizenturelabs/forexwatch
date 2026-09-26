@@ -1,11 +1,15 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
-import dev.shorthouse.coinwatch.common.toSanitisedBigDecimalOrNull
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.common.toSanitisedBigDecimalOrNull
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import java.math.BigDecimal
 import java.util.Locale
 
-data class Price(val price: String?, val currency: Currency = Currency.USD) : Comparable<Price> {
+data class Price(
+    val price: String?, 
+    val currency: Currency = Currency.USD,
+    val isJpyPair: Boolean = false
+) : Comparable<Price> {
 
     val amount: BigDecimal
         get() = price.toSanitisedBigDecimalOrNull() ?: BigDecimal.ZERO
@@ -23,7 +27,8 @@ data class Price(val price: String?, val currency: Currency = Currency.USD) : Co
             PriceFormatter.format(
                 amount = amountToFormat,
                 currency = currency,
-                formatLocale = formatLocale
+                formatLocale = formatLocale,
+                isJpyPair = isJpyPair
             )
         }
     }
