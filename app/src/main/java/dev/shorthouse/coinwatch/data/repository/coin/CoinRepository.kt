@@ -1,17 +1,22 @@
-package dev.shorthouse.coinwatch.data.repository.coin
+package com.vizenture.forexwatch.data.repository.pair
 
-import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
+import com.vizenture.forexwatch.common.Result
+import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
 import kotlinx.coroutines.flow.Flow
 
-interface CoinRepository {
-    suspend fun getRemoteCoins(
-        coinSort: CoinSort,
+interface ForexPairRepository {
+    suspend fun getRemoteForexPairs(
+        terminalId: Int,
+        pairSort: PairSort,
         currency: Currency,
-    ): Result<List<Coin>>
+    ): Result<List<CurrencyPair>>
 
-    fun getCachedCoins(): Flow<Result<List<Coin>>>
-    suspend fun updateCachedCoins(coins: List<Coin>)
+    fun getCachedForexPairs(terminalId: Int): Flow<Result<List<CurrencyPair>>>
+    
+    suspend fun updateCachedForexPairs(
+        terminalId: Int, 
+        pairs: List<CurrencyPair>
+    )
 }
