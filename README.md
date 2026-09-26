@@ -1,8 +1,8 @@
-<p align="center">
+<!-- <p align="center">
    <img src="https://github.com/user-attachments/assets/3cc55b66-c2e5-43b1-a56e-60574e8c79bc"/>
-</p>
+</p> -->
 
-# CoinWatch
+# ForexWatch
 [![Android Weekly](https://img.shields.io/badge/News-Android%20Weekly%20%23636-040273?logo=android&logoColor=%233DDC84)](https://androidweekly.net/issues/issue-636)
 [![Android CI Workflow](https://github.com/shorthouse/CoinWatch/actions/workflows/android.yml/badge.svg)](https://github.com/shorthouse/CoinWatch/actions)
 [![Release](https://img.shields.io/badge/Release-1.2.9-1397CB)](https://github.com/shorthouse/CoinWatch/releases)
@@ -16,9 +16,9 @@
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
 
 # 📱 Download
-<a href='https://play.google.com/store/apps/details?id=dev.shorthouse.coinwatch&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+<!-- <a href='https://play.google.com/store/apps/details?id=dev.shorthouse.coinwatch&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
     <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height='80'/>
-</a>
+</a> -->
 
 # 🛠 Built With 
 - Kotlin
@@ -54,7 +54,7 @@ A high-level overview of the app's architecture is displayed below. The architec
 - Create a personalized list of favourite cryptocurrencies 
 
 # 🧬 Testing 
-CoinWatch features an extensive test suite, using the following:
+ForexWatch features an extensive test suite, using the following:
  - JUnit for local tests
  - Jetpack Compose testing APIs for instrumented tests
  - Truth for assertions
@@ -63,16 +63,16 @@ CoinWatch features an extensive test suite, using the following:
 # 🤝 Contributing 
 Contributions to the project are welcome and highly encouraged! To get started, please check out the [contributing guidelines](https://github.com/shorthouse/CoinWatch/blob/main/CONTRIBUTING.md).
 
-# 📥 Contact 
+<!-- # 📥 Contact 
 Do you have ideas to improve the app or a query for the developer?
 
-Please get in touch via email - shorthousedev@gmail.com
+Please get in touch via email - shorthousedev@gmail.com -->
 
-# ❤️ Acknowledgements 
+<!-- # ❤️ Acknowledgements 
  - Coin data provided by [CoinRanking API](https://developers.coinranking.com/api)
- - Empty state images provided by [unDraw](https://undraw.co/illustrations)
+ - Empty state images provided by [unDraw](https://undraw.co/illustrations) -->
 
-# 🔖 License 
+<!-- # 🔖 License 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -85,4 +85,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-```
+``` -->
