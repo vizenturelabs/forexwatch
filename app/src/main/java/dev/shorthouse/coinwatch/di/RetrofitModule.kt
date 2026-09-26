@@ -1,12 +1,13 @@
-package dev.shorthouse.coinwatch.di
+package com.vizenture.forexwatch.di
 
+import com.vizenture.forexwatch.BuildConfig
+import com.vizenture.forexwatch.common.Constants
+import com.vizenture.forexwatch.data.source.remote.ForexApi
+import com.vizenture.forexwatch.domain.manager.TerminalManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.coinwatch.BuildConfig
-import dev.shorthouse.coinwatch.common.Constants
-import dev.shorthouse.coinwatch.data.source.remote.CoinApi
 import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -20,8 +21,8 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideCoinApi(retrofit: Retrofit): CoinApi {
-        return retrofit.create(CoinApi::class.java)
+    fun provideForexApi(retrofit: Retrofit): ForexApi {
+        return retrofit.create(ForexApi::class.java)
     }
 
     @Provides
@@ -36,7 +37,16 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(terminalManager: TerminalManager): OkHttpClient {
+        val terminalInterceptor = Interceptor { chain ->
+            val newRequest = chain.request()
+                .newBuilder()
+                .header("X-Terminal-Id", terminalManager.getActiveTerminalId())
+                .build()
+
+            chain.proceed(newRequest)
+        }
+
         val apiKeyInterceptor = Interceptor { chain ->
             val newRequest = chain.request()
                 .newBuilder()
@@ -55,6 +65,7 @@ object RetrofitModule {
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(terminalInterceptor)
             .addInterceptor(apiKeyInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
