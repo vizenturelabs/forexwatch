@@ -1,44 +1,38 @@
-package dev.shorthouse.coinwatch.di
+package com.vizenture.forexwatch.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.coinwatch.common.TimeProvider
-import dev.shorthouse.coinwatch.data.mapper.CoinChartMapper
-import dev.shorthouse.coinwatch.data.mapper.CoinDetailsMapper
-import dev.shorthouse.coinwatch.data.mapper.CoinMapper
-import dev.shorthouse.coinwatch.data.mapper.CoinSearchResultsMapper
-import dev.shorthouse.coinwatch.data.mapper.FearGreedMapper
-import dev.shorthouse.coinwatch.data.mapper.FavouriteCoinMapper
-import dev.shorthouse.coinwatch.data.mapper.GlobalMarketMapper
-import dev.shorthouse.coinwatch.data.mapper.MarketStatsMapper
-import dev.shorthouse.coinwatch.data.mapper.TrendingCoinMapper
-import dev.shorthouse.coinwatch.data.repository.chart.CoinChartRepository
-import dev.shorthouse.coinwatch.data.repository.chart.CoinChartRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.coin.CoinRepository
-import dev.shorthouse.coinwatch.data.repository.coin.CoinRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.details.CoinDetailsRepository
-import dev.shorthouse.coinwatch.data.repository.details.CoinDetailsRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.fearGreed.FearGreedRepository
-import dev.shorthouse.coinwatch.data.repository.fearGreed.FearGreedRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.favouriteCoin.FavouriteCoinRepository
-import dev.shorthouse.coinwatch.data.repository.favouriteCoin.FavouriteCoinRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.favouriteCoinId.FavouriteCoinIdRepository
-import dev.shorthouse.coinwatch.data.repository.favouriteCoinId.FavouriteCoinIdRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.globalMarket.GlobalMarketRepository
-import dev.shorthouse.coinwatch.data.repository.globalMarket.GlobalMarketRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.marketStats.MarketStatsRepository
-import dev.shorthouse.coinwatch.data.repository.marketStats.MarketStatsRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.reviewPrompt.ReviewPromptRepository
-import dev.shorthouse.coinwatch.data.repository.reviewPrompt.ReviewPromptRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.searchResults.CoinSearchResultsRepository
-import dev.shorthouse.coinwatch.data.repository.searchResults.CoinSearchResultsRepositoryImpl
-import dev.shorthouse.coinwatch.data.repository.trendingCoins.TrendingCoinsRepository
-import dev.shorthouse.coinwatch.data.repository.trendingCoins.TrendingCoinsRepositoryImpl
-import dev.shorthouse.coinwatch.data.source.local.database.CoinLocalDataSource
-import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
+import com.vizenture.forexwatch.common.TimeProvider
+import com.vizenture.forexwatch.data.mapper.ForexPairChartMapper
+import com.vizenture.forexwatch.data.mapper.ForexPairDetailsMapper
+import com.vizenture.forexwatch.data.mapper.ForexPairMapper
+import com.vizenture.forexwatch.data.mapper.ForexSearchResultsMapper
+import com.vizenture.forexwatch.data.mapper.FavouriteForexPairMapper
+import com.vizenture.forexwatch.data.mapper.MarketStatsMapper
+import com.vizenture.forexwatch.data.mapper.TrendingForexPairMapper
+import com.vizenture.forexwatch.data.repository.chart.ForexPairChartRepository
+import com.vizenture.forexwatch.data.repository.chart.ForexPairChartRepositoryImpl
+import com.vizenture.forexwatch.data.repository.pair.ForexPairRepository
+import com.vizenture.forexwatch.data.repository.pair.ForexPairRepositoryImpl
+import com.vizenture.forexwatch.data.repository.details.ForexPairDetailsRepository
+import com.vizenture.forexwatch.data.repository.details.ForexPairDetailsRepositoryImpl
+import com.vizenture.forexwatch.data.repository.favouritePair.FavouriteForexPairRepository
+import com.vizenture.forexwatch.data.repository.favouritePair.FavouriteForexPairRepositoryImpl
+import com.vizenture.forexwatch.data.repository.favouriteSymbol.FavouriteForexSymbolRepository
+import com.vizenture.forexwatch.data.repository.favouriteSymbol.FavouriteForexSymbolRepositoryImpl
+import com.vizenture.forexwatch.data.repository.marketStats.MarketStatsRepository
+import com.vizenture.forexwatch.data.repository.marketStats.MarketStatsRepositoryImpl
+import com.vizenture.forexwatch.data.repository.reviewPrompt.ReviewPromptRepository
+import com.vizenture.forexwatch.data.repository.reviewPrompt.ReviewPromptRepositoryImpl
+import com.vizenture.forexwatch.data.repository.searchResults.ForexSearchResultsRepository
+import com.vizenture.forexwatch.data.repository.searchResults.ForexSearchResultsRepositoryImpl
+import com.vizenture.forexwatch.data.repository.trendingPairs.TrendingForexPairsRepository
+import com.vizenture.forexwatch.data.repository.trendingPairs.TrendingForexPairsRepositoryImpl
+import com.vizenture.forexwatch.data.source.local.database.ForexLocalDataSource
+import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
+import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSource
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 
@@ -48,73 +42,73 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCoinRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        coinLocalDataSource: CoinLocalDataSource,
-        coinMapper: CoinMapper,
+    fun provideForexPairRepository(
+        forexNetworkDataSource: ForexNetworkDataSource,
+        forexLocalDataSource: ForexLocalDataSource,
+        forexPairMapper: ForexPairMapper,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): CoinRepository {
-        return CoinRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            coinLocalDataSource = coinLocalDataSource,
-            coinMapper = coinMapper,
+    ): ForexPairRepository {
+        return ForexPairRepositoryImpl(
+            forexNetworkDataSource = forexNetworkDataSource,
+            forexLocalDataSource = forexLocalDataSource,
+            forexPairMapper = forexPairMapper,
             ioDispatcher = ioDispatcher
         )
     }
 
     @Provides
     @Singleton
-    fun provideFavouriteCoinRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        coinLocalDataSource: CoinLocalDataSource,
-        favouriteCoinMapper: FavouriteCoinMapper,
+    fun provideFavouriteForexPairRepository(
+        forexNetworkDataSource: ForexNetworkDataSource,
+        forexLocalDataSource: ForexLocalDataSource,
+        favouriteForexPairMapper: FavouriteForexPairMapper,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): FavouriteCoinRepository {
-        return FavouriteCoinRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            coinLocalDataSource = coinLocalDataSource,
-            favouriteCoinMapper = favouriteCoinMapper,
+    ): FavouriteForexPairRepository {
+        return FavouriteForexPairRepositoryImpl(
+            forexNetworkDataSource = forexNetworkDataSource,
+            forexLocalDataSource = forexLocalDataSource,
+            favouriteForexPairMapper = favouriteForexPairMapper,
             ioDispatcher = ioDispatcher
         )
     }
 
     @Provides
     @Singleton
-    fun provideFavouriteCoinIdRepository(
-        coinLocalDataSource: CoinLocalDataSource,
+    fun provideFavouriteForexSymbolRepository(
+        forexLocalDataSource: ForexLocalDataSource,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): FavouriteCoinIdRepository {
-        return FavouriteCoinIdRepositoryImpl(
-            coinLocalDataSource = coinLocalDataSource,
+    ): FavouriteForexSymbolRepository {
+        return FavouriteForexSymbolRepositoryImpl(
+            forexLocalDataSource = forexLocalDataSource,
             ioDispatcher = ioDispatcher
         )
     }
 
     @Provides
     @Singleton
-    fun provideCoinDetailsRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        coinDetailsMapper: CoinDetailsMapper,
+    fun provideForexPairDetailsRepository(
+        forexNetworkDataSource: ForexNetworkDataSource,
+        forexPairDetailsMapper: ForexPairDetailsMapper,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): CoinDetailsRepository {
-        return CoinDetailsRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            coinDetailsMapper = coinDetailsMapper,
+    ): ForexPairDetailsRepository {
+        return ForexPairDetailsRepositoryImpl(
+            forexNetworkDataSource = forexNetworkDataSource,
+            forexPairDetailsMapper = forexPairDetailsMapper,
             ioDispatcher = ioDispatcher
         )
     }
 
     @Provides
     @Singleton
-    fun provideCoinChartRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        coinChartMapper: CoinChartMapper,
+    fun provideForexPairChartRepository(
+        forexNetworkDataSource: ForexNetworkDataSource,
+        forexPairChartMapper: ForexPairChartMapper,
         timeProvider: TimeProvider,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): CoinChartRepository {
-        return CoinChartRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            coinChartMapper = coinChartMapper,
+    ): ForexPairChartRepository {
+        return ForexPairChartRepositoryImpl(
+            forexNetworkDataSource = forexNetworkDataSource,
+            forexPairChartMapper = forexPairChartMapper,
             timeProvider = timeProvider,
             ioDispatcher = ioDispatcher
         )
@@ -122,14 +116,14 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCoinSearchResultsRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        coinSearchResultsMapper: CoinSearchResultsMapper,
+    fun provideForexSearchResultsRepository(
+        forexNetworkDataSource: ForexNetworkDataSource,
+        forexSearchResultsMapper: ForexSearchResultsMapper,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): CoinSearchResultsRepository {
-        return CoinSearchResultsRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            coinSearchResultsMapper = coinSearchResultsMapper,
+    ): ForexSearchResultsRepository {
+        return ForexSearchResultsRepositoryImpl(
+            forexNetworkDataSource = forexNetworkDataSource,
+            forexSearchResultsMapper = forexSearchResultsMapper,
             ioDispatcher = ioDispatcher
         )
     }
@@ -137,48 +131,24 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesMarketStatsRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
+        forexNetworkDataSource: ForexNetworkDataSource,
         marketStatsMapper: MarketStatsMapper,
     ): MarketStatsRepository {
         return MarketStatsRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
+            forexNetworkDataSource = forexNetworkDataSource,
             marketStatsMapper = marketStatsMapper
         )
     }
 
     @Provides
     @Singleton
-    fun provideFearGreedRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        fearGreedMapper: FearGreedMapper,
-    ): FearGreedRepository {
-        return FearGreedRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            fearGreedMapper = fearGreedMapper
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideGlobalMarketRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        globalMarketMapper: GlobalMarketMapper,
-    ): GlobalMarketRepository {
-        return GlobalMarketRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            globalMarketMapper = globalMarketMapper
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideTrendingCoinsRepository(
-        coinNetworkDataSource: CoinNetworkDataSource,
-        trendingCoinMapper: TrendingCoinMapper,
-    ): TrendingCoinsRepository {
-        return TrendingCoinsRepositoryImpl(
-            coinNetworkDataSource = coinNetworkDataSource,
-            trendingCoinMapper = trendingCoinMapper
+    fun provideTrendingForexPairsRepository(
+        forexNetworkDataSource: ForexNetworkDataSource,
+        trendingForexPairMapper: TrendingForexPairMapper,
+    ): TrendingForexPairsRepository {
+        return TrendingForexPairsRepositoryImpl(
+            forexNetworkDataSource = forexNetworkDataSource,
+            trendingForexPairMapper = trendingForexPairMapper
         )
     }
 
