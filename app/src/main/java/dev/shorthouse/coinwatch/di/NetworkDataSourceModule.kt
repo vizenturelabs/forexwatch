@@ -1,12 +1,12 @@
-package dev.shorthouse.coinwatch.di
+package com.vizenture.forexwatch.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.coinwatch.data.source.remote.CoinApi
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSourceImpl
+import com.vizenture.forexwatch.data.source.remote.ForexApi
+import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSource
+import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSourceImpl
 import javax.inject.Singleton
 
 @Module
@@ -15,7 +15,7 @@ object NetworkDataSourceModule {
 
     @Provides
     @Singleton
-    fun provideCoinNetworkDataSource(coinApi: CoinApi): CoinNetworkDataSource {
-        return CoinNetworkDataSourceImpl(coinApi = coinApi)
+    fun provideForexNetworkDataSource(forexApi: ForexApi): ForexNetworkDataSource {
+        return ForexNetworkDataSourceImpl(forexApi = forexApi)
     }
 }
