@@ -1,22 +1,20 @@
-package dev.shorthouse.coinwatch.data.source.remote.model
+package com.vizenture.forexwatch.data.source.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CoinChartApiModel(
-    @SerializedName("data")
-    val coinChartData: CoinChartData?
+data class ForexChartApiModel(
+    @SerializedName("candles") val candles: List<CandleApiModel>
 )
 
-data class CoinChartData(
-    @SerializedName("change")
-    val priceChangePercentage: String?,
-    @SerializedName("history")
-    val pastPrices: List<PastPrice?>?
+data class CandleApiModel(
+    @SerializedName("time") val time: String,
+    @SerializedName("mid") val mid: OhlcApiModel
 )
 
-data class PastPrice(
-    @SerializedName("price")
-    val amount: String?,
-    @SerializedName("timestamp")
-    val timestamp: Long?
+data class OhlcApiModel(
+    @SerializedName("o") val open: String,
+    @SerializedName("h") val high: String,
+    @SerializedName("l") val low: String,
+    @SerializedName("c") val close: String
 )
+
