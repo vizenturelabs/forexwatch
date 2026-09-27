@@ -1,8 +1,11 @@
-package dev.shorthouse.coinwatch.common
+package com.vizenture.forexwatch.common
 
 object Constants {
-    const val BASE_URL = "https://api.coinranking.com/v2/"
-    const val PARAM_COIN_ID = "coinId"
-    const val COIN_DATABASE_NAME = "Coin.db"
+    const val BASE_URL = "https://api.oanda.com/" // Update to your chosen Forex API base URL
+    
+    const val PARAM_PAIR_SYMBOL = "pairSymbol"
+    
+    const val FOREX_DATABASE_NAME = "ForexWatch.db"
+    
     const val MISSING_VALUE_PLACEHOLDER = "—"
 }
