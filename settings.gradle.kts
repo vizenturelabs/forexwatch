@@ -11,8 +11,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
-rootProject.name = "CoinWatch"
+rootProject.name = "ForexWatch"
 include(":app")
