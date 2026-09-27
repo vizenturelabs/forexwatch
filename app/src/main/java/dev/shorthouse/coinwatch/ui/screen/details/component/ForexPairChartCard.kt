@@ -24,12 +24,11 @@ import androidx.compose.ui.unit.dp
 import com.vizenture.forexwatch.R
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.model.ForexPairChart
+import com.vizenture.forexwatch.model.OhlcEntry
 import com.vizenture.forexwatch.model.Percentage
 import com.vizenture.forexwatch.model.Price
-import com.vizenture.forexwatch.model.PriceEntry
-import com.vizenture.forexwatch.model.ScrubData
+import com.vizenture.forexwatch.ui.component.CandlestickChart
 import com.vizenture.forexwatch.ui.component.PercentageChangeChip
-import com.vizenture.forexwatch.ui.component.ScrubPriceGraph
 import com.vizenture.forexwatch.ui.model.ChartPeriod
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.vizenture.forexwatch.ui.preview.AppPreviewWrapper
@@ -44,21 +43,23 @@ fun ForexPairChartCard(
     onClickChartPeriod: (ChartPeriod) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var scrubData by remember { mutableStateOf<ScrubData?>(null) }
-
-    val displayPrice = scrubData?.let { Price(price = it.price.toPlainString(), currency = pairChart.currency) } ?: currentPrice
-    val displayPercentage = scrubData?.changePercentage ?: pairChart.periodPriceChangePercentage
-
     Surface(shape = MaterialTheme.shapes.medium, modifier = modifier) {
         Column(modifier = Modifier.padding(vertical = 12.dp)) {
             Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-                Text(text = displayPrice.formattedAmount, style = MaterialTheme.typography.headlineSmall)
+                Text(text = currentPrice.formattedAmount, style = MaterialTheme.typography.headlineSmall)
                 Spacer(Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    PercentageChangeChip(percentage = displayPercentage, modifier = Modifier.animateContentSize())
+                    PercentageChangeChip(
+                        percentage = pairChart.periodPriceChangePercentage, 
+                        modifier = Modifier.animateContentSize()
+                    )
                     Spacer(Modifier.width(8.dp))
-                    if (pairChart.priceHistory.isNotEmpty() && scrubData == null) {
-                        Text(text = stringResource(chartPeriod.longNameId), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (pairChart.priceHistory.isNotEmpty()) {
+                        Text(
+                            text = stringResource(chartPeriod.longNameId),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }
@@ -66,15 +67,15 @@ fun ForexPairChartCard(
             Spacer(Modifier.height(32.dp))
 
             if (pairChart.priceHistory.isNotEmpty()) {
-                ScrubPriceGraph(
+                CandlestickChart(
                     priceHistory = pairChart.priceHistory,
-                    priceChangePercentage = pairChart.periodPriceChangePercentage,
-                    isGraphAnimated = true,
-                    onScrub = { scrubData = it },
-                    modifier = Modifier.fillMaxWidth().height(200.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .padding(horizontal = 12.dp)
                 )
             } else {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().height(240.dp)) {
                     Text(text = stringResource(R.string.empty_chart_message), color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleSmall)
                 }
             }
@@ -99,7 +100,15 @@ private fun ForexPairChartCardPreview() {
         currentPrice = Price("1.08452"),
         pairChart = ForexPairChart(
             currency = Currency.USD,
-            priceHistory = persistentListOf(PriceEntry(BigDecimal("1.08550"), 1700000000L, "14 Nov 2023")),
+            priceHistory = persistentListOf(
+                OhlcEntry(
+                    open = BigDecimal("1.08500"),
+                    high = BigDecimal("1.08600"),
+                    low = BigDecimal("1.08400"),
+                    close = BigDecimal("1.08550"),
+                    timestamp = 1700000000L
+                )
+            ),
             periodPriceChangePercentage = Percentage("0.15")
         ),
         chartPeriod = chartPeriod,
