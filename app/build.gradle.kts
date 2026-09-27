@@ -147,6 +147,9 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)
 
+    // Charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     // Play In-App Review
     implementation(libs.play.review)
     implementation(libs.play.review.ktx)
