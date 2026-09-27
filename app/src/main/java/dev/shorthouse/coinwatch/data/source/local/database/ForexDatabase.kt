@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.vizenture.forexwatch.data.source.local.database.converters.ImmutableListTypeConverter
+import com.vizenture.forexwatch.data.source.local.database.converters.OhlcEntryListTypeConverter
 import com.vizenture.forexwatch.data.source.local.database.converters.PercentageTypeConverter
 import com.vizenture.forexwatch.data.source.local.database.converters.PriceTypeConverter
 import com.vizenture.forexwatch.data.source.local.database.dao.CurrencyPairDao
@@ -21,7 +22,8 @@ import com.vizenture.forexwatch.data.source.local.database.model.FavouriteSymbol
 @TypeConverters(
     PriceTypeConverter::class,
     PercentageTypeConverter::class,
-    ImmutableListTypeConverter::class
+    ImmutableListTypeConverter::class,
+    OhlcEntryListTypeConverter::class
 )
 abstract class ForexDatabase : RoomDatabase() {
     abstract fun currencyPairDao(): CurrencyPairDao
