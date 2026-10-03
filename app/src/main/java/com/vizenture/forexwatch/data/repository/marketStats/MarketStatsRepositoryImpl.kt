@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.data.repository.marketStats
 
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.MarketStatsMapper
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.model.MarketStats
 import kotlinx.coroutines.CancellationException
 import javax.inject.Inject

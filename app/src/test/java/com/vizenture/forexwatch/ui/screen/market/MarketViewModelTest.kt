@@ -9,11 +9,8 @@ import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
 import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferences
 import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
-import dev.shorthouse.coinwatch.domain.market.GetCoinsUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetMarketPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.market.GetMarketStatsUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.market.UpdateCachedCoinsUseCase
 import dev.shorthouse.coinwatch.domain.preferences.UpdateMarketCoinSortUseCase
 import dev.shorthouse.coinwatch.model.MarketStats
 import dev.shorthouse.coinwatch.model.Percentage

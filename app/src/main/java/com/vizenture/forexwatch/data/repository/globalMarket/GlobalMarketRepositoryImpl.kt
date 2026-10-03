@@ -3,7 +3,6 @@ package dev.shorthouse.coinwatch.data.repository.globalMarket
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.GlobalMarketMapper
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.model.GlobalMarket
 import kotlinx.coroutines.CancellationException
 import timber.log.Timber

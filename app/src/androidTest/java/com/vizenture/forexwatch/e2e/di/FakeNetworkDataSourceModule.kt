@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.di.NetworkDataSourceModule
 import dev.shorthouse.coinwatch.e2e.fake.FakeCoinNetworkDataSource
 import javax.inject.Singleton

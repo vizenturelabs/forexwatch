@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.data.repository.fearGreed
 
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.FearGreedMapper
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.model.FearGreed
 import kotlinx.coroutines.CancellationException
 import timber.log.Timber

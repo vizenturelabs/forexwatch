@@ -7,7 +7,6 @@ import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.repository.favouriteCoin.FavouriteForexPairRepository
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
-import dev.shorthouse.coinwatch.domain.favourites.UpdateCachedFavouriteCoinsUseCase
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
 import io.mockk.MockKAnnotations

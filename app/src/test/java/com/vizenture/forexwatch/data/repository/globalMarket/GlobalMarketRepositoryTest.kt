@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.GlobalMarketMapper
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.GlobalMarketCoinStatsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.GlobalMarketCoinStatsData
 import dev.shorthouse.coinwatch.data.source.remote.model.GlobalMarketCoinStatsDataHolder

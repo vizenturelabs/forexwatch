@@ -6,9 +6,7 @@ import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.CoinMapper
 import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.local.database.CoinLocalDataSource
 import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinsData

@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.e2e.fake
 
 import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartData
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinDetailsApiModel

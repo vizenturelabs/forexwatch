@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.data.repository.searchResults
 
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.CoinSearchResultsMapper
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.di.IoDispatcher
 import dev.shorthouse.coinwatch.model.SearchCoin
 import javax.inject.Inject

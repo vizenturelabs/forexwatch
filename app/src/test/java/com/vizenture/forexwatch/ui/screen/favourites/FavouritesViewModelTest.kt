@@ -10,10 +10,8 @@ import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferenc
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
 import dev.shorthouse.coinwatch.domain.favourites.GetFavouriteCoinIdsUseCase
-import dev.shorthouse.coinwatch.domain.favourites.GetFavouriteCoinsUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetFavouritesPreferencesUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.favourites.UpdateCachedFavouriteCoinsUseCase
 import dev.shorthouse.coinwatch.domain.preferences.UpdateFavouritesCoinSortUseCase
 import dev.shorthouse.coinwatch.domain.preferences.UpdateIsFavouritesCondensedUseCase
 import dev.shorthouse.coinwatch.model.Percentage

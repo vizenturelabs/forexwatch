@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.CoinSearchResultsMapper
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResult
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsData

@@ -4,11 +4,9 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.FavouriteCoinMapper
-import dev.shorthouse.coinwatch.data.source.local.database.CoinLocalDataSource
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
 import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinsData

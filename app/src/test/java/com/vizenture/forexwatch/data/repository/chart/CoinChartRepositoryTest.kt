@@ -6,7 +6,6 @@ import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.common.TimeProvider
 import dev.shorthouse.coinwatch.data.mapper.CoinChartMapper
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartData
 import dev.shorthouse.coinwatch.data.source.remote.model.PastPrice
