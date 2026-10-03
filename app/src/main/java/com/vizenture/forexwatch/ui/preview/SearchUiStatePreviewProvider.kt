@@ -1,7 +1,7 @@
 package dev.shorthouse.coinwatch.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import dev.shorthouse.coinwatch.ui.screen.search.SearchUiState
 import kotlinx.collections.immutable.persistentListOf
 
@@ -15,19 +15,19 @@ class SearchScreenPreviewStateProvider : PreviewParameterProvider<SearchScreenPr
         SearchScreenPreviewState(
             uiState = SearchUiState(
                 searchResults = persistentListOf(
-                    SearchCoin(
+                    SearchResult(
                         id = "bitcoin",
                         symbol = "BTC",
                         name = "Bitcoin",
                         imageUrl = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"
                     ),
-                    SearchCoin(
+                    SearchResult(
                         id = "ethereum",
                         symbol = "ETH",
                         name = "Ethereum",
                         imageUrl = "https://cdn.coinranking.com/rk4RKHOuW/eth.svg"
                     ),
-                    SearchCoin(
+                    SearchResult(
                         id = "tether",
                         symbol = "USDT",
                         name = "Tether",

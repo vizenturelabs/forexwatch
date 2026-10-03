@@ -5,7 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.domain.search.GetCoinSearchResultsUseCase
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -96,13 +96,13 @@ class SearchViewModelTest {
         val searchQuery = "bit"
 
         val searchResults = persistentListOf(
-            SearchCoin(
+            SearchResult(
                 id = "Qwsogvtv82FCd",
                 symbol = "BTC",
                 name = "Bitcoin",
                 imageUrl = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"
             ),
-            SearchCoin(
+            SearchResult(
                 id = "ZlZpzOJo43mIo",
                 symbol = "BCH",
                 name = "Bitcoin Cash",
@@ -117,13 +117,13 @@ class SearchViewModelTest {
         coEvery { getCoinSearchResultsUseCase(searchQuery) } returns
             Result.Success(
                 listOf(
-                    SearchCoin(
+                    SearchResult(
                         id = "Qwsogvtv82FCd",
                         symbol = "BTC",
                         name = "Bitcoin",
                         imageUrl = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"
                     ),
-                    SearchCoin(
+                    SearchResult(
                         id = "ZlZpzOJo43mIo",
                         symbol = "BCH",
                         name = "Bitcoin Cash",
@@ -146,7 +146,7 @@ class SearchViewModelTest {
         // Arrange
         val searchQuery = "abcdefghijk"
 
-        val searchResults = persistentListOf<SearchCoin>()
+        val searchResults = persistentListOf<SearchResult>()
 
         val expectedUiState = SearchUiState(
             searchResults = searchResults,

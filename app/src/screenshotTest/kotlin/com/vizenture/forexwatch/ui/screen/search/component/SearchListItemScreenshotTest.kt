@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.android.tools.screenshot.PreviewTest
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import dev.shorthouse.coinwatch.ui.preview.SearchCoinPreviewProvider
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
 
@@ -13,11 +13,11 @@ import dev.shorthouse.coinwatch.ui.theme.AppTheme
 @Preview
 @Composable
 fun SearchListItemScreenshotTest(
-    @PreviewParameter(SearchCoinPreviewProvider::class) searchCoin: SearchCoin,
+    @PreviewParameter(SearchCoinPreviewProvider::class) searchResult: SearchResult,
 ) {
     AppTheme {
         SearchListItem(
-            searchCoin = searchCoin,
+            searchResult = searchResult,
             onCoinClick = {},
             cardShape = MaterialTheme.shapes.medium
         )

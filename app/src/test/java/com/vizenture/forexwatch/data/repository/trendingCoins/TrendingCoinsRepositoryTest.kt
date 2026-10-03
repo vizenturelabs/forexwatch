@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.data.repository.trendingCoins
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.mapper.TrendingCoinMapper
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinsApiModel

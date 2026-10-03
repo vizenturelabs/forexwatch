@@ -3,11 +3,11 @@ package dev.shorthouse.coinwatch.data.repository.searchResults
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.mapper.CoinSearchResultsMapper
+import dev.shorthouse.coinwatch.data.mapper.ForexSearchResultsMapper
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResult
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsData
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -21,13 +21,13 @@ import org.junit.Rule
 import org.junit.Test
 import retrofit2.Response
 
-class CoinSearchResultsRepositoryTest {
+class ForexSearchResultsRepositoryTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     // Class under test
-    private lateinit var coinSearchResultsRepository: CoinSearchResultsRepository
+    private lateinit var forexSearchResultsRepository: ForexSearchResultsRepository
 
     @MockK
     private lateinit var coinNetworkDataSource: CoinNetworkDataSource
@@ -36,9 +36,9 @@ class CoinSearchResultsRepositoryTest {
     fun setup() {
         MockKAnnotations.init(this)
 
-        coinSearchResultsRepository = CoinSearchResultsRepositoryImpl(
+        forexSearchResultsRepository = ForexSearchResultsRepositoryImpl(
             coinNetworkDataSource = coinNetworkDataSource,
-            coinSearchResultsMapper = CoinSearchResultsMapper(),
+            coinSearchResultsMapper = ForexSearchResultsMapper(),
             ioDispatcher = mainDispatcherRule.testDispatcher
         )
     }
@@ -55,13 +55,13 @@ class CoinSearchResultsRepositoryTest {
 
         val expectedResult = Result.Success(
             listOf(
-                SearchCoin(
+                SearchResult(
                     id = "Qwsogvtv82FCd",
                     symbol = "BTC",
                     name = "Bitcoin",
                     imageUrl = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"
                 ),
-                SearchCoin(
+                SearchResult(
                     id = "ZlZpzOJo43mIo",
                     symbol = "BCH",
                     name = "Bitcoin Cash",
@@ -96,7 +96,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -111,7 +111,7 @@ class CoinSearchResultsRepositoryTest {
 
             val expectedResult = Result.Success(
                 listOf(
-                    SearchCoin(
+                    SearchResult(
                         id = "Qwsogvtv82FCd",
                         symbol = "",
                         name = "",
@@ -139,7 +139,7 @@ class CoinSearchResultsRepositoryTest {
                 )
 
             // Act
-            val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+            val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
             // Assert
             assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -151,7 +151,7 @@ class CoinSearchResultsRepositoryTest {
         // Arrange
         val searchQuery = ""
 
-        val expectedResult = Result.Success<List<SearchCoin>>(
+        val expectedResult = Result.Success<List<SearchResult>>(
             emptyList()
         )
 
@@ -174,7 +174,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -186,7 +186,7 @@ class CoinSearchResultsRepositoryTest {
         // Arrange
         val searchQuery = ""
 
-        val expectedResult = Result.Success<List<SearchCoin>>(
+        val expectedResult = Result.Success<List<SearchResult>>(
             emptyList()
         )
 
@@ -202,7 +202,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -214,7 +214,7 @@ class CoinSearchResultsRepositoryTest {
         // Arrange
         val searchQuery = ""
 
-        val expectedResult = Result.Success<List<SearchCoin>>(
+        val expectedResult = Result.Success<List<SearchResult>>(
             emptyList()
         )
 
@@ -230,7 +230,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -243,7 +243,7 @@ class CoinSearchResultsRepositoryTest {
         val searchQuery = ""
         val errorMessage = "Unable to fetch coin search results"
 
-        val expectedResult = Result.Error<List<SearchCoin>>(
+        val expectedResult = Result.Error<List<SearchResult>>(
             message = errorMessage
         )
 
@@ -257,7 +257,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -270,7 +270,7 @@ class CoinSearchResultsRepositoryTest {
         val searchQuery = ""
         val errorMessage = "Unable to fetch coin search results"
 
-        val expectedResult = Result.Error<List<SearchCoin>>(
+        val expectedResult = Result.Error<List<SearchResult>>(
             message = errorMessage
         )
 
@@ -282,7 +282,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -295,7 +295,7 @@ class CoinSearchResultsRepositoryTest {
         val searchQuery = ""
         val errorMessage = "Unable to fetch coin search results"
 
-        val expectedResult = Result.Error<List<SearchCoin>>(
+        val expectedResult = Result.Error<List<SearchResult>>(
             message = errorMessage
         )
 
@@ -308,7 +308,7 @@ class CoinSearchResultsRepositoryTest {
             )
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -321,7 +321,7 @@ class CoinSearchResultsRepositoryTest {
         val searchQuery = ""
         val errorMessage = "Unable to fetch coin search results"
 
-        val expectedResult = Result.Error<List<SearchCoin>>(
+        val expectedResult = Result.Error<List<SearchResult>>(
             message = errorMessage
         )
 
@@ -330,7 +330,7 @@ class CoinSearchResultsRepositoryTest {
         } throws IllegalArgumentException(errorMessage)
 
         // Act
-        val result = coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+        val result = forexSearchResultsRepository.getCoinSearchResults(searchQuery)
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -349,7 +349,7 @@ class CoinSearchResultsRepositoryTest {
 
         // Act & Assert
         try {
-            coinSearchResultsRepository.getCoinSearchResults(searchQuery)
+            forexSearchResultsRepository.getCoinSearchResults(searchQuery)
             throw AssertionError("Expected CancellationException")
         } catch (e: CancellationException) {
             assertThat(e).isSameInstanceAs(cancellationException)

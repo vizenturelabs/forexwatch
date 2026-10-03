@@ -7,9 +7,7 @@ import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
 import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.pulse.GetFearGreedUseCase
 import dev.shorthouse.coinwatch.domain.pulse.GetGlobalMarketUseCase
-import dev.shorthouse.coinwatch.domain.pulse.GetTrendingCoinsUseCase
 import dev.shorthouse.coinwatch.model.FearGreed
 import dev.shorthouse.coinwatch.model.FearGreedMoodBand
 import dev.shorthouse.coinwatch.model.GlobalMarket

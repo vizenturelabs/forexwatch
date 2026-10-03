@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import dev.shorthouse.coinwatch.ui.component.ErrorState
 import dev.shorthouse.coinwatch.ui.component.LoadingIndicator
 import dev.shorthouse.coinwatch.ui.insets.AppWindowInsets
@@ -70,7 +70,7 @@ fun SearchScreen(
 fun SearchScreen(
     uiState: SearchUiState,
     queryState: TextFieldState,
-    onCoinClick: (SearchCoin) -> Unit,
+    onCoinClick: (SearchResult) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -165,9 +165,9 @@ private fun SearchBar(
 @Composable
 fun SearchContent(
     queryIsEmpty: Boolean,
-    searchResults: ImmutableList<SearchCoin>,
+    searchResults: ImmutableList<SearchResult>,
     queryHasNoResults: Boolean,
-    onCoinClick: (SearchCoin) -> Unit,
+    onCoinClick: (SearchResult) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when {
@@ -208,7 +208,7 @@ fun SearchContent(
                         }
 
                         SearchListItem(
-                            searchCoin = searchCoin,
+                            searchResult = searchCoin,
                             onCoinClick = onCoinClick,
                             cardShape = cardShape
                         )

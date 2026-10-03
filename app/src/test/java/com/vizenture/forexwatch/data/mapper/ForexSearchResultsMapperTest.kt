@@ -4,14 +4,14 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResult
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsData
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class CoinSearchResultsMapperTest {
+class ForexSearchResultsMapperTest {
 
     // Class under test
-    private val coinSearchResultsMapper = CoinSearchResultsMapper()
+    private val forexSearchResultsMapper = ForexSearchResultsMapper()
 
     @Test
     fun `When coinsSearchResultsData null should return empty list`() = runTest {
@@ -21,7 +21,7 @@ class CoinSearchResultsMapperTest {
         )
 
         // Act
-        val coinSearchResults = coinSearchResultsMapper.mapApiModelToModel(apiModel)
+        val coinSearchResults = forexSearchResultsMapper.mapApiModelToModel(apiModel)
 
         // Assert
         assertThat(coinSearchResults).isEmpty()
@@ -37,7 +37,7 @@ class CoinSearchResultsMapperTest {
         )
 
         // Act
-        val coinSearchResults = coinSearchResultsMapper.mapApiModelToModel(apiModel)
+        val coinSearchResults = forexSearchResultsMapper.mapApiModelToModel(apiModel)
 
         // Assert
         assertThat(coinSearchResults).isEmpty()
@@ -64,7 +64,7 @@ class CoinSearchResultsMapperTest {
         )
 
         val expectedCoinSearchResults = listOf(
-            SearchCoin(
+            SearchResult(
                 id = "Qwsogvtv82FCd",
                 symbol = "BTC",
                 name = "Bitcoin",
@@ -74,7 +74,7 @@ class CoinSearchResultsMapperTest {
         )
 
         // Act
-        val coinSearchResults = coinSearchResultsMapper.mapApiModelToModel(apiModel)
+        val coinSearchResults = forexSearchResultsMapper.mapApiModelToModel(apiModel)
 
         // Assert
         assertThat(coinSearchResults).isEqualTo(expectedCoinSearchResults)
@@ -112,7 +112,7 @@ class CoinSearchResultsMapperTest {
         )
 
         val expectedCoinSearchResults = listOf(
-            SearchCoin(
+            SearchResult(
                 id = "Qwsogvtv82FCd",
                 symbol = "BTC",
                 name = "Bitcoin",
@@ -122,7 +122,7 @@ class CoinSearchResultsMapperTest {
         )
 
         // Act
-        val coinSearchResults = coinSearchResultsMapper.mapApiModelToModel(apiModel)
+        val coinSearchResults = forexSearchResultsMapper.mapApiModelToModel(apiModel)
 
         // Assert
         assertThat(coinSearchResults).isEqualTo(expectedCoinSearchResults)
@@ -145,7 +145,7 @@ class CoinSearchResultsMapperTest {
         )
 
         val expectedCoinSearchResults = listOf(
-            SearchCoin(
+            SearchResult(
                 id = "Qwsogvtv82FCd",
                 symbol = "",
                 name = "",
@@ -154,7 +154,7 @@ class CoinSearchResultsMapperTest {
         )
 
         // Act
-        val coinSearchResults = coinSearchResultsMapper.mapApiModelToModel(apiModel)
+        val coinSearchResults = forexSearchResultsMapper.mapApiModelToModel(apiModel)
 
         // Assert
         assertThat(coinSearchResults).isEqualTo(expectedCoinSearchResults)
@@ -177,7 +177,7 @@ class CoinSearchResultsMapperTest {
         )
 
         val expectedCoinSearchResults = listOf(
-            SearchCoin(
+            SearchResult(
                 id = "Qwsogvtv82FCd",
                 symbol = "BTC",
                 name = "Bitcoin",
@@ -186,7 +186,7 @@ class CoinSearchResultsMapperTest {
         )
 
         // Act
-        val coinSearchResults = coinSearchResultsMapper.mapApiModelToModel(apiModel)
+        val coinSearchResults = forexSearchResultsMapper.mapApiModelToModel(apiModel)
 
         // Assert
         assertThat(coinSearchResults).isEqualTo(expectedCoinSearchResults)

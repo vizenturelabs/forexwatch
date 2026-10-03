@@ -25,15 +25,15 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.svg.SvgDecoder
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import dev.shorthouse.coinwatch.ui.preview.SearchCoinPreviewProvider
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun SearchListItem(
-    searchCoin: SearchCoin,
-    onCoinClick: (SearchCoin) -> Unit,
+    searchResult: SearchResult,
+    onCoinClick: (SearchResult) -> Unit,
     cardShape: Shape,
     modifier: Modifier = Modifier,
 ) {
@@ -48,7 +48,7 @@ fun SearchListItem(
         shape = cardShape,
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onCoinClick(searchCoin) }
+            .clickable { onCoinClick(searchResult) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -56,7 +56,7 @@ fun SearchListItem(
         ) {
             AsyncImage(
                 model = imageBuilder
-                    .data(searchCoin.imageUrl)
+                    .data(searchResult.imageUrl)
                     .crossfade(true)
                     .build(),
                 modifier = Modifier.size(32.dp),
@@ -67,14 +67,14 @@ fun SearchListItem(
 
             Column {
                 Text(
-                    text = searchCoin.name,
+                    text = searchResult.name,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
-                    text = searchCoin.symbol,
+                    text = searchResult.symbol,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -89,10 +89,10 @@ fun SearchListItem(
 @Preview
 @PreviewWrapper(wrapper = AppPreviewWrapper::class)
 private fun SearchListItemPreview(
-    @PreviewParameter(SearchCoinPreviewProvider::class) searchCoin: SearchCoin,
+    @PreviewParameter(SearchCoinPreviewProvider::class) searchResult: SearchResult,
 ) {
     SearchListItem(
-        searchCoin = searchCoin,
+        searchResult = searchResult,
         onCoinClick = {},
         cardShape = MaterialTheme.shapes.medium
     )

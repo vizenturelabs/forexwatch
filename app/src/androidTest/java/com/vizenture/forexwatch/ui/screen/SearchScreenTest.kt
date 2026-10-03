@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 import dev.shorthouse.coinwatch.ui.screen.search.SearchScreen
 import dev.shorthouse.coinwatch.ui.screen.search.SearchUiState
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
@@ -211,13 +211,13 @@ class SearchScreenTest {
     fun when_searchResultsListDisplayed_should_displayInExpectedFormat() {
         val uiState = SearchUiState(
             searchResults = persistentListOf(
-                SearchCoin(
+                SearchResult(
                     id = "Qwsogvtv82FCd",
                     symbol = "BTC",
                     name = "Bitcoin",
                     imageUrl = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"
                 ),
-                SearchCoin(
+                SearchResult(
                     id = "ZlZpzOJo43mIo",
                     symbol = "BCH",
                     name = "Bitcoin Cash",
@@ -250,7 +250,7 @@ class SearchScreenTest {
 
         val uiState = SearchUiState(
             searchResults = persistentListOf(
-                SearchCoin(
+                SearchResult(
                     id = "Qwsogvtv82FCd",
                     symbol = "BTC",
                     name = "Bitcoin",

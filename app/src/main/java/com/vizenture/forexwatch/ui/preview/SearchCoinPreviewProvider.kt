@@ -1,23 +1,23 @@
 package dev.shorthouse.coinwatch.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import dev.shorthouse.coinwatch.model.SearchCoin
+import dev.shorthouse.coinwatch.model.SearchResult
 
-class SearchCoinPreviewProvider : PreviewParameterProvider<SearchCoin> {
+class SearchCoinPreviewProvider : PreviewParameterProvider<SearchResult> {
     override val values = sequenceOf(
-        SearchCoin(
+        SearchResult(
             id = "bitcoin",
             symbol = "BTC",
             name = "Bitcoin",
             imageUrl = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"
         ),
-        SearchCoin(
+        SearchResult(
             id = "ethereum",
             symbol = "ETH",
             name = "Ethereum",
             imageUrl = "https://cdn.coinranking.com/rk4RKHOuW/eth.svg"
         ),
-        SearchCoin(
+        SearchResult(
             id = "tether",
             symbol = "USDT",
             name = "Tether",

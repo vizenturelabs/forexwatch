@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.data.repository.fearGreed
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.mapper.FearGreedMapper
 import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedDataPointApiModel
 import dev.shorthouse.coinwatch.model.FearGreed
