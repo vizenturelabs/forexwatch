@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.R
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
 import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferences
@@ -142,7 +142,7 @@ class MarketViewModelTest {
             currency = currency
         )
 
-        val coinSort = CoinSort.Newest
+        val coinSort = PairSort.Newest
 
         val marketPreferences = MarketPreferences(
             coinSort = coinSort
@@ -179,7 +179,7 @@ class MarketViewModelTest {
             currency = currency
         )
 
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
 
         val marketPreferences = MarketPreferences(
             coinSort = coinSort
@@ -211,7 +211,7 @@ class MarketViewModelTest {
     @Test
     fun `When coin sort updates should call use case`() {
         // Arrange
-        val coinSort = CoinSort.Popular
+        val coinSort = PairSort.Popular
 
         // Act
         viewModel.updateCoinSort(coinSort)
@@ -225,7 +225,7 @@ class MarketViewModelTest {
     @Test
     fun `When pull refresh cached coins called should refresh cached coins with user prefs`() {
         // Arrange
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
         val currency = Currency.USD
 
         every { getUserPreferencesUseCase() } returns flowOf(

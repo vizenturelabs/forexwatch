@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.navigation
+package com.vizenture.forexwatch.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -10,8 +10,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dev.shorthouse.coinwatch.ui.screen.details.DetailsScreen
-import dev.shorthouse.coinwatch.ui.screen.settings.SettingsScreen
+import com.vizenture.forexwatch.common.Constants
+import com.vizenture.forexwatch.ui.screen.details.DetailsScreen
+import com.vizenture.forexwatch.ui.screen.settings.SettingsScreen
 
 @Composable
 fun AppNavHost(
@@ -27,8 +28,8 @@ fun AppNavHost(
         composable(route = Screen.NavigationBar.route) {
             NavigationBarScaffold(
                 startScreen = navigationBarStartScreen,
-                onNavigateDetails = { coinId: String ->
-                    navController.navigate(Screen.Details.route + "/$coinId")
+                onNavigateDetails = { pairSymbol: String ->
+                    navController.navigate(Screen.Details.route + "/$pairSymbol")
                 },
                 onNavigateSettings = {
                     navController.navigate(Screen.Settings.route)
@@ -36,7 +37,7 @@ fun AppNavHost(
             )
         }
         composable(
-            route = Screen.Details.route + "/{coinId}",
+            route = Screen.Details.route + "/{${Constants.PARAM_PAIR_SYMBOL}}",
             enterTransition = { fadeIn(animationSpec = tween(500)) },
             exitTransition = { fadeOut(animationSpec = tween(500)) }
         ) {

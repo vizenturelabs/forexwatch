@@ -1,175 +1,47 @@
-package dev.shorthouse.coinwatch.ui.screen.favourites
+package com.vizenture.forexwatch.ui.screen.favourites
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vizenture.forexwatch.common.Result
+import com.vizenture.forexwatch.data.repository.favouritePair.FavouriteForexPairRepository
+import com.vizenture.forexwatch.domain.manager.TerminalManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
-import dev.shorthouse.coinwatch.domain.favourites.GetFavouriteCoinIdsUseCase
-import dev.shorthouse.coinwatch.domain.favourites.GetFavouriteCoinsUseCase
-import dev.shorthouse.coinwatch.domain.preferences.GetFavouritesPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.favourites.UpdateCachedFavouriteCoinsUseCase
-import dev.shorthouse.coinwatch.domain.preferences.UpdateFavouritesCoinSortUseCase
-import dev.shorthouse.coinwatch.domain.preferences.UpdateIsFavouritesCondensedUseCase
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val getFavouriteCoinsUseCase: GetFavouriteCoinsUseCase,
-    private val updateCachedFavouriteCoinsUseCase: UpdateCachedFavouriteCoinsUseCase,
-    private val getFavouriteCoinIdsUseCase: GetFavouriteCoinIdsUseCase,
-    private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
-    private val getFavouritesPreferencesUseCase: GetFavouritesPreferencesUseCase,
-    private val updateIsFavouritesCondensedUseCase: UpdateIsFavouritesCondensedUseCase,
-    private val updateFavouritesCoinSortUseCase: UpdateFavouritesCoinSortUseCase,
+    private val favouriteForexPairRepository: FavouriteForexPairRepository,
+    private val terminalManager: TerminalManager
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(FavouritesUiState())
+
+    private val _uiState = MutableStateFlow<FavouritesUiState>(FavouritesUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         initialiseUiState()
     }
 
-    fun initialiseUiState() {
-        _uiState.update { it.copy(isLoading = true) }
+    private fun initialiseUiState() {
+        val terminalId = terminalManager.getActiveTerminalId().toInt()
 
-        val favouriteCoinIdsFlow = getFavouriteCoinIdsUseCase()
-        val userPreferencesFlow = getUserPreferencesUseCase()
-        val favouritesPreferencesFlow = getFavouritesPreferencesUseCase()
-
-        combine(
-            favouriteCoinIdsFlow,
-            userPreferencesFlow,
-            favouritesPreferencesFlow
-        ) { favouriteCoinIdsResult, userPreferences, favouritesPreferences ->
-            when (favouriteCoinIdsResult) {
-                is Result.Success -> {
-                    updateCachedFavouriteCoins(
-                        coinIds = favouriteCoinIdsResult.data,
-                        currency = userPreferences.currency,
-                        coinSort = favouritesPreferences.coinSort
-                    )
-                }
-
-                is Result.Error -> {
-                    addErrorMessage(R.string.error_local_favourite_coin_ids)
-                }
-            }
-        }.launchIn(viewModelScope)
-
-        getFavouritesPreferencesUseCase().onEach { favouritesPreferences ->
-            _uiState.update {
-                it.copy(
-                    isFavouritesCondensed = favouritesPreferences.isFavouritesCondensed,
-                    coinSort = favouritesPreferences.coinSort
-                )
-            }
-        }.launchIn(viewModelScope)
-
-        getFavouriteCoinsUseCase().onEach { favouriteCoinsResult ->
-            when (favouriteCoinsResult) {
-                is Result.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            favouriteCoins = favouriteCoinsResult.data.toImmutableList(),
-                            isFavouriteCoinsEmpty = favouriteCoinsResult.data.isEmpty()
-                        )
+        favouriteForexPairRepository.getFavouriteForexPairs(terminalId)
+            .onEach { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _uiState.update { FavouritesUiState.Success(favourites = result.data) }
+                    }
+                    is Result.Error -> {
+                        _uiState.update { FavouritesUiState.Error(result.message) }
+                    }
+                    is Result.Loading -> {
+                        _uiState.update { FavouritesUiState.Loading }
                     }
                 }
-
-                is Result.Error -> {
-                    addErrorMessage(R.string.error_local_favourite_coins)
-                }
-            }
-
-            _uiState.update { it.copy(isLoading = false) }
-        }.launchIn(viewModelScope)
-    }
-
-    fun pullRefreshFavouriteCoins() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isRefreshing = true) }
-            delay(250.milliseconds)
-
-            val favouriteCoinIdsResult = getFavouriteCoinIdsUseCase().first()
-            val userPreferences = getUserPreferencesUseCase().first()
-            val favouritesPreferences = getFavouritesPreferencesUseCase().first()
-
-            when (favouriteCoinIdsResult) {
-                is Result.Success -> {
-                    updateCachedFavouriteCoins(
-                        coinIds = favouriteCoinIdsResult.data,
-                        currency = userPreferences.currency,
-                        coinSort = favouritesPreferences.coinSort
-                    )
-                }
-
-                is Result.Error -> {
-                    addErrorMessage(R.string.error_local_favourite_coin_ids)
-                }
-            }
-
-            _uiState.update { it.copy(isRefreshing = false) }
-        }
-    }
-
-    fun dismissErrorMessage(@StringRes dismissedErrorMessageId: Int) {
-        _uiState.update {
-            val errorMessageIds = it.errorMessageIds.filterNot { errorMessageId ->
-                errorMessageId == dismissedErrorMessageId
-            }
-            it.copy(errorMessageIds = errorMessageIds)
-        }
-    }
-
-    fun updateIsFavouritesCondensed(isCondensed: Boolean) {
-        viewModelScope.launch {
-            updateIsFavouritesCondensedUseCase(isCondensed = isCondensed)
-        }
-    }
-
-    fun updateCoinSort(coinSort: CoinSort) {
-        viewModelScope.launch {
-            updateFavouritesCoinSortUseCase(coinSort = coinSort)
-        }
-    }
-
-    private suspend fun updateCachedFavouriteCoins(
-        coinIds: List<FavouriteCoinId>,
-        currency: Currency,
-        coinSort: CoinSort,
-    ) {
-        val updateCachedFavouriteCoinResult = updateCachedFavouriteCoinsUseCase(
-            coinIds = coinIds,
-            currency = currency,
-            coinSort = coinSort
-        )
-
-        if (updateCachedFavouriteCoinResult is Result.Error) {
-            addErrorMessage(R.string.error_network_favourite_coins)
-        }
-    }
-
-    private fun addErrorMessage(@StringRes errorMessageId: Int) {
-        _uiState.update {
-            val errorMessages = it.errorMessageIds + errorMessageId
-            it.copy(errorMessageIds = errorMessages)
-        }
+            }.launchIn(viewModelScope)
     }
 }

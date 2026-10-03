@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
@@ -337,7 +337,7 @@ class MarketScreenTest {
     @Test
     fun when_coinSortMarketCap_should_haveMarketCapChipSelected() {
         val uiState = MarketUiState(
-            coinSort = CoinSort.MarketCap,
+            coinSort = PairSort.MarketCap,
             coins = persistentListOf(bitcoin)
         )
 
@@ -366,7 +366,7 @@ class MarketScreenTest {
     @Test
     fun when_coinSortPopular_should_displaySelectedCoinSortAsPopular() {
         val uiState = MarketUiState(
-            coinSort = CoinSort.Popular,
+            coinSort = PairSort.Popular,
             coins = persistentListOf(bitcoin)
         )
 
@@ -395,7 +395,7 @@ class MarketScreenTest {
     @Test
     fun when_coinSortGainers_should_displaySelectedCoinSortAsGainers() {
         val uiState = MarketUiState(
-            coinSort = CoinSort.Gainers,
+            coinSort = PairSort.Gainers,
             coins = persistentListOf(bitcoin)
         )
 
@@ -424,7 +424,7 @@ class MarketScreenTest {
     @Test
     fun when_coinSortLosers_should_displaySelectedCoinSortAsLosers() {
         val uiState = MarketUiState(
-            coinSort = CoinSort.Losers,
+            coinSort = PairSort.Losers,
             coins = persistentListOf(bitcoin)
         )
 
@@ -453,7 +453,7 @@ class MarketScreenTest {
     @Test
     fun when_coinSortNewest_should_displaySelectedCoinSortAsNewest() {
         val uiState = MarketUiState(
-            coinSort = CoinSort.Newest,
+            coinSort = PairSort.Newest,
             coins = persistentListOf(bitcoin)
         )
 
@@ -481,7 +481,7 @@ class MarketScreenTest {
 
     @Test
     fun when_coinSortClicked_should_callUpdateCoinSort() {
-        val onClickCoinSortMap = CoinSort.entries
+        val onClickCoinSortMap = PairSort.entries
             .associateWith { false }
             .toMutableMap()
 

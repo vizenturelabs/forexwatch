@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.CoinMapper
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.database.CoinLocalDataSource
 import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
@@ -69,7 +69,7 @@ class CoinRepositoryTest {
     @Test
     fun `When remote coins returns valid data should return success`() = runTest {
         // Arrange
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
 
         coEvery {
@@ -122,7 +122,7 @@ class CoinRepositoryTest {
     fun `When remote coins data has null values should populate with defaults and return success`() =
         runTest {
             // Arrange
-            val coinSort = CoinSort.MarketCap
+            val coinSort = PairSort.MarketCap
             val currency = Currency.USD
 
             coEvery {
@@ -174,7 +174,7 @@ class CoinRepositoryTest {
     @Test
     fun `When coins data is null should return error`() = runTest {
         // Arrange
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.USD
 
         coEvery {
@@ -206,7 +206,7 @@ class CoinRepositoryTest {
     @Test
     fun `When retrofit response is unsuccessful should return error`() = runTest {
         // Arrange
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.USD
         val errorMessage = "Unable to fetch coin search results"
 
@@ -238,7 +238,7 @@ class CoinRepositoryTest {
     @Test
     fun `When mapping remote coins throws error should catch and return error`() = runTest {
         // Arrange
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.USD
 
         coEvery {
@@ -266,7 +266,7 @@ class CoinRepositoryTest {
     @Test
     fun `When remote coins request is cancelled should rethrow cancellation`() = runTest {
         // Arrange
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.USD
         val cancellationException = CancellationException("Cancelled")
 

@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch
+package com.vizenture.forexwatch
 
 import android.graphics.Color
 import android.os.Bundle

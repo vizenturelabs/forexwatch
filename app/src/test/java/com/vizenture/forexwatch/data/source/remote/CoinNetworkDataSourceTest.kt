@@ -1,7 +1,7 @@
 package dev.shorthouse.coinwatch.data.source.remote
 
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinsApiModel
@@ -48,7 +48,7 @@ class CoinNetworkDataSourceTest {
     @Test
     fun `When get coins should call API with expected queries`() = runTest {
         // Arrange
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
         val currency = Currency.EUR
 
         coEvery { coinApi.getCoins(any(), any(), any()) } returns
@@ -74,7 +74,7 @@ class CoinNetworkDataSourceTest {
     fun `When get favourite coins should call API with expected queries`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.USD
 
         coEvery { coinApi.getFavouriteCoins(any(), any(), any()) } returns

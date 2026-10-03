@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.tools.screenshot.PreviewTest
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -21,7 +21,7 @@ import dev.shorthouse.coinwatch.ui.theme.AppTheme
 @Composable
 fun CoinSortChipScreenshotTest() {
     AppTheme {
-        val coinSorts = CoinSort.entries.toTypedArray()
+        val coinSorts = PairSort.entries.toTypedArray()
 
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),

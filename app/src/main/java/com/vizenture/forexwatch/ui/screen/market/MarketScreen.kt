@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.market
+package com.vizenture.forexwatch.ui.screen.market
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -51,20 +51,19 @@ import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
-import dev.shorthouse.coinwatch.model.Percentage
-import dev.shorthouse.coinwatch.ui.component.CoinSortChip
-import dev.shorthouse.coinwatch.ui.component.LoadingIndicator
-import dev.shorthouse.coinwatch.ui.component.ScrollToTopFab
-import dev.shorthouse.coinwatch.ui.insets.AppWindowInsets
-import dev.shorthouse.coinwatch.ui.model.TimeOfDay
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.MarketUiStatePreviewProvider
-import dev.shorthouse.coinwatch.ui.screen.market.component.MarketCoinItem
-import dev.shorthouse.coinwatch.ui.screen.market.component.MarketDropdownMenu
-import dev.shorthouse.coinwatch.ui.screen.market.component.SearchPrompt
+import com.vizenture.forexwatch.R
+import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
+import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.ui.component.PairSortChip
+import com.vizenture.forexwatch.ui.component.LoadingIndicator
+import com.vizenture.forexwatch.ui.component.ScrollToTopFab
+import com.vizenture.forexwatch.ui.insets.AppWindowInsets
+import com.vizenture.forexwatch.ui.model.TimeOfDay
+import com.vizenture.forexwatch.ui.preview.AppPreviewWrapper
+import com.vizenture.forexwatch.ui.preview.MarketUiStatePreviewProvider
+import com.vizenture.forexwatch.ui.screen.market.component.MarketPairItem
+import com.vizenture.forexwatch.ui.screen.market.component.MarketDropdownMenu
+import com.vizenture.forexwatch.ui.screen.market.component.SearchPrompt
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
@@ -78,15 +77,15 @@ fun MarketScreen(
 
     MarketScreen(
         uiState = uiState,
-        onCoinClick = { coin ->
-            onNavigateDetails(coin.id)
+        onPairClick = { pair ->
+            onNavigateDetails(pair.symbol)
         },
         onNavigateSettings = onNavigateSettings,
-        onUpdateCoinSort = { coinSort ->
-            viewModel.updateCoinSort(coinSort)
+        onUpdatePairSort = { pairSort ->
+            viewModel.updatePairSort(pairSort)
         },
         onRefresh = {
-            viewModel.pullRefreshCoins()
+            viewModel.refreshPairs()
         },
         onDismissError = { errorMessageId ->
             viewModel.dismissErrorMessage(errorMessageId)
@@ -98,9 +97,9 @@ fun MarketScreen(
 @Composable
 fun MarketScreen(
     uiState: MarketUiState,
-    onCoinClick: (Coin) -> Unit,
+    onPairClick: (CurrencyPair) -> Unit,
     onNavigateSettings: () -> Unit,
-    onUpdateCoinSort: (CoinSort) -> Unit,
+    onUpdatePairSort: (PairSort) -> Unit,
     onRefresh: () -> Unit,
     onDismissError: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -120,7 +119,6 @@ fun MarketScreen(
         topBar = {
             MarketTopBar(
                 timeOfDay = uiState.timeOfDay,
-                marketCapChangePercentage24h = uiState.marketCapChangePercentage24h,
                 onNavigateSettings = onNavigateSettings,
                 scrollBehavior = scrollBehavior
             )
@@ -169,10 +167,10 @@ fun MarketScreen(
 
                 else -> {
                     MarketContent(
-                        coins = uiState.coins,
-                        onCoinClick = onCoinClick,
-                        coinSort = uiState.coinSort,
-                        onUpdateCoinSort = onUpdateCoinSort,
+                        pairs = uiState.pairs,
+                        onPairClick = onPairClick,
+                        pairSort = uiState.pairSort,
+                        onUpdatePairSort = onUpdatePairSort,
                         lazyListState = listState
                     )
                 }
@@ -193,7 +191,6 @@ fun MarketScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun MarketTopBar(
     timeOfDay: TimeOfDay,
-    marketCapChangePercentage24h: Percentage?,
     onNavigateSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
@@ -209,18 +206,6 @@ private fun MarketTopBar(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-
-                marketCapChangePercentage24h?.let {
-                    Text(
-                        text = when {
-                            it.isPositive -> stringResource(R.string.market_is_up)
-                            it.isNegative -> stringResource(R.string.market_is_down)
-                            else -> stringResource(R.string.market_is_flat)
-                        },
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
             }
         },
         actions = {
@@ -249,14 +234,14 @@ private fun MarketTopBar(
 
 @Composable
 private fun MarketContent(
-    coins: ImmutableList<Coin>,
-    onCoinClick: (Coin) -> Unit,
-    coinSort: CoinSort,
-    onUpdateCoinSort: (CoinSort) -> Unit,
+    pairs: ImmutableList<CurrencyPair>,
+    onPairClick: (CurrencyPair) -> Unit,
+    pairSort: PairSort,
+    onUpdatePairSort: (PairSort) -> Unit,
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    if (coins.isEmpty()) {
+    if (pairs.isEmpty()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {}
     } else {
         LazyColumn(
@@ -271,20 +256,20 @@ private fun MarketContent(
                         .horizontalScroll(rememberScrollState())
                         .padding(bottom = 8.dp)
                 ) {
-                    CoinSort.entries.forEach { coinSortEntry ->
-                        CoinSortChip(
-                            coinSort = coinSortEntry,
-                            selected = coinSortEntry == coinSort,
-                            onClick = { onUpdateCoinSort(coinSortEntry) }
+                    PairSort.entries.forEach { pairSortEntry ->
+                        PairSortChip(
+                            pairSort = pairSortEntry,
+                            selected = pairSortEntry == pairSort,
+                            onClick = { onUpdatePairSort(pairSortEntry) }
                         )
                     }
                 }
             }
             items(
-                count = coins.size,
-                key = { coins[it].id },
+                count = pairs.size,
+                key = { pairs[it].symbol }, // Changed from pairs[it].id to pairs[it].symbol
                 itemContent = { index ->
-                    val coinListItem = coins[index]
+                    val pairListItem = pairs[index]
 
                     val cardShape = when (index) {
                         0 -> MaterialTheme.shapes.medium.copy(
@@ -292,7 +277,7 @@ private fun MarketContent(
                             bottomEnd = CornerSize(0.dp)
                         )
 
-                        coins.lastIndex -> MaterialTheme.shapes.medium.copy(
+                        pairs.lastIndex -> MaterialTheme.shapes.medium.copy(
                             topStart = CornerSize(0.dp),
                             topEnd = CornerSize(0.dp)
                         )
@@ -300,9 +285,9 @@ private fun MarketContent(
                         else -> RoundedCornerShape(0.dp)
                     }
 
-                    MarketCoinItem(
-                        coin = coinListItem,
-                        onCoinClick = { onCoinClick(coinListItem) },
+                    MarketPairItem(
+                        pair = pairListItem,
+                        onPairClick = { onPairClick(pairListItem) },
                         cardShape = cardShape
                     )
                 }
@@ -323,11 +308,10 @@ private fun MarketScreenPreview(
 ) {
     MarketScreen(
         uiState = uiState,
-        onCoinClick = {},
+        onPairClick = {},
         onNavigateSettings = {},
-        onUpdateCoinSort = {},
+        onUpdatePairSort = {},
         onRefresh = {},
         onDismissError = {}
     )
-
 }

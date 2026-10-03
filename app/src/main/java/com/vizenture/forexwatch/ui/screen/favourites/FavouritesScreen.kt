@@ -56,7 +56,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.shorthouse.coinwatch.R
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.ui.component.CoinSortChip
 import dev.shorthouse.coinwatch.ui.component.LoadingIndicator
 import dev.shorthouse.coinwatch.ui.component.ScrollToTopFab
@@ -102,7 +102,7 @@ fun FavouriteScreen(
     uiState: FavouritesUiState,
     onCoinClick: (FavouriteCoin) -> Unit,
     onUpdateIsFavouritesCondensed: (Boolean) -> Unit,
-    onUpdateCoinSort: (CoinSort) -> Unit,
+    onUpdateCoinSort: (PairSort) -> Unit,
     onRefresh: () -> Unit,
     onDismissError: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -244,8 +244,8 @@ fun FavouritesContent(
     favouriteCoins: ImmutableList<FavouriteCoin>,
     onCoinClick: (FavouriteCoin) -> Unit,
     isFavouritesCondensed: Boolean,
-    coinSort: CoinSort,
-    onUpdateCoinSort: (CoinSort) -> Unit,
+    coinSort: PairSort,
+    onUpdateCoinSort: (PairSort) -> Unit,
     gridState: LazyGridState,
     modifier: Modifier = Modifier,
 ) {
@@ -275,8 +275,8 @@ fun FavouritesGrid(
     favouriteCoins: ImmutableList<FavouriteCoin>,
     onCoinClick: (FavouriteCoin) -> Unit,
     isFavouritesCondensed: Boolean,
-    coinSort: CoinSort,
-    onUpdateCoinSort: (CoinSort) -> Unit,
+    coinSort: PairSort,
+    onUpdateCoinSort: (PairSort) -> Unit,
     gridState: LazyGridState,
     modifier: Modifier = Modifier,
 ) {
@@ -311,7 +311,7 @@ fun FavouritesGrid(
                         }
                     )
             ) {
-                CoinSort.entries.forEach { coinSortEntry ->
+                PairSort.entries.forEach { coinSortEntry ->
                     CoinSortChip(
                         coinSort = coinSortEntry,
                         selected = coinSortEntry == coinSort,

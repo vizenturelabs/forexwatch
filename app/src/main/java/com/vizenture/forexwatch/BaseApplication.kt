@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch
+package com.vizenture.forexwatch
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

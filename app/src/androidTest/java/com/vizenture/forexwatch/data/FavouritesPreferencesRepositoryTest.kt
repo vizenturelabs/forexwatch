@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferencesRepository
 import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferencesSerializer
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +83,7 @@ class FavouritesPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortMarketCap_should_updateFavouritesPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
 
         favouritesPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -96,7 +96,7 @@ class FavouritesPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortPopular_should_updateFavouritesPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Popular
+        val coinSort = PairSort.Popular
 
         favouritesPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -109,7 +109,7 @@ class FavouritesPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortGainers_should_updateFavouritesPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
 
         favouritesPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -122,7 +122,7 @@ class FavouritesPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortLosers_should_updateFavouritesPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Losers
+        val coinSort = PairSort.Losers
 
         favouritesPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -135,7 +135,7 @@ class FavouritesPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortNewest_should_updateFavouritesPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Newest
+        val coinSort = PairSort.Newest
 
         favouritesPreferencesRepository.updateCoinSort(coinSort = coinSort)
 

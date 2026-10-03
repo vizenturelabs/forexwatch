@@ -1,18 +1,19 @@
-package dev.shorthouse.coinwatch.ui.screen.market
+package com.vizenture.forexwatch.ui.screen.market
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
-import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
-import dev.shorthouse.coinwatch.model.Percentage
-import dev.shorthouse.coinwatch.ui.model.TimeOfDay
+import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
+import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.model.Percentage
+import com.vizenture.forexwatch.ui.model.TimeOfDay
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 data class MarketUiState(
-    val coins: ImmutableList<Coin> = persistentListOf(),
-    val timeOfDay: TimeOfDay = TimeOfDay.Morning,
-    val marketCapChangePercentage24h: Percentage? = null,
-    val coinSort: CoinSort = CoinSort.MarketCap,
+    val pairs: ImmutableList<CurrencyPair>,
+    val pairSort: PairSort,
+    val timeOfDay: TimeOfDay,
+    val marketChangePercentage24h: Percentage?,
+    val currency: Currency,
     val isRefreshing: Boolean = false,
-    val isLoading: Boolean = false,
-    val errorMessageIds: List<Int> = persistentListOf(),
+    val errorMessageIds: List<Int> = emptyList(),
+    val isLoading: Boolean = false
 )

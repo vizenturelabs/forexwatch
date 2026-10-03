@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class FavouriteCoinIdRepositoryImpl @Inject constructor(
+class FavouriteForexPairIdRepositoryImpl @Inject constructor(
     private val coinLocalDataSource: CoinLocalDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : FavouriteCoinIdRepository {
+) : FavouriteForexPairIdRepository {
     override fun getFavouriteCoinIds(): Flow<Result<List<FavouriteCoinId>>> {
         return coinLocalDataSource.getFavouriteCoinIds()
             .map<List<FavouriteCoinId>, Result<List<FavouriteCoinId>>> { Result.Success(it) }

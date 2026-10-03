@@ -1,6 +1,6 @@
 package dev.shorthouse.coinwatch.e2e.fake
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
@@ -69,13 +69,13 @@ class FakeCoinNetworkDataSource @Inject constructor() : CoinNetworkDataSource {
         Response.success(defaultTrendingCoins())
 
     override suspend fun getCoins(
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Response<CoinsApiModel> = coinsResponse
 
     override suspend fun getFavouriteCoins(
         coinIds: List<String>,
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Response<FavouriteCoinsApiModel> = favouriteCoinsResponse
 

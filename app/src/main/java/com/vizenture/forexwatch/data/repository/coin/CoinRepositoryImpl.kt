@@ -2,7 +2,7 @@ package dev.shorthouse.coinwatch.data.repository.coin
 
 import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.CoinMapper
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.database.CoinLocalDataSource
 import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
@@ -25,7 +25,7 @@ class CoinRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : CoinRepository {
     override suspend fun getRemoteCoins(
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Result<List<Coin>> = withContext(ioDispatcher) {
         try {

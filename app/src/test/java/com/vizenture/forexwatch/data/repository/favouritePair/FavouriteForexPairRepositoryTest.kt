@@ -6,7 +6,7 @@ import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.FavouriteCoinMapper
 import dev.shorthouse.coinwatch.data.source.local.database.CoinLocalDataSource
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.CoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinApiModel
@@ -37,13 +37,13 @@ import retrofit2.Response
 import java.io.IOException
 import java.math.BigDecimal
 
-class FavouriteCoinRepositoryTest {
+class FavouriteForexPairRepositoryTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     // Class under test
-    private lateinit var favouriteCoinRepository: FavouriteCoinRepository
+    private lateinit var favouriteForexPairRepository: FavouriteForexPairRepository
 
     @MockK
     private lateinit var coinNetworkDataSource: CoinNetworkDataSource
@@ -57,7 +57,7 @@ class FavouriteCoinRepositoryTest {
     fun setup() {
         MockKAnnotations.init(this)
 
-        favouriteCoinRepository = FavouriteCoinRepositoryImpl(
+        favouriteForexPairRepository = FavouriteForexPairRepositoryImpl(
             coinNetworkDataSource = coinNetworkDataSource,
             coinLocalDataSource = coinLocalDataSource,
             favouriteCoinMapper = favouriteCoinMapper,
@@ -74,7 +74,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote coins with empty coins ids should return success with empty list`() = runTest {
         // Arrange
         val coinIds = emptyList<String>()
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
 
         val expectedResult = Result.Success<List<FavouriteCoin>>(
@@ -82,7 +82,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -105,7 +105,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote coins returns retrofit error should return error`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
         val errorMessage = "Unable to fetch network favourite coins list"
 
@@ -125,7 +125,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -140,7 +140,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote favourite coins api model is null should return error`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
         val errorMessage = "Unable to fetch network favourite coins list"
 
@@ -159,7 +159,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -174,7 +174,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote favourite coins data is null should return error`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
         val errorMessage = "Unable to fetch network favourite coins list"
 
@@ -195,7 +195,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -210,7 +210,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote favourite coins is null should return error`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
         val errorMessage = "Unable to fetch network favourite coins list"
 
@@ -233,7 +233,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -248,7 +248,7 @@ class FavouriteCoinRepositoryTest {
     fun `When get remote favourite coins throws should catch and return error`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
         val errorMessage = "Unable to fetch network favourite coins list"
 
@@ -265,7 +265,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -280,7 +280,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote favourite coins request is cancelled should rethrow cancellation`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
         val cancellationException = CancellationException("Cancelled")
 
@@ -294,7 +294,7 @@ class FavouriteCoinRepositoryTest {
 
         // Act & Assert
         try {
-            favouriteCoinRepository.getRemoteFavouriteCoins(
+            favouriteForexPairRepository.getRemoteFavouriteCoins(
                 coinIds = coinIds,
                 coinSort = coinSort,
                 currency = currency
@@ -309,7 +309,7 @@ class FavouriteCoinRepositoryTest {
     fun `When remote favourite coins is successful should return success`() = runTest {
         // Arrange
         val coinIds = listOf("Qwsogvtv82FCd")
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
         val currency = Currency.EUR
 
         coEvery {
@@ -363,7 +363,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getRemoteFavouriteCoins(
+        val result = favouriteForexPairRepository.getRemoteFavouriteCoins(
             coinIds = coinIds,
             coinSort = coinSort,
             currency = currency
@@ -418,7 +418,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getCachedFavouriteCoins().first()
+        val result = favouriteForexPairRepository.getCachedFavouriteCoins().first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -439,7 +439,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getCachedFavouriteCoins().first()
+        val result = favouriteForexPairRepository.getCachedFavouriteCoins().first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -464,7 +464,7 @@ class FavouriteCoinRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinRepository.getCachedFavouriteCoins().first()
+        val result = favouriteForexPairRepository.getCachedFavouriteCoins().first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -495,7 +495,7 @@ class FavouriteCoinRepositoryTest {
         coEvery { coinLocalDataSource.updateFavouriteCoins(favouriteCoins) } just runs
 
         // Act
-        favouriteCoinRepository.updateCachedFavouriteCoins(favouriteCoins)
+        favouriteForexPairRepository.updateCachedFavouriteCoins(favouriteCoins)
 
         // Assert
         coVerifySequence {

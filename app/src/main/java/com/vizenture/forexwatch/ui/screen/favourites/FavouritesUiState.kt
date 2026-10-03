@@ -1,16 +1,9 @@
-package dev.shorthouse.coinwatch.ui.screen.favourites
+package com.vizenture.forexwatch.ui.screen.favourites
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
-import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import com.vizenture.forexwatch.data.source.local.database.model.FavouriteCurrencyPair
 
-data class FavouritesUiState(
-    val favouriteCoins: ImmutableList<FavouriteCoin> = persistentListOf(),
-    val isFavouritesCondensed: Boolean = false,
-    val coinSort: CoinSort = CoinSort.MarketCap,
-    val isFavouriteCoinsEmpty: Boolean = true,
-    val isRefreshing: Boolean = false,
-    val isLoading: Boolean = false,
-    val errorMessageIds: List<Int> = persistentListOf(),
-)
+sealed interface FavouritesUiState {
+    data class Success(val favourites: List<FavouriteCurrencyPair>) : FavouritesUiState
+    data class Error(val message: String?) : FavouritesUiState
+    data object Loading : FavouritesUiState
+}

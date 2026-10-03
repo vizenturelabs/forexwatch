@@ -21,13 +21,13 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
 
-class FavouriteCoinIdRepositoryTest {
+class FavouriteForexPairIdRepositoryTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     // Class under test
-    private lateinit var favouriteCoinIdRepository: FavouriteCoinIdRepository
+    private lateinit var favouriteForexPairIdRepository: FavouriteForexPairIdRepository
 
     @MockK
     private lateinit var coinLocalDataSource: CoinLocalDataSource
@@ -36,7 +36,7 @@ class FavouriteCoinIdRepositoryTest {
     fun setup() {
         MockKAnnotations.init(this)
 
-        favouriteCoinIdRepository = FavouriteCoinIdRepositoryImpl(
+        favouriteForexPairIdRepository = FavouriteForexPairIdRepositoryImpl(
             coinLocalDataSource = coinLocalDataSource,
             ioDispatcher = mainDispatcherRule.testDispatcher,
         )
@@ -65,7 +65,7 @@ class FavouriteCoinIdRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinIdRepository.getFavouriteCoinIds().first()
+        val result = favouriteForexPairIdRepository.getFavouriteCoinIds().first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -84,7 +84,7 @@ class FavouriteCoinIdRepositoryTest {
         val expectedResult = Result.Success(true)
 
         // Act
-        val result = favouriteCoinIdRepository.isCoinFavourite(favouriteCoinId).first()
+        val result = favouriteForexPairIdRepository.isCoinFavourite(favouriteCoinId).first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -103,7 +103,7 @@ class FavouriteCoinIdRepositoryTest {
         val expectedResult = Result.Success(false)
 
         // Act
-        val result = favouriteCoinIdRepository.isCoinFavourite(favouriteCoinId).first()
+        val result = favouriteForexPairIdRepository.isCoinFavourite(favouriteCoinId).first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -124,7 +124,7 @@ class FavouriteCoinIdRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinIdRepository.getFavouriteCoinIds().first()
+        val result = favouriteForexPairIdRepository.getFavouriteCoinIds().first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -148,7 +148,7 @@ class FavouriteCoinIdRepositoryTest {
         )
 
         // Act
-        val result = favouriteCoinIdRepository.isCoinFavourite(favouriteCoinId).first()
+        val result = favouriteForexPairIdRepository.isCoinFavourite(favouriteCoinId).first()
 
         // Assert
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -165,7 +165,7 @@ class FavouriteCoinIdRepositoryTest {
         } returns true
 
         // Act
-        favouriteCoinIdRepository.toggleIsCoinFavourite(favouriteCoinId = favouriteCoinId)
+        favouriteForexPairIdRepository.toggleIsCoinFavourite(favouriteCoinId = favouriteCoinId)
 
         // Assert
         coVerifySequence {
@@ -183,7 +183,7 @@ class FavouriteCoinIdRepositoryTest {
         } returns true
 
         // Act
-        val result = favouriteCoinIdRepository.toggleIsCoinFavourite(
+        val result = favouriteForexPairIdRepository.toggleIsCoinFavourite(
             favouriteCoinId = favouriteCoinId
         )
 
@@ -201,7 +201,7 @@ class FavouriteCoinIdRepositoryTest {
         } returns false
 
         // Act
-        val result = favouriteCoinIdRepository.toggleIsCoinFavourite(
+        val result = favouriteForexPairIdRepository.toggleIsCoinFavourite(
             favouriteCoinId = favouriteCoinId
         )
 

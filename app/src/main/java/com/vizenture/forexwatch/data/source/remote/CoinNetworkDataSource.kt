@@ -1,6 +1,6 @@
 package dev.shorthouse.coinwatch.data.source.remote
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinDetailsApiModel
@@ -16,13 +16,13 @@ import retrofit2.Response
 
 interface CoinNetworkDataSource {
     suspend fun getCoins(
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Response<CoinsApiModel>
 
     suspend fun getFavouriteCoins(
         coinIds: List<String>,
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Response<FavouriteCoinsApiModel>
 

@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
@@ -562,7 +562,7 @@ class FavouritesScreenTest {
     @Test
     fun when_coinSortMarketCap_should_haveMarketCapChipSelected() {
         val uiState = FavouritesUiState(
-            coinSort = CoinSort.MarketCap,
+            coinSort = PairSort.MarketCap,
             favouriteCoins = persistentListOf(bitcoin)
         )
 
@@ -591,7 +591,7 @@ class FavouritesScreenTest {
     @Test
     fun when_coinSortPopular_should_havePopularChipSelected() {
         val uiState = FavouritesUiState(
-            coinSort = CoinSort.Popular,
+            coinSort = PairSort.Popular,
             favouriteCoins = persistentListOf(bitcoin)
         )
 
@@ -620,7 +620,7 @@ class FavouritesScreenTest {
     @Test
     fun when_coinSortGainers_should_haveGainersChipSelected() {
         val uiState = FavouritesUiState(
-            coinSort = CoinSort.Gainers,
+            coinSort = PairSort.Gainers,
             favouriteCoins = persistentListOf(bitcoin)
         )
 
@@ -649,7 +649,7 @@ class FavouritesScreenTest {
     @Test
     fun when_coinSortLosers_should_haveLosersChipSelected() {
         val uiState = FavouritesUiState(
-            coinSort = CoinSort.Losers,
+            coinSort = PairSort.Losers,
             favouriteCoins = persistentListOf(bitcoin)
         )
 
@@ -678,7 +678,7 @@ class FavouritesScreenTest {
     @Test
     fun when_coinSortNewest_should_haveNewestChipSelected() {
         val uiState = FavouritesUiState(
-            coinSort = CoinSort.Newest,
+            coinSort = PairSort.Newest,
             favouriteCoins = persistentListOf(bitcoin)
         )
 
@@ -706,7 +706,7 @@ class FavouritesScreenTest {
 
     @Test
     fun when_coinSortClicked_should_callUpdateCoinSort() {
-        val onClickCoinSortMap = CoinSort.entries
+        val onClickCoinSortMap = PairSort.entries
             .associateWith { false }
             .toMutableMap()
 

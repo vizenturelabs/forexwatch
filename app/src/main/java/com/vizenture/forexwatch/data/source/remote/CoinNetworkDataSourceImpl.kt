@@ -1,6 +1,6 @@
 package dev.shorthouse.coinwatch.data.source.remote
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinDetailsApiModel
@@ -19,7 +19,7 @@ class CoinNetworkDataSourceImpl @Inject constructor(
     private val coinApi: CoinApi,
 ) : CoinNetworkDataSource {
     override suspend fun getCoins(
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Response<CoinsApiModel> {
         return coinApi.getCoins(
@@ -31,7 +31,7 @@ class CoinNetworkDataSourceImpl @Inject constructor(
 
     override suspend fun getFavouriteCoins(
         coinIds: List<String>,
-        coinSort: CoinSort,
+        coinSort: PairSort,
         currency: Currency,
     ): Response<FavouriteCoinsApiModel> {
         return coinApi.getFavouriteCoins(
@@ -103,22 +103,22 @@ private fun Currency.toCurrencyUUID(): String {
     }
 }
 
-private fun CoinSort.getOrderBy(): String {
+private fun PairSort.getOrderBy(): String {
     return when (this) {
-        CoinSort.MarketCap -> "marketCap"
-        CoinSort.Popular -> "24hVolume"
-        CoinSort.Gainers -> "change"
-        CoinSort.Losers -> "change"
-        CoinSort.Newest -> "listedAt"
+        PairSort.MarketCap -> "marketCap"
+        PairSort.Popular -> "24hVolume"
+        PairSort.Gainers -> "change"
+        PairSort.Losers -> "change"
+        PairSort.Newest -> "listedAt"
     }
 }
 
-private fun CoinSort.getOrderDirection(): String {
+private fun PairSort.getOrderDirection(): String {
     return when (this) {
-        CoinSort.MarketCap -> "desc"
-        CoinSort.Popular -> "desc"
-        CoinSort.Gainers -> "desc"
-        CoinSort.Losers -> "asc"
-        CoinSort.Newest -> "desc"
+        PairSort.MarketCap -> "desc"
+        PairSort.Popular -> "desc"
+        PairSort.Gainers -> "desc"
+        PairSort.Losers -> "asc"
+        PairSort.Newest -> "desc"
     }
 }

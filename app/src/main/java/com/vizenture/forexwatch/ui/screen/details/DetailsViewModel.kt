@@ -5,14 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vizenture.forexwatch.common.Constants.PARAM_PAIR_SYMBOL
 import com.vizenture.forexwatch.common.Result
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.database.model.FavouriteSymbol
 import com.vizenture.forexwatch.domain.manager.TerminalManager
 import com.vizenture.forexwatch.domain.usecase.details.GetForexPairChartUseCase
 import com.vizenture.forexwatch.domain.usecase.details.GetForexPairDetailsUseCase
 import com.vizenture.forexwatch.domain.usecase.favourites.IsForexPairFavouriteUseCase
 import com.vizenture.forexwatch.domain.usecase.favourites.ToggleIsForexPairFavouriteUseCase
-import com.vizenture.forexwatch.domain.usecase.reviewprompt.RecordFavouriteAddedUseCase
-import com.vizenture.forexwatch.domain.usecase.reviewprompt.RecordSuccessfulDetailsViewUseCase
 import com.vizenture.forexwatch.ui.model.ChartPeriod
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
@@ -20,7 +19,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
@@ -33,8 +31,6 @@ class DetailsViewModel @Inject constructor(
     private val getForexPairChartUseCase: GetForexPairChartUseCase,
     private val isForexPairFavouriteUseCase: IsForexPairFavouriteUseCase,
     private val toggleIsForexPairFavouriteUseCase: ToggleIsForexPairFavouriteUseCase,
-    private val recordSuccessfulDetailsViewUseCase: RecordSuccessfulDetailsViewUseCase,
-    private val recordFavouriteAddedUseCase: RecordFavouriteAddedUseCase,
     private val terminalManager: TerminalManager,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -44,8 +40,9 @@ class DetailsViewModel @Inject constructor(
 
     private val pairSymbol = savedStateHandle.get<String>(PARAM_PAIR_SYMBOL)
     private val chartPeriodFlow = MutableStateFlow(ChartPeriod.Day)
-    
-    private var hasRecordedSuccessfulDetailsView = false
+
+    // Hardcoded for Phase 4 Proof of Concept
+    private val currentCurrency = Currency.USD
 
     init {
         initialiseUiState()
@@ -58,63 +55,60 @@ class DetailsViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
-            val terminalId = terminalManager.getActiveTerminalId().toInt()
-            
-            val pairDetailsFlow = getForexPairDetailsUseCase(symbol = pairSymbol)
+        val terminalId = terminalManager.getActiveTerminalId().toInt()
 
-            val pairChartFlow = chartPeriodFlow.flatMapLatest { chartPeriod ->
-                getForexPairChartUseCase(
-                    symbol = pairSymbol,
-                    chartPeriod = chartPeriod.stringName
-                )
-            }
+        val pairDetailsFlow = getForexPairDetailsUseCase(
+            symbol = pairSymbol,
+            currency = currentCurrency
+        )
 
-            val isPairFavouriteFlow = isForexPairFavouriteUseCase(
-                favouriteSymbol = FavouriteSymbol(symbol = pairSymbol, terminalId = terminalId)
+        val pairChartFlow = chartPeriodFlow.flatMapLatest { chartPeriod ->
+            getForexPairChartUseCase(
+                symbol = pairSymbol,
+                chartPeriod = chartPeriod,
+                currency = currentCurrency
             )
+        }
 
-            combine(
-                pairDetailsFlow,
-                pairChartFlow,
-                isPairFavouriteFlow
-            ) { pairDetailsResult, pairChartResult, isPairFavouriteResult ->
-                when {
-                    pairDetailsResult is Result.Error -> _uiState.update { DetailsUiState.Error(pairDetailsResult.message) }
-                    pairChartResult is Result.Error -> _uiState.update { DetailsUiState.Error(pairChartResult.message) }
-                    isPairFavouriteResult is Result.Error -> _uiState.update { DetailsUiState.Error(isPairFavouriteResult.message) }
-                    pairDetailsResult is Result.Success &&
-                            pairChartResult is Result.Success &&
-                            isPairFavouriteResult is Result.Success -> {
-                        _uiState.update {
-                            DetailsUiState.Success(
-                                pairDetails = pairDetailsResult.data,
-                                pairChart = pairChartResult.data,
-                                chartPeriod = chartPeriodFlow.value,
-                                isPairFavourite = isPairFavouriteResult.data
-                            )
-                        }
-                        
-                        if (!hasRecordedSuccessfulDetailsView) {
-                            runCatching { recordSuccessfulDetailsViewUseCase() }
-                                .onSuccess { hasRecordedSuccessfulDetailsView = true }
-                                .onFailure { if (it is CancellationException) throw it }
-                        }
+        val isPairFavouriteFlow = isForexPairFavouriteUseCase(
+            favouriteSymbol = FavouriteSymbol(symbol = pairSymbol, terminalId = terminalId)
+        )
+
+        combine(
+            pairDetailsFlow,
+            pairChartFlow,
+            isPairFavouriteFlow
+        ) { pairDetailsResult, pairChartResult, isPairFavouriteResult ->
+            when {
+                pairDetailsResult is Result.Error -> _uiState.update { DetailsUiState.Error(pairDetailsResult.message) }
+                pairChartResult is Result.Error -> _uiState.update { DetailsUiState.Error(pairChartResult.message) }
+                isPairFavouriteResult is Result.Error -> _uiState.update { DetailsUiState.Error(isPairFavouriteResult.message) }
+                pairDetailsResult is Result.Success &&
+                    pairChartResult is Result.Success &&
+                    isPairFavouriteResult is Result.Success -> {
+                    _uiState.update {
+                        DetailsUiState.Success(
+                            pairDetails = pairDetailsResult.data,
+                            pairChart = pairChartResult.data,
+                            chartPeriod = chartPeriodFlow.value,
+                            isPairFavourite = isPairFavouriteResult.data
+                        )
                     }
                 }
-            }.launchIn(viewModelScope)
-        }
+            }
+        }.launchIn(viewModelScope)
     }
 
-    fun updateChartPeriod(chartPeriod: ChartPeriod) { chartPeriodFlow.value = chartPeriod }
+    fun updateChartPeriod(chartPeriod: ChartPeriod) {
+        chartPeriodFlow.value = chartPeriod
+    }
 
     fun toggleIsPairFavourite() {
         if (pairSymbol == null) return
         viewModelScope.launch {
             val terminalId = terminalManager.getActiveTerminalId().toInt()
             val favouriteSymbol = FavouriteSymbol(symbol = pairSymbol, terminalId = terminalId)
-            val isPairFavouriteAfterToggle = toggleIsForexPairFavouriteUseCase(favouriteSymbol)
-            if (isPairFavouriteAfterToggle) recordFavouriteAddedUseCase()
+            toggleIsForexPairFavouriteUseCase(favouriteSymbol)
         }
     }
 }

@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferencesRepository
 import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferencesSerializer
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +51,7 @@ class MarketPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortMarketCap_should_updateMarketPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.MarketCap
+        val coinSort = PairSort.MarketCap
 
         marketPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -64,7 +64,7 @@ class MarketPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortPopular_should_updateMarketPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Popular
+        val coinSort = PairSort.Popular
 
         marketPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -77,7 +77,7 @@ class MarketPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortGainers_should_updateMarketPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
 
         marketPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -90,7 +90,7 @@ class MarketPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortLosers_should_updateMarketPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Losers
+        val coinSort = PairSort.Losers
 
         marketPreferencesRepository.updateCoinSort(coinSort = coinSort)
 
@@ -101,7 +101,7 @@ class MarketPreferencesRepositoryTest {
 
     @Test
     fun when_coinSortNewest_should_updateMarketPreferences() = testCoroutineScope.runTest {
-        val coinSort = CoinSort.Newest
+        val coinSort = PairSort.Newest
 
         marketPreferencesRepository.updateCoinSort(coinSort = coinSort)
 

@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.R
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferences
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
@@ -322,20 +322,20 @@ class FavouritesViewModelTest {
     @Test
     fun `When favourites preferences returns coin sort should update UI state`() {
         // Arrange
-        val favouritesPreferences = FavouritesPreferences(coinSort = CoinSort.Popular)
+        val favouritesPreferences = FavouritesPreferences(coinSort = PairSort.Popular)
         every { getFavouritesPreferencesUseCase() } returns flowOf(favouritesPreferences)
 
         // Act
         viewModel.initialiseUiState()
 
         // Assert
-        assertThat(viewModel.uiState.value.coinSort).isEqualTo(CoinSort.Popular)
+        assertThat(viewModel.uiState.value.coinSort).isEqualTo(PairSort.Popular)
     }
 
     @Test
     fun `When coin sort updates should call use case`() {
         // Arrange
-        val coinSort = CoinSort.Popular
+        val coinSort = PairSort.Popular
 
         // Act
         viewModel.updateCoinSort(coinSort)

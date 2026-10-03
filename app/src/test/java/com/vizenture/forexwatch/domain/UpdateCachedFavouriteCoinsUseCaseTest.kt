@@ -2,9 +2,9 @@ package dev.shorthouse.coinwatch.domain
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.repository.favouriteCoin.FavouriteCoinRepository
+import dev.shorthouse.coinwatch.data.repository.favouriteCoin.FavouriteForexPairRepository
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
 import dev.shorthouse.coinwatch.domain.favourites.UpdateCachedFavouriteCoinsUseCase
@@ -29,14 +29,14 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
     private lateinit var updateCachedFavouriteCoinsUseCase: UpdateCachedFavouriteCoinsUseCase
 
     @MockK
-    private lateinit var favouriteCoinRepository: FavouriteCoinRepository
+    private lateinit var favouriteForexPairRepository: FavouriteForexPairRepository
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
 
         updateCachedFavouriteCoinsUseCase = UpdateCachedFavouriteCoinsUseCase(
-            favouriteCoinRepository = favouriteCoinRepository
+            favouriteForexPairRepository = favouriteForexPairRepository
         )
     }
 
@@ -47,11 +47,11 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
             val coinIds = listOf(FavouriteCoinId("Qwsogvtv82FCd"))
             val rawCoinIds = listOf("Qwsogvtv82FCd")
             val currency = Currency.USD
-            val coinSort = CoinSort.Popular
+            val coinSort = PairSort.Popular
             val errorMessage = "Unable to fetch network favourite coins list"
 
             coEvery {
-                favouriteCoinRepository.getRemoteFavouriteCoins(
+                favouriteForexPairRepository.getRemoteFavouriteCoins(
                     coinIds = rawCoinIds,
                     currency = currency,
                     coinSort = coinSort
@@ -72,14 +72,14 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
             assertThat((result as Result.Error).message).isEqualTo(expectedResult.message)
 
             coVerify(exactly = 1) {
-                favouriteCoinRepository.getRemoteFavouriteCoins(
+                favouriteForexPairRepository.getRemoteFavouriteCoins(
                     coinIds = rawCoinIds,
                     coinSort = coinSort,
                     currency = currency
                 )
             }
 
-            confirmVerified(favouriteCoinRepository)
+            confirmVerified(favouriteForexPairRepository)
         }
 
     @Test
@@ -89,7 +89,7 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
             val coinIds = listOf(FavouriteCoinId("Qwsogvtv82FCd"))
             val rawCoinIds = listOf("Qwsogvtv82FCd")
             val currency = Currency.USD
-            val coinSort = CoinSort.MarketCap
+            val coinSort = PairSort.MarketCap
             val favouriteCoins = listOf(
                 FavouriteCoin(
                     id = "Qwsogvtv82FCd",
@@ -109,7 +109,7 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
             )
 
             coEvery {
-                favouriteCoinRepository.getRemoteFavouriteCoins(
+                favouriteForexPairRepository.getRemoteFavouriteCoins(
                     coinIds = rawCoinIds,
                     currency = currency,
                     coinSort = coinSort
@@ -117,7 +117,7 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
             } returns Result.Success(favouriteCoins)
 
             coEvery {
-                favouriteCoinRepository.updateCachedFavouriteCoins(favouriteCoins = favouriteCoins)
+                favouriteForexPairRepository.updateCachedFavouriteCoins(favouriteCoins = favouriteCoins)
             } just Runs
 
             val expectedResult = Result.Success(favouriteCoins)
@@ -134,17 +134,17 @@ class UpdateCachedFavouriteCoinsUseCaseTest {
             assertThat((result as Result.Success).data).isEqualTo(expectedResult.data)
 
             coVerify(exactly = 1) {
-                favouriteCoinRepository.getRemoteFavouriteCoins(
+                favouriteForexPairRepository.getRemoteFavouriteCoins(
                     coinIds = rawCoinIds,
                     coinSort = coinSort,
                     currency = currency
                 )
 
-                favouriteCoinRepository.updateCachedFavouriteCoins(
+                favouriteForexPairRepository.updateCachedFavouriteCoins(
                     favouriteCoins = favouriteCoins
                 )
             }
 
-            confirmVerified(favouriteCoinRepository)
+            confirmVerified(favouriteForexPairRepository)
         }
 }

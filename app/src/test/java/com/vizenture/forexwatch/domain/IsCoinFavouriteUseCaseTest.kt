@@ -1,7 +1,7 @@
 package dev.shorthouse.coinwatch.domain
 
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.repository.favouriteCoinId.FavouriteCoinIdRepository
+import dev.shorthouse.coinwatch.data.repository.favouriteCoinId.FavouriteForexPairIdRepository
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
 import dev.shorthouse.coinwatch.domain.favourites.IsCoinFavouriteUseCase
 import io.mockk.MockKAnnotations
@@ -18,14 +18,14 @@ class IsCoinFavouriteUseCaseTest {
     private lateinit var isCoinFavouriteUseCase: IsCoinFavouriteUseCase
 
     @MockK
-    private lateinit var favouriteCoinIdRepository: FavouriteCoinIdRepository
+    private lateinit var favouriteForexPairIdRepository: FavouriteForexPairIdRepository
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
 
         isCoinFavouriteUseCase = IsCoinFavouriteUseCase(
-            favouriteCoinIdRepository = favouriteCoinIdRepository
+            favouriteForexPairIdRepository = favouriteForexPairIdRepository
         )
     }
 
@@ -35,7 +35,7 @@ class IsCoinFavouriteUseCaseTest {
         val favouriteCoinId = FavouriteCoinId(id = "Qwsogvtv82FCd")
 
         every {
-            favouriteCoinIdRepository.isCoinFavourite(favouriteCoinId = favouriteCoinId)
+            favouriteForexPairIdRepository.isCoinFavourite(favouriteCoinId = favouriteCoinId)
         } returns flowOf(Result.Success(true))
 
         // Act
@@ -43,7 +43,7 @@ class IsCoinFavouriteUseCaseTest {
 
         // Assert
         verifySequence {
-            favouriteCoinIdRepository.isCoinFavourite(favouriteCoinId = favouriteCoinId)
+            favouriteForexPairIdRepository.isCoinFavourite(favouriteCoinId = favouriteCoinId)
         }
     }
 }

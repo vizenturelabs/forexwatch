@@ -17,13 +17,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun CoinSortChip(
-    coinSort: CoinSort,
+    coinSort: PairSort,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -55,22 +55,22 @@ fun CoinSortChip(
     )
 }
 
-private val CoinSort.labelId: Int
+private val PairSort.labelId: Int
     get() = when (this) {
-        CoinSort.MarketCap -> R.string.market_coin_sort_market_cap
-        CoinSort.Popular -> R.string.market_coin_sort_popular
-        CoinSort.Gainers -> R.string.market_coin_sort_gainers
-        CoinSort.Losers -> R.string.market_coin_sort_losers
-        CoinSort.Newest -> R.string.market_coin_sort_newest
+        PairSort.MarketCap -> R.string.market_coin_sort_market_cap
+        PairSort.Popular -> R.string.market_coin_sort_popular
+        PairSort.Gainers -> R.string.market_coin_sort_gainers
+        PairSort.Losers -> R.string.market_coin_sort_losers
+        PairSort.Newest -> R.string.market_coin_sort_newest
     }
 
-private val CoinSort.imageVector: ImageVector
+private val PairSort.imageVector: ImageVector
     get() = when (this) {
-        CoinSort.MarketCap -> Icons.Rounded.BarChart
-        CoinSort.Popular -> Icons.Rounded.Whatshot
-        CoinSort.Gainers -> Icons.AutoMirrored.Rounded.TrendingUp
-        CoinSort.Losers -> Icons.AutoMirrored.Rounded.TrendingDown
-        CoinSort.Newest -> Icons.Rounded.MoreTime
+        PairSort.MarketCap -> Icons.Rounded.BarChart
+        PairSort.Popular -> Icons.Rounded.Whatshot
+        PairSort.Gainers -> Icons.AutoMirrored.Rounded.TrendingUp
+        PairSort.Losers -> Icons.AutoMirrored.Rounded.TrendingDown
+        PairSort.Newest -> Icons.Rounded.MoreTime
     }
 
 @Preview(showBackground = true)
@@ -78,7 +78,7 @@ private val CoinSort.imageVector: ImageVector
 @Composable
 private fun CoinSortChipUnselectedPreview() {
     CoinSortChip(
-        coinSort = CoinSort.MarketCap,
+        coinSort = PairSort.MarketCap,
         selected = false,
         onClick = {}
     )
@@ -90,7 +90,7 @@ private fun CoinSortChipUnselectedPreview() {
 @Composable
 private fun CoinSortChipSelectedPreview() {
     CoinSortChip(
-        coinSort = CoinSort.Gainers,
+        coinSort = PairSort.Gainers,
         selected = true,
         onClick = {}
     )

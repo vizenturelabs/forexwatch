@@ -1,7 +1,7 @@
 package dev.shorthouse.coinwatch.data.source.local.datastore.favourites
 
 import androidx.datastore.core.DataStore
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -30,7 +30,7 @@ class FavouritesPreferencesRepository @Inject constructor(
         }
     }
 
-    suspend fun updateCoinSort(coinSort: CoinSort) {
+    suspend fun updateCoinSort(coinSort: PairSort) {
         if (coinSort != favouritesPreferencesFlow.first().coinSort) {
             favouritesPreferencesDataStore.updateData { currentPreferences ->
                 currentPreferences.copy(coinSort = coinSort)

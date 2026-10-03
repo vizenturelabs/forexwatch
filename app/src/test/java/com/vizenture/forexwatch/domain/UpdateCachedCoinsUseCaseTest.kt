@@ -2,7 +2,7 @@ package dev.shorthouse.coinwatch.domain
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.common.Result
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.CoinSort
+import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.repository.coin.CoinRepository
 import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
@@ -39,7 +39,7 @@ class UpdateCachedCoinsUseCaseTest {
     @Test
     fun `When remote coins success should refresh cached coins and return success`() = runTest {
         // Arrange
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
         val currency = Currency.EUR
 
         val remoteCoinsResult = Result.Success(
@@ -89,7 +89,7 @@ class UpdateCachedCoinsUseCaseTest {
     @Test
     fun `When remote coins error should not call refresh and should return error`() = runTest {
         // Arrange
-        val coinSort = CoinSort.Gainers
+        val coinSort = PairSort.Gainers
         val currency = Currency.EUR
 
         val remoteCoinsResult = Result.Error<List<Coin>>(
