@@ -3,6 +3,7 @@ package dev.shorthouse.coinwatch.ui.screen.pulse.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -13,9 +14,8 @@ import dev.shorthouse.coinwatch.R
 import dev.shorthouse.coinwatch.model.FearGreed
 import dev.shorthouse.coinwatch.model.FearGreedMoodBand
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
-import androidx.compose.material3.MaterialTheme
+import java.math.BigDecimal
 
 @PreviewTest
 @Preview

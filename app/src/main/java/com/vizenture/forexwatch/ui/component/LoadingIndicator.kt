@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.component
+package com.vizenture.forexwatch.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun LoadingIndicator(modifier: Modifier = Modifier) {
@@ -25,12 +22,4 @@ fun LoadingIndicator(modifier: Modifier = Modifier) {
             strokeCap = StrokeCap.Round
         )
     }
-}
-
-@Preview(showBackground = true)
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-@Composable
-private fun LoadingIndicatorPreview() {
-    LoadingIndicator()
-
 }

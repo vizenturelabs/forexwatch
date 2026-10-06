@@ -13,11 +13,11 @@ import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.Revi
 import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
 import dev.shorthouse.coinwatch.e2e.fixture.Bitcoin
 import dev.shorthouse.coinwatch.e2e.support.awaitText
-import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
 @HiltAndroidTest
 class ReviewAnalyticsE2ETest {

@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.insets
+package com.vizenture.forexwatch.ui.insets
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides

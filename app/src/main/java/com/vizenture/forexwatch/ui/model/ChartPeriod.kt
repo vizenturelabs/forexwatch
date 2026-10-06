@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.ui.model
+package com.vizenture.forexwatch.ui.model
 
 import androidx.annotation.StringRes
-import dev.shorthouse.coinwatch.R
+import com.vizenture.forexwatch.R
 
 enum class ChartPeriod(
     @StringRes val shortNameId: Int,

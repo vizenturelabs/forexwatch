@@ -1,6 +1,6 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore.global
+package com.vizenture.forexwatch.data.source.local.datastore.global
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.BasePreferencesSerializer
+import com.vizenture.forexwatch.data.source.local.datastore.BasePreferencesSerializer
 
 object UserPreferencesSerializer : BasePreferencesSerializer<UserPreferences>(
     defaultInstance = { UserPreferences() },

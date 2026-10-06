@@ -22,12 +22,12 @@ import dev.shorthouse.coinwatch.model.TrendingCoin
 import dev.shorthouse.coinwatch.ui.screen.pulse.PulseScreen
 import dev.shorthouse.coinwatch.ui.screen.pulse.PulseUiState
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
-import java.math.BigDecimal
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import org.junit.Rule
 import org.junit.Test
+import java.math.BigDecimal
 
 class PulseScreenTest {
 

@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
 import kotlinx.collections.immutable.ImmutableList
 import java.math.BigDecimal

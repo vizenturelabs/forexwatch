@@ -1,6 +1,5 @@
 package dev.shorthouse.coinwatch.domain
 
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.repository.favouriteCoinId.FavouriteForexPairIdRepository
 import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
 import dev.shorthouse.coinwatch.domain.favourites.IsCoinFavouriteUseCase

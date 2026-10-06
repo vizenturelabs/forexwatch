@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.market.component
+package com.vizenture.forexwatch.ui.screen.market.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,10 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import dev.shorthouse.coinwatch.R
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
+import com.vizenture.forexwatch.R
 
 @Composable
 fun SearchPrompt(modifier: Modifier = Modifier) {
@@ -36,12 +33,4 @@ fun SearchPrompt(modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun SearchPromptPreview() {
-    SearchPrompt()
-
 }

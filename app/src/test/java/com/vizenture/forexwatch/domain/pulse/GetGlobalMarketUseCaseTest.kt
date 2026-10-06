@@ -1,7 +1,6 @@
 package dev.shorthouse.coinwatch.domain.pulse
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.repository.globalMarket.GlobalMarketRepository
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.model.GlobalMarket
@@ -10,10 +9,10 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerifySequence
 import io.mockk.impl.annotations.MockK
-import java.math.BigDecimal
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 
 class GetGlobalMarketUseCaseTest {
 

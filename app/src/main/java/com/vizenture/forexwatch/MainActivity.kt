@@ -11,9 +11,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.vizenture.forexwatch.navigation.AppNavHost
+import com.vizenture.forexwatch.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.coinwatch.navigation.AppNavHost
-import dev.shorthouse.coinwatch.ui.theme.AppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

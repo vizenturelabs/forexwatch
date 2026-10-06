@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore
+package com.vizenture.forexwatch.data.source.local.datastore
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.KSerializer

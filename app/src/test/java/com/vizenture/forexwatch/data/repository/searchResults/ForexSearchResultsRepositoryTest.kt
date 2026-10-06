@@ -1,13 +1,12 @@
 package dev.shorthouse.coinwatch.data.repository.searchResults
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.ForexSearchResultsMapper
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResult
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinSearchResultsData
 import dev.shorthouse.coinwatch.model.SearchResult
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

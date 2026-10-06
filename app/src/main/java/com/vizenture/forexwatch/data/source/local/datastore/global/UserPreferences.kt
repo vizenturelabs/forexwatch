@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore.global
+package com.vizenture.forexwatch.data.source.local.datastore.global
 
 import androidx.annotation.StringRes
-import dev.shorthouse.coinwatch.R
+import com.vizenture.forexwatch.R
 import kotlinx.serialization.Serializable
 
 @Serializable

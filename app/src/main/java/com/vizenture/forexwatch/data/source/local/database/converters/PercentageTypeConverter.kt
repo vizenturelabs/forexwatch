@@ -1,8 +1,8 @@
-package dev.shorthouse.coinwatch.data.source.local.database.converters
+package com.vizenture.forexwatch.data.source.local.database.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import dev.shorthouse.coinwatch.model.Percentage
+import com.vizenture.forexwatch.model.Percentage
 
 class PercentageTypeConverter {
     private val gson = Gson()

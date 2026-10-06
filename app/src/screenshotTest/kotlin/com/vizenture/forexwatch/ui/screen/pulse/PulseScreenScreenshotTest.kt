@@ -9,8 +9,8 @@ import dev.shorthouse.coinwatch.model.FearGreedMoodBand
 import dev.shorthouse.coinwatch.model.GlobalMarket
 import dev.shorthouse.coinwatch.model.Price
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
+import java.math.BigDecimal
 
 @PreviewTest
 @Preview

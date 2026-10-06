@@ -8,9 +8,9 @@ import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinsData
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
 import dev.shorthouse.coinwatch.model.TrendingCoin
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
+import java.math.BigDecimal
 
 class TrendingCoinMapperTest {
 

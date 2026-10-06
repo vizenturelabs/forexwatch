@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.domain.preferences
+package com.vizenture.forexwatch.domain.preferences
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
-import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferencesRepository
+import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.favourites.FavouritesPreferencesRepository
 import javax.inject.Inject
 
 class UpdateFavouritesCoinSortUseCase @Inject constructor(

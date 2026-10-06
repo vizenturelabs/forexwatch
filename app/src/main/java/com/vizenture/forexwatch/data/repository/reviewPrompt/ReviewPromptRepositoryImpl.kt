@@ -1,8 +1,8 @@
-package dev.shorthouse.coinwatch.data.repository.reviewPrompt
+package com.vizenture.forexwatch.data.repository.reviewPrompt
 
-import dev.shorthouse.coinwatch.common.TimeProvider
-import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.ReviewAnalytics
-import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
+import com.vizenture.forexwatch.common.TimeProvider
+import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalytics
+import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
 import java.time.Duration
 import javax.inject.Inject
 

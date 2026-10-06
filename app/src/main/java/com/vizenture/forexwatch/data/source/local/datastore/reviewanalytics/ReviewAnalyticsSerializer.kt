@@ -1,6 +1,6 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics
+package com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.BasePreferencesSerializer
+import com.vizenture.forexwatch.data.source.local.datastore.BasePreferencesSerializer
 
 object ReviewAnalyticsSerializer : BasePreferencesSerializer<ReviewAnalytics>(
     defaultInstance = { ReviewAnalytics() },

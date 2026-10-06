@@ -10,10 +10,10 @@ import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
 import dev.shorthouse.coinwatch.model.TrendingCoin
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
+import java.math.BigDecimal
 
 class TrendingSpotlightCardTest {
 

@@ -1,7 +1,6 @@
 package dev.shorthouse.coinwatch.domain.pulse
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.repository.fearGreed.FearGreedRepository
 import dev.shorthouse.coinwatch.model.FearGreed
 import dev.shorthouse.coinwatch.model.FearGreedMoodBand
@@ -9,11 +8,11 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerifySequence
 import io.mockk.impl.annotations.MockK
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 
 class GetFearGreedUseCaseTest {
 

@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.navigation
+package com.vizenture.forexwatch.navigation
 
 import androidx.annotation.StringRes
-import dev.shorthouse.coinwatch.R
+import com.vizenture.forexwatch.R
 
 sealed class NavigationBarScreen(
     val route: String,

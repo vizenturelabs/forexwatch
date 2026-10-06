@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.common
+package com.vizenture.forexwatch.common
 
 import android.os.SystemClock
 import java.time.Clock

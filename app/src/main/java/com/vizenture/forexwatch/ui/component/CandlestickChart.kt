@@ -45,9 +45,9 @@ fun CandlestickChart(
                 setNoDataTextColor(textColor)
 
                 xAxis.apply {
-                    position = XAxis.XAxisPosition.BOTTOM
+                    setPosition(XAxis.XAxisPosition.BOTTOM) // Fixed: use setPosition()
                     setDrawGridLines(false)
-                    textColor = textColor
+                    setTextColor(textColor)                 // Fixed: use setTextColor()
                     granularity = 1f
                     valueFormatter = object : ValueFormatter() {
                         private val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -59,11 +59,11 @@ fun CandlestickChart(
 
                 axisLeft.apply {
                     setDrawGridLines(true)
-                    gridColor = gridColor
-                    textColor = textColor
+                    setGridColor(gridColor)                 // Fixed: use setGridColor()
+                    setTextColor(textColor)                 // Fixed: use setTextColor()
                     setDrawAxisLine(false)
-                    spaceTop = 10f
-                    spaceBottom = 10f
+                    setSpaceTop(10f)                        // Fixed: use setSpaceTop()
+                    setSpaceBottom(10f)                     // Fixed: use setSpaceBottom()
                 }
 
                 axisRight.isEnabled = false

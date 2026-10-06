@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
-import dev.shorthouse.coinwatch.common.toSanitisedBigDecimalOrNull
-import dev.shorthouse.coinwatch.common.toSanitisedBigDecimalOrZero
+import com.vizenture.forexwatch.common.toSanitisedBigDecimalOrNull
+import com.vizenture.forexwatch.common.toSanitisedBigDecimalOrZero
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale

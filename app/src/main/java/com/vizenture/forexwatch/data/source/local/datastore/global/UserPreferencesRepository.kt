@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore.global
+package com.vizenture.forexwatch.data.source.local.datastore.global
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.Flow

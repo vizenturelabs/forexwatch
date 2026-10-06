@@ -3,11 +3,12 @@ package com.vizenture.forexwatch.data.repository.pair
 import com.vizenture.forexwatch.common.Constants
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.mapper.ForexChartMapper
-import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
-import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.database.ForexLocalDataSource
 import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
+import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSource
+import com.vizenture.forexwatch.model.Percentage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class ForexPairRepositoryImpl @Inject constructor(
                         bid = details.bid,
                         ask = details.ask,
                         spread = details.spread,
-                        priceChangePercentage24h = details.periodPriceChangePercentage, // Will be 0 for now
+                        priceChangePercentage24h = Percentage("0.00"), // Will be 0 for now
                         isJpyPair = details.isJpyPair
                     )
                 }

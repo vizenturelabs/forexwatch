@@ -1,20 +1,20 @@
 package dev.shorthouse.coinwatch.ui.screen.pulse.component
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.model.FearGreed
 import dev.shorthouse.coinwatch.model.FearGreedMoodBand
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
+import java.math.BigDecimal
 
 class MarketMoodCardTest {
 

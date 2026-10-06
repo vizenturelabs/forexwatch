@@ -1,19 +1,17 @@
 package dev.shorthouse.coinwatch.data.repository.marketStats
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.mapper.MarketStatsMapper
 import dev.shorthouse.coinwatch.data.source.remote.model.MarketStatsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.MarketStatsData
 import dev.shorthouse.coinwatch.data.source.remote.model.MarketStatsDataHolder
 import dev.shorthouse.coinwatch.model.MarketStats
 import dev.shorthouse.coinwatch.model.Percentage
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -22,6 +20,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.Response
+import java.io.IOException
 
 class MarketStatsRepositoryTest {
 

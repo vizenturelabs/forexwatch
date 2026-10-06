@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.settings.component
+package com.vizenture.forexwatch.ui.screen.settings.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,10 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun SettingsItem(
@@ -74,18 +68,4 @@ fun SettingsItem(
             )
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun SettingsItemPreview() {
-    SettingsItem(
-        title = "Start destination",
-        subtitle = "Market",
-        leadingIcon = Icons.Rounded.Home,
-        trailingIcon = Icons.Rounded.ChevronRight,
-        onClick = {}
-    )
-
 }

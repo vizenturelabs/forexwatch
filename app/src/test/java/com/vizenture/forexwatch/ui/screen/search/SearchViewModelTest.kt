@@ -2,10 +2,9 @@ package dev.shorthouse.coinwatch.ui.screen.search
 
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.domain.search.GetCoinSearchResultsUseCase
 import dev.shorthouse.coinwatch.model.SearchResult
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

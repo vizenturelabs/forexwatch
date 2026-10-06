@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.settings
+package com.vizenture.forexwatch.ui.screen.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -37,26 +37,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.shorthouse.coinwatch.BuildConfig
-import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
-import dev.shorthouse.coinwatch.ui.component.ErrorState
-import dev.shorthouse.coinwatch.ui.component.LoadingIndicator
-import dev.shorthouse.coinwatch.ui.insets.AppWindowInsets
-import dev.shorthouse.coinwatch.ui.preview.SettingsUiStatePreviewProvider
-import dev.shorthouse.coinwatch.ui.screen.settings.component.CurrencyBottomSheet
-import dev.shorthouse.coinwatch.ui.screen.settings.component.SettingsGroup
-import dev.shorthouse.coinwatch.ui.screen.settings.component.SettingsItem
-import dev.shorthouse.coinwatch.ui.screen.settings.component.StartScreenBottomSheet
+import com.vizenture.forexwatch.BuildConfig
+import com.vizenture.forexwatch.R
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
+import com.vizenture.forexwatch.ui.component.ErrorState
+import com.vizenture.forexwatch.ui.component.LoadingIndicator
+import com.vizenture.forexwatch.ui.insets.AppWindowInsets
+import com.vizenture.forexwatch.ui.screen.settings.component.CurrencyBottomSheet
+import com.vizenture.forexwatch.ui.screen.settings.component.SettingsGroup
+import com.vizenture.forexwatch.ui.screen.settings.component.SettingsItem
+import com.vizenture.forexwatch.ui.screen.settings.component.StartScreenBottomSheet
 import kotlinx.coroutines.launch
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun SettingsScreen(
@@ -284,19 +279,3 @@ fun SettingsTopBar(
     )
 }
 
-@Preview
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-@Composable
-private fun SettingsScreenPreview(
-    @PreviewParameter(SettingsUiStatePreviewProvider::class) uiState: SettingsUiState,
-) {
-    SettingsScreen(
-        uiState = uiState,
-        onNavigateUp = {},
-        onUpdateCurrency = {},
-        onUpdateIsCurrencySheetShown = {},
-        onUpdateStartScreen = {},
-        onUpdateIsStartScreenSheetShown = {}
-    )
-
-}

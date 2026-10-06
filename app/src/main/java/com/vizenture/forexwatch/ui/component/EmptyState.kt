@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.component
+package com.vizenture.forexwatch.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,13 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.shorthouse.coinwatch.R
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun EmptyState(
@@ -61,20 +55,3 @@ fun EmptyState(
     }
 }
 
-@Composable
-@Preview(heightDp = 400)
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun EmptyStatePreview() {
-    EmptyState(
-        image = painterResource(R.drawable.empty_state_coins),
-        title = "No coins",
-        subtitle = {
-            Text(
-                text = stringResource(R.string.empty_state_coins_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        },
-    )
-
-}

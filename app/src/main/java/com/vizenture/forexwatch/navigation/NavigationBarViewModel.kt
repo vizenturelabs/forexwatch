@@ -1,9 +1,9 @@
-package dev.shorthouse.coinwatch.navigation
+package com.vizenture.forexwatch.navigation
 
 import androidx.lifecycle.ViewModel
+import com.vizenture.forexwatch.domain.reviewprompt.IsReviewPromptEligibleUseCase
+import com.vizenture.forexwatch.domain.reviewprompt.RecordReviewPromptAttemptedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.coinwatch.domain.reviewprompt.IsReviewPromptEligibleUseCase
-import dev.shorthouse.coinwatch.domain.reviewprompt.RecordReviewPromptAttemptedUseCase
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,5 +1,7 @@
 package dev.shorthouse.coinwatch.e2e
 
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
@@ -8,8 +10,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
 import androidx.test.core.app.ActivityScenario
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -22,12 +22,12 @@ import dev.shorthouse.coinwatch.e2e.fixture.respondWithCoins
 import dev.shorthouse.coinwatch.e2e.support.awaitText
 import dev.shorthouse.coinwatch.e2e.support.launchMainActivityAfterPreLaunchSetup
 import dev.shorthouse.coinwatch.model.Price
-import java.util.Locale
-import javax.inject.Inject
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.Locale
+import javax.inject.Inject
 
 @HiltAndroidTest
 class PriceLocaleE2ETest {

@@ -1,12 +1,12 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics
+package com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics
 
 import androidx.datastore.core.DataStore
-import java.io.IOException
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
+import java.io.IOException
+import javax.inject.Inject
 
 class ReviewAnalyticsLocalDataSource @Inject constructor(
     private val reviewAnalyticsDataStore: DataStore<ReviewAnalytics>,

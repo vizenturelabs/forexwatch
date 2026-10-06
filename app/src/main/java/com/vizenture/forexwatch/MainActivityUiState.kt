@@ -1,6 +1,6 @@
-package dev.shorthouse.coinwatch
+package com.vizenture.forexwatch
 
-import dev.shorthouse.coinwatch.navigation.NavigationBarScreen
+import com.vizenture.forexwatch.navigation.NavigationBarScreen
 
 data class MainActivityUiState(
     val startScreen: NavigationBarScreen = NavigationBarScreen.Market,

@@ -45,24 +45,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vizenture.forexwatch.R
 import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
 import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
-import com.vizenture.forexwatch.ui.component.PairSortChip
 import com.vizenture.forexwatch.ui.component.LoadingIndicator
+import com.vizenture.forexwatch.ui.component.PairSortChip
 import com.vizenture.forexwatch.ui.component.ScrollToTopFab
 import com.vizenture.forexwatch.ui.insets.AppWindowInsets
 import com.vizenture.forexwatch.ui.model.TimeOfDay
-import com.vizenture.forexwatch.ui.preview.AppPreviewWrapper
-import com.vizenture.forexwatch.ui.preview.MarketUiStatePreviewProvider
-import com.vizenture.forexwatch.ui.screen.market.component.MarketPairItem
 import com.vizenture.forexwatch.ui.screen.market.component.MarketDropdownMenu
+import com.vizenture.forexwatch.ui.screen.market.component.MarketPairItem
 import com.vizenture.forexwatch.ui.screen.market.component.SearchPrompt
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -298,20 +293,4 @@ private fun MarketContent(
             }
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun MarketScreenPreview(
-    @PreviewParameter(MarketUiStatePreviewProvider::class) uiState: MarketUiState,
-) {
-    MarketScreen(
-        uiState = uiState,
-        onPairClick = {},
-        onNavigateSettings = {},
-        onUpdatePairSort = {},
-        onRefresh = {},
-        onDismissError = {}
-    )
 }

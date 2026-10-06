@@ -5,9 +5,9 @@ import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedDataPointApiModel
 import dev.shorthouse.coinwatch.model.FearGreed
 import dev.shorthouse.coinwatch.model.FearGreedMoodBand
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
+import java.math.BigDecimal
 
 class FearGreedMapperTest {
 

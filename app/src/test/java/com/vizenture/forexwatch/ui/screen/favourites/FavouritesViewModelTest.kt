@@ -1,14 +1,12 @@
 package dev.shorthouse.coinwatch.ui.screen.favourites
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.common.Result
+import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
+import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
 import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferences
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
-import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoin
-import dev.shorthouse.coinwatch.data.source.local.database.model.FavouriteCoinId
 import dev.shorthouse.coinwatch.domain.favourites.GetFavouriteCoinIdsUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetFavouritesPreferencesUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
@@ -16,6 +14,7 @@ import dev.shorthouse.coinwatch.domain.preferences.UpdateFavouritesCoinSortUseCa
 import dev.shorthouse.coinwatch.domain.preferences.UpdateIsFavouritesCondensedUseCase
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify

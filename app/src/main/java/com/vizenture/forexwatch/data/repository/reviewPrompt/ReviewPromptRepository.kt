@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.data.repository.reviewPrompt
+package com.vizenture.forexwatch.data.repository.reviewPrompt
 
 interface ReviewPromptRepository {
     suspend fun recordSuccessfulDetailsView()

@@ -1,18 +1,18 @@
-package dev.shorthouse.coinwatch
+package com.vizenture.forexwatch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
+import com.vizenture.forexwatch.domain.preferences.GetUserPreferencesUseCase
+import com.vizenture.forexwatch.navigation.NavigationBarScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
-import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
-import dev.shorthouse.coinwatch.navigation.NavigationBarScreen
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(

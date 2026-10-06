@@ -1,6 +1,5 @@
 package com.vizenture.forexwatch.data.mapper
 
-import com.google.gson.JsonObject
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponse

@@ -1,11 +1,11 @@
-package dev.shorthouse.coinwatch.di
+package com.vizenture.forexwatch.di
 
+import com.vizenture.forexwatch.common.SystemTimeProvider
+import com.vizenture.forexwatch.common.TimeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.coinwatch.common.SystemTimeProvider
-import dev.shorthouse.coinwatch.common.TimeProvider
 import javax.inject.Singleton
 
 @Module

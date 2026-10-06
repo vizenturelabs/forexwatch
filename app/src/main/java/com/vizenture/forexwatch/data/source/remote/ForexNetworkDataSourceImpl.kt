@@ -1,8 +1,8 @@
 package com.vizenture.forexwatch.data.source.remote
 
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponse
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageSearchResponse
+import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponse
 import javax.inject.Inject
 
 class ForexNetworkDataSourceImpl @Inject constructor(

@@ -1,13 +1,13 @@
-package dev.shorthouse.coinwatch.ui.screen.settings
+package com.vizenture.forexwatch.ui.screen.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
+import com.vizenture.forexwatch.domain.preferences.GetUserPreferencesUseCase
+import com.vizenture.forexwatch.domain.preferences.UpdateCurrencyUseCase
+import com.vizenture.forexwatch.domain.preferences.UpdateStartScreenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
-import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
-import dev.shorthouse.coinwatch.domain.preferences.UpdateCurrencyUseCase
-import dev.shorthouse.coinwatch.domain.preferences.UpdateStartScreenUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch

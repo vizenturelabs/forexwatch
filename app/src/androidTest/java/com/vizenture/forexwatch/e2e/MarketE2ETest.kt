@@ -20,10 +20,11 @@ import dev.shorthouse.coinwatch.e2e.fixture.failCoins
 import dev.shorthouse.coinwatch.e2e.fixture.respondWithCoins
 import dev.shorthouse.coinwatch.e2e.support.awaitText
 import dev.shorthouse.coinwatch.model.Price
-import javax.inject.Inject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
+
 @HiltAndroidTest
 class MarketE2ETest {
 

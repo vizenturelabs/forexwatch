@@ -1,6 +1,5 @@
 package dev.shorthouse.coinwatch.data.source.remote
 
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinsApiModel
@@ -8,6 +7,7 @@ import dev.shorthouse.coinwatch.data.source.remote.model.FavouriteCoinsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.GlobalMarketCoinStatsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.GlobalStatsApiModel
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify

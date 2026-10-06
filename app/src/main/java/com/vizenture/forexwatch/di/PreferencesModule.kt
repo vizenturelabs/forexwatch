@@ -1,23 +1,23 @@
-package dev.shorthouse.coinwatch.di
+package com.vizenture.forexwatch.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
+import com.vizenture.forexwatch.data.source.local.datastore.favourites.FavouritesPreferences
+import com.vizenture.forexwatch.data.source.local.datastore.favourites.FavouritesPreferencesSerializer
+import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferences
+import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferencesSerializer
+import com.vizenture.forexwatch.data.source.local.datastore.market.MarketPreferences
+import com.vizenture.forexwatch.data.source.local.datastore.market.MarketPreferencesSerializer
+import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalytics
+import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferences
-import dev.shorthouse.coinwatch.data.source.local.datastore.favourites.FavouritesPreferencesSerializer
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferencesSerializer
-import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferences
-import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferencesSerializer
-import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.ReviewAnalytics
-import dev.shorthouse.coinwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsSerializer
 import javax.inject.Singleton
 
 @Module

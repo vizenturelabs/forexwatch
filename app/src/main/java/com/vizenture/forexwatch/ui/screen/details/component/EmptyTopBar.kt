@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.details.component
+package com.vizenture.forexwatch.ui.screen.details.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -11,10 +11,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import dev.shorthouse.coinwatch.R
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
+import com.vizenture.forexwatch.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,12 +36,3 @@ fun EmptyTopBar(
     )
 }
 
-@Preview
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-@Composable
-private fun DetailsEmptyTopBarPreview() {
-    EmptyTopBar(
-        onNavigateUp = {}
-    )
-
-}

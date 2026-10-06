@@ -22,11 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
 import com.vizenture.forexwatch.ui.component.PercentageChange
-import com.vizenture.forexwatch.ui.preview.CurrencyPairPreviewProvider
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import com.vizenture.forexwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun MarketPairItem(
@@ -96,15 +91,4 @@ fun MarketPairItem(
     }
 }
 
-@Composable
-@Preview
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun MarketPairItemPreview(
-    @PreviewParameter(CurrencyPairPreviewProvider::class) pair: CurrencyPair,
-) {
-    MarketPairItem(
-        pair = pair,
-        onPairClick = {},
-        cardShape = MaterialTheme.shapes.medium
-    )
-}
+

@@ -2,33 +2,177 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "709dd53f253b1b79e567cd82d73a5811",
+    "identityHash": "6d7c4b12b68e6e6e690ddf93a91c6271",
     "entities": [
       {
-        "tableName": "FavouriteCoin",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "currency_pairs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`symbol` TEXT NOT NULL, `terminalId` INTEGER NOT NULL, `name` TEXT NOT NULL, `currentPrice` TEXT NOT NULL, `bid` TEXT NOT NULL, `ask` TEXT NOT NULL, `spread` REAL NOT NULL, `priceChangePercentage24h` TEXT NOT NULL, `isJpyPair` INTEGER NOT NULL, PRIMARY KEY(`symbol`, `terminalId`))",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "symbol",
+            "columnName": "symbol",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "terminalId",
+            "columnName": "terminalId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentPrice",
+            "columnName": "currentPrice",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bid",
+            "columnName": "bid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ask",
+            "columnName": "ask",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spread",
+            "columnName": "spread",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceChangePercentage24h",
+            "columnName": "priceChangePercentage24h",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isJpyPair",
+            "columnName": "isJpyPair",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "id"
+            "symbol",
+            "terminalId"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
+      },
+      {
+        "tableName": "favourite_currency_pairs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`symbol` TEXT NOT NULL, `terminalId` INTEGER NOT NULL, `name` TEXT NOT NULL, `currentPrice` TEXT NOT NULL, `bid` TEXT NOT NULL, `ask` TEXT NOT NULL, `spread` REAL NOT NULL, `priceChangePercentage24h` TEXT NOT NULL, `priceHistory24h` TEXT NOT NULL, `isJpyPair` INTEGER NOT NULL, PRIMARY KEY(`symbol`, `terminalId`))",
+        "fields": [
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "terminalId",
+            "columnName": "terminalId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentPrice",
+            "columnName": "currentPrice",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bid",
+            "columnName": "bid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ask",
+            "columnName": "ask",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spread",
+            "columnName": "spread",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceChangePercentage24h",
+            "columnName": "priceChangePercentage24h",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceHistory24h",
+            "columnName": "priceHistory24h",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isJpyPair",
+            "columnName": "isJpyPair",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "symbol",
+            "terminalId"
+          ]
+        }
+      },
+      {
+        "tableName": "favourite_symbols",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`symbol` TEXT NOT NULL, `terminalId` INTEGER NOT NULL, PRIMARY KEY(`symbol`, `terminalId`))",
+        "fields": [
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "terminalId",
+            "columnName": "terminalId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "symbol",
+            "terminalId"
+          ]
+        }
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '709dd53f253b1b79e567cd82d73a5811')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6d7c4b12b68e6e6e690ddf93a91c6271')"
     ]
   }
 }

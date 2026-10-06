@@ -1,20 +1,19 @@
 package dev.shorthouse.coinwatch.ui.screen.market
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.common.Result
+import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
 import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
 import dev.shorthouse.coinwatch.data.source.local.datastore.market.MarketPreferences
-import dev.shorthouse.coinwatch.data.source.local.database.model.Coin
 import dev.shorthouse.coinwatch.domain.preferences.GetMarketPreferencesUseCase
 import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
 import dev.shorthouse.coinwatch.domain.preferences.UpdateMarketCoinSortUseCase
 import dev.shorthouse.coinwatch.model.MarketStats
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.Price
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.ui.model.TimeOfDay
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

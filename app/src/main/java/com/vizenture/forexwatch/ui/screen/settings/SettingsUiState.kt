@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.ui.screen.settings
+package com.vizenture.forexwatch.ui.screen.settings
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
 
 data class SettingsUiState(
     val currency: Currency = Currency.USD,

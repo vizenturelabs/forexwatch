@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.navigation
+package com.vizenture.forexwatch.navigation
 
 import android.app.Activity
 import androidx.activity.compose.LocalActivity
@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.WifiTethering
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -37,11 +35,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import dev.shorthouse.coinwatch.ui.review.launchInAppReview
-import dev.shorthouse.coinwatch.ui.screen.favourites.FavouritesScreen
-import dev.shorthouse.coinwatch.ui.screen.market.MarketScreen
-import dev.shorthouse.coinwatch.ui.screen.pulse.PulseScreen
-import dev.shorthouse.coinwatch.ui.screen.search.SearchScreen
+import com.vizenture.forexwatch.ui.review.launchInAppReview
+import com.vizenture.forexwatch.ui.screen.favourites.FavouritesScreen
+import com.vizenture.forexwatch.ui.screen.market.MarketScreen
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
@@ -58,9 +54,8 @@ fun NavigationBarScaffold(
     val navigationBarScreens = remember {
         persistentListOf(
             NavigationBarScreen.Market,
-            NavigationBarScreen.Favourites,
-            NavigationBarScreen.Pulse,
-            NavigationBarScreen.Search
+            NavigationBarScreen.Favourites
+            // Pulse and Search are temporarily disabled
         )
     }
 
@@ -145,12 +140,7 @@ private fun NavigationBarNavHost(
         composable(route = NavigationBarScreen.Favourites.route) {
             FavouritesScreen(onNavigateDetails = onNavigateDetails)
         }
-        composable(route = NavigationBarScreen.Pulse.route) {
-            PulseScreen(onNavigateDetails = onNavigateDetails)
-        }
-        composable(route = NavigationBarScreen.Search.route) {
-            SearchScreen(onNavigateDetails = onNavigateDetails)
-        }
+        // Pulse and Search composables removed
     }
 }
 
@@ -177,8 +167,7 @@ private fun RowScope.AddNavigationBarItem(
                 imageVector = when (screen) {
                     NavigationBarScreen.Market -> Icons.Rounded.BarChart
                     NavigationBarScreen.Favourites -> Icons.Rounded.Favorite
-                    NavigationBarScreen.Pulse -> Icons.Rounded.WifiTethering
-                    NavigationBarScreen.Search -> Icons.Rounded.Search
+                    else -> Icons.Rounded.BarChart // Fallback for disabled screens
                 },
                 contentDescription = null
             )

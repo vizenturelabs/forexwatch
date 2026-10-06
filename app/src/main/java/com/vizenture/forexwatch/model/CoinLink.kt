@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
 data class CoinLink(
     val type: CoinLinkType,

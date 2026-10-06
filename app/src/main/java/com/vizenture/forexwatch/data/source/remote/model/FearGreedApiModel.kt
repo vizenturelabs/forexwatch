@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.data.source.remote.model
+package com.vizenture.forexwatch.data.source.remote.model
 
 import com.google.gson.annotations.SerializedName
 

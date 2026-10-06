@@ -9,8 +9,8 @@ import dev.shorthouse.coinwatch.data.source.remote.model.GlobalStatsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.GlobalStatsData
 import dev.shorthouse.coinwatch.model.GlobalMarket
 import dev.shorthouse.coinwatch.model.Price
-import java.math.BigDecimal
 import org.junit.Test
+import java.math.BigDecimal
 
 class GlobalMarketMapperTest {
 

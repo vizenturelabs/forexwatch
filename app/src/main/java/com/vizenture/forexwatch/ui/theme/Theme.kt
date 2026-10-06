@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.theme
+package com.vizenture.forexwatch.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

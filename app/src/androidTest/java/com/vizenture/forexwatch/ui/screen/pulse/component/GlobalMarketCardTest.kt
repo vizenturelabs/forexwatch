@@ -7,11 +7,11 @@ import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.model.GlobalMarket
 import dev.shorthouse.coinwatch.model.Price
 import dev.shorthouse.coinwatch.ui.theme.AppTheme
+import org.junit.Rule
+import org.junit.Test
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
-import org.junit.Rule
-import org.junit.Test
 
 class GlobalMarketCardTest {
 

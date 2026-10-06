@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vizenture.forexwatch.common.Constants.PARAM_PAIR_SYMBOL
 import com.vizenture.forexwatch.common.Result
-import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.database.model.FavouriteSymbol
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.domain.manager.TerminalManager
 import com.vizenture.forexwatch.domain.usecase.details.GetForexPairChartUseCase
 import com.vizenture.forexwatch.domain.usecase.details.GetForexPairDetailsUseCase
@@ -14,7 +14,6 @@ import com.vizenture.forexwatch.domain.usecase.favourites.IsForexPairFavouriteUs
 import com.vizenture.forexwatch.domain.usecase.favourites.ToggleIsForexPairFavouriteUseCase
 import com.vizenture.forexwatch.ui.model.ChartPeriod
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

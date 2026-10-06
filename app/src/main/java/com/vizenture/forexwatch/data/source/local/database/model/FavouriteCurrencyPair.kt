@@ -3,8 +3,8 @@ package com.vizenture.forexwatch.data.source.local.database.model
 import androidx.room.Entity
 import com.vizenture.forexwatch.model.Percentage
 import com.vizenture.forexwatch.model.Price
-import java.math.BigDecimal
 import kotlinx.collections.immutable.ImmutableList
+import java.math.BigDecimal
 
 @Entity(
     tableName = "favourite_currency_pairs",

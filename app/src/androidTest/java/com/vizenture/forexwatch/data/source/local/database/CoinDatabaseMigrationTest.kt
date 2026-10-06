@@ -6,10 +6,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
-import java.io.Closeable
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.Closeable
 
 @RunWith(AndroidJUnit4::class)
 class CoinDatabaseMigrationTest {

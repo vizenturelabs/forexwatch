@@ -1,6 +1,6 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
-import dev.shorthouse.coinwatch.common.Constants.MISSING_VALUE_PLACEHOLDER
+import com.vizenture.forexwatch.common.Constants.MISSING_VALUE_PLACEHOLDER
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.AttributedCharacterIterator

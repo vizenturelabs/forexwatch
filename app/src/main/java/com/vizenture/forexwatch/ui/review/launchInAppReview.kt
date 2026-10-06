@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.review
+package com.vizenture.forexwatch.ui.review
 
 import android.app.Activity
 import com.google.android.play.core.ktx.launchReview

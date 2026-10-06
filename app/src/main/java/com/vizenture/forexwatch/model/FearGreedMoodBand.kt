@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
 enum class FearGreedMoodBand {
     ExtremeFear,

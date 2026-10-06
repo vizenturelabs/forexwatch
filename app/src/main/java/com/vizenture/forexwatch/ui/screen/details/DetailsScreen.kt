@@ -32,8 +32,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,13 +42,8 @@ import com.vizenture.forexwatch.ui.component.ErrorState
 import com.vizenture.forexwatch.ui.component.LoadingIndicator
 import com.vizenture.forexwatch.ui.insets.AppWindowInsets
 import com.vizenture.forexwatch.ui.model.ChartPeriod
-import com.vizenture.forexwatch.ui.preview.DetailsScreenPreviewState
-import com.vizenture.forexwatch.ui.preview.DetailsScreenPreviewStateProvider
 import com.vizenture.forexwatch.ui.screen.details.component.EmptyTopBar
-import com.vizenture.forexwatch.ui.screen.details.component.ForexMarketStatsCard
 import com.vizenture.forexwatch.ui.screen.details.component.ForexPairChartCard
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import com.vizenture.forexwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun DetailsScreen(
@@ -230,22 +223,7 @@ fun DetailsContent(
             onClickChartPeriod = onClickChartPeriod
         )
 
-        ForexMarketStatsCard(pairDetails = pairDetails)
+        // ForexMarketStatsCard removed as it is not applicable for Forex pairs
     }
 }
 
-@Composable
-@Preview
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun DetailsScreenPreview(
-    @PreviewParameter(DetailsScreenPreviewStateProvider::class)
-    previewState: DetailsScreenPreviewState,
-) {
-    DetailsScreen(
-        uiState = previewState.uiState,
-        onNavigateUp = {},
-        onClickFavouritePair = {},
-        onClickChartPeriod = {},
-        scrollState = rememberScrollState(initial = previewState.scrollPosition)
-    )
-}

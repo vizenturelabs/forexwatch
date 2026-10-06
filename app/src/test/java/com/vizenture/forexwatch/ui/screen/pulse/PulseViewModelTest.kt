@@ -2,7 +2,6 @@ package dev.shorthouse.coinwatch.ui.screen.pulse
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
@@ -21,7 +20,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import java.math.BigDecimal
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -30,6 +28,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.math.BigDecimal
 
 class PulseViewModelTest {
 

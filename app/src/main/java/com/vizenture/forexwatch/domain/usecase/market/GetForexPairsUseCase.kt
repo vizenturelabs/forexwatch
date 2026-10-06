@@ -2,9 +2,9 @@ package com.vizenture.forexwatch.domain.usecase.market
 
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.repository.pair.ForexPairRepository
+import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
 import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
-import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

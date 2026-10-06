@@ -1,9 +1,7 @@
 package com.vizenture.forexwatch.data.repository.favouritePair
 
-import com.vizenture.forexwatch.common.Constants
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.mapper.ForexChartMapper
-import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.database.ForexLocalDataSource
 import com.vizenture.forexwatch.data.source.local.database.model.FavouriteCurrencyPair
 import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSource

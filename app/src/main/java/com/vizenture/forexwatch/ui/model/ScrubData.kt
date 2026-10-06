@@ -1,6 +1,6 @@
-package dev.shorthouse.coinwatch.ui.model
+package com.vizenture.forexwatch.ui.model
 
-import dev.shorthouse.coinwatch.model.Percentage
+import com.vizenture.forexwatch.model.Percentage
 import java.math.BigDecimal
 
 data class ScrubData(

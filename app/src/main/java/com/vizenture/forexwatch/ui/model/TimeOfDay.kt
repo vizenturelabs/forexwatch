@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.model
+package com.vizenture.forexwatch.ui.model
 
 enum class TimeOfDay {
     Morning,

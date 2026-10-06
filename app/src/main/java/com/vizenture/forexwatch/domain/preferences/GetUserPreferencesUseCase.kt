@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.domain.preferences
+package com.vizenture.forexwatch.domain.preferences
 
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferencesRepository
+import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferences
+import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

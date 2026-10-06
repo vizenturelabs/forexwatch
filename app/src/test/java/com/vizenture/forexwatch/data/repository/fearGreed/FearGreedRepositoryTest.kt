@@ -1,7 +1,6 @@
 package dev.shorthouse.coinwatch.data.repository.fearGreed
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.FearGreedDataPointApiModel
 import dev.shorthouse.coinwatch.model.FearGreed
@@ -11,8 +10,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import java.io.IOException
-import java.math.BigDecimal
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
@@ -22,6 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.Response
+import java.io.IOException
+import java.math.BigDecimal
 
 class FearGreedRepositoryTest {
 

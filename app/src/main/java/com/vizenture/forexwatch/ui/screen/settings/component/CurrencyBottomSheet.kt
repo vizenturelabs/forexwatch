@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.settings.component
+package com.vizenture.forexwatch.ui.screen.settings.component
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -7,25 +7,16 @@ import androidx.compose.material.icons.rounded.CurrencyPound
 import androidx.compose.material.icons.rounded.Euro
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import dev.shorthouse.coinwatch.R
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.ui.component.AppBottomSheet
-import dev.shorthouse.coinwatch.ui.component.BottomSheetOption
+import com.vizenture.forexwatch.R
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.ui.component.AppBottomSheet
+import com.vizenture.forexwatch.ui.component.BottomSheetOption
 import kotlinx.collections.immutable.persistentListOf
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,28 +70,3 @@ private data class CurrencyOption(
     val currency: Currency,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(widthDp = 360, heightDp = 280)
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-@Composable
-private fun CurrencyBottomSheetPreview() {
-    val density = LocalDensity.current
-    val sheetState = remember {
-        SheetState(
-            skipPartiallyExpanded = true,
-            positionalThreshold = { with(density) { 56.dp.toPx() } },
-            velocityThreshold = { with(density) { 125.dp.toPx() } },
-            initialValue = SheetValue.Expanded,
-        )
-    }
-
-    var selectedCurrency by remember { mutableStateOf(Currency.USD) }
-
-    CurrencyBottomSheet(
-        sheetState = sheetState,
-        selectedCurrency = selectedCurrency,
-        onDismissRequest = {},
-        onCurrencySelected = { selectedCurrency = it }
-    )
-
-}

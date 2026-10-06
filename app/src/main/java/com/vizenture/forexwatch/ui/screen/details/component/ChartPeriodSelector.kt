@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.ui.screen.details.component
+package com.vizenture.forexwatch.ui.screen.details.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,13 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.shorthouse.coinwatch.ui.model.ChartPeriod
+import com.vizenture.forexwatch.ui.model.ChartPeriod
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.compose.ui.tooling.preview.PreviewWrapper
-import dev.shorthouse.coinwatch.ui.preview.AppPreviewWrapper
 
 @Composable
 fun ChartPeriodSelector(
@@ -84,15 +81,4 @@ fun ChartPeriodSelector(
     }
 }
 
-@Composable
-@Preview
-@PreviewWrapper(wrapper = AppPreviewWrapper::class)
-private fun ChartPeriodSelectorPreview() {
-    var selectedChartPeriod by remember { mutableStateOf(ChartPeriod.Week) }
 
-    ChartPeriodSelector(
-        selectedChartPeriod = selectedChartPeriod,
-        onChartPeriodSelected = { selectedChartPeriod = it }
-    )
-
-}

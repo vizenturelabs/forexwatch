@@ -1,8 +1,6 @@
 package dev.shorthouse.coinwatch.data.repository.chart
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
-import dev.shorthouse.coinwatch.common.Result
 import dev.shorthouse.coinwatch.common.TimeProvider
 import dev.shorthouse.coinwatch.data.mapper.CoinChartMapper
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
@@ -12,6 +10,7 @@ import dev.shorthouse.coinwatch.data.source.remote.model.PastPrice
 import dev.shorthouse.coinwatch.model.CoinChart
 import dev.shorthouse.coinwatch.model.Percentage
 import dev.shorthouse.coinwatch.model.PriceEntry
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify

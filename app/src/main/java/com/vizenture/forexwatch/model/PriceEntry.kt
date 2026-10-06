@@ -1,4 +1,4 @@
-package dev.shorthouse.coinwatch.model
+package com.vizenture.forexwatch.model
 
 import java.math.BigDecimal
 

@@ -1,13 +1,13 @@
 package dev.shorthouse.coinwatch.ui.screen.settings
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.StartScreen
 import dev.shorthouse.coinwatch.data.source.local.datastore.global.UserPreferences
 import dev.shorthouse.coinwatch.domain.preferences.GetUserPreferencesUseCase
 import dev.shorthouse.coinwatch.domain.preferences.UpdateCurrencyUseCase
 import dev.shorthouse.coinwatch.domain.preferences.UpdateStartScreenUseCase
+import dev.shorthouse.coinwatch.rule.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.coVerifySequence

@@ -1,25 +1,29 @@
 package com.vizenture.forexwatch.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.vizenture.forexwatch.common.TimeProvider
 import com.vizenture.forexwatch.data.mapper.ForexChartMapper
 import com.vizenture.forexwatch.data.mapper.ForexSearchResultsMapper
 import com.vizenture.forexwatch.data.repository.chart.ForexPairChartRepository
 import com.vizenture.forexwatch.data.repository.chart.ForexPairChartRepositoryImpl
-import com.vizenture.forexwatch.data.repository.pair.ForexPairRepository
-import com.vizenture.forexwatch.data.repository.pair.ForexPairRepositoryImpl
 import com.vizenture.forexwatch.data.repository.details.ForexPairDetailsRepository
 import com.vizenture.forexwatch.data.repository.details.ForexPairDetailsRepositoryImpl
 import com.vizenture.forexwatch.data.repository.favouritePair.FavouriteForexPairRepository
 import com.vizenture.forexwatch.data.repository.favouritePair.FavouriteForexPairRepositoryImpl
 import com.vizenture.forexwatch.data.repository.favouriteSymbol.FavouriteForexSymbolRepository
 import com.vizenture.forexwatch.data.repository.favouriteSymbol.FavouriteForexSymbolRepositoryImpl
+import com.vizenture.forexwatch.data.repository.pair.ForexPairRepository
+import com.vizenture.forexwatch.data.repository.pair.ForexPairRepositoryImpl
+import com.vizenture.forexwatch.data.repository.reviewPrompt.ReviewPromptRepository
+import com.vizenture.forexwatch.data.repository.reviewPrompt.ReviewPromptRepositoryImpl
 import com.vizenture.forexwatch.data.repository.searchResults.ForexSearchResultsRepository
 import com.vizenture.forexwatch.data.repository.searchResults.ForexSearchResultsRepositoryImpl
 import com.vizenture.forexwatch.data.source.local.database.ForexLocalDataSource
+import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
 import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSource
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
@@ -68,4 +72,11 @@ object RepositoryModule {
         forexNetworkDataSource: ForexNetworkDataSource,
         forexSearchResultsMapper: ForexSearchResultsMapper,
     ): ForexSearchResultsRepository = ForexSearchResultsRepositoryImpl(forexNetworkDataSource, forexSearchResultsMapper)
+
+    @Provides
+    @Singleton
+    fun provideReviewPromptRepository(
+        reviewAnalyticsLocalDataSource: ReviewAnalyticsLocalDataSource,
+        timeProvider: TimeProvider,
+    ): ReviewPromptRepository = ReviewPromptRepositoryImpl(reviewAnalyticsLocalDataSource, timeProvider)
 }

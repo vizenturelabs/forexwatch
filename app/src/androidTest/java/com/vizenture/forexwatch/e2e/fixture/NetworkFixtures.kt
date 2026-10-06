@@ -1,6 +1,5 @@
 package dev.shorthouse.coinwatch.e2e.fixture
 
-import dev.shorthouse.coinwatch.e2e.fake.FakeCoinNetworkDataSource
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartData
@@ -16,6 +15,7 @@ import dev.shorthouse.coinwatch.data.source.remote.model.PastPrice
 import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinsApiModel
 import dev.shorthouse.coinwatch.data.source.remote.model.TrendingCoinsData
+import dev.shorthouse.coinwatch.e2e.fake.FakeCoinNetworkDataSource
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response

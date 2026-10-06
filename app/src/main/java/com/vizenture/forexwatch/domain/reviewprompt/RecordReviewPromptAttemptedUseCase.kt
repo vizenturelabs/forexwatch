@@ -1,6 +1,6 @@
-package dev.shorthouse.coinwatch.domain.reviewprompt
+package com.vizenture.forexwatch.domain.reviewprompt
 
-import dev.shorthouse.coinwatch.data.repository.reviewPrompt.ReviewPromptRepository
+import com.vizenture.forexwatch.data.repository.reviewPrompt.ReviewPromptRepository
 import javax.inject.Inject
 
 class RecordReviewPromptAttemptedUseCase @Inject constructor(

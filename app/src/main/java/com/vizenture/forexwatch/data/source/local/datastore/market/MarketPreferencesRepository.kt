@@ -1,7 +1,7 @@
-package dev.shorthouse.coinwatch.data.source.local.datastore.market
+package com.vizenture.forexwatch.data.source.local.datastore.market
 
 import androidx.datastore.core.DataStore
-import dev.shorthouse.coinwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
