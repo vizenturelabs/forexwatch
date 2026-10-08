@@ -1,348 +1,188 @@
-package dev.shorthouse.coinwatch.data.mapper
+package com.vizenture.forexwatch.data.mapper
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.coinwatch.data.source.local.datastore.global.Currency
-import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartApiModel
-import dev.shorthouse.coinwatch.data.source.remote.model.CoinChartData
-import dev.shorthouse.coinwatch.data.source.remote.model.PastPrice
-import dev.shorthouse.coinwatch.model.CoinChart
-import dev.shorthouse.coinwatch.model.Percentage
-import dev.shorthouse.coinwatch.model.PriceEntry
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponse
+import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponseAdapter
+import com.vizenture.forexwatch.model.ForexPairChart
+import com.vizenture.forexwatch.model.OhlcEntry
+import com.vizenture.forexwatch.model.Percentage
 import kotlinx.collections.immutable.persistentListOf
+import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.ZoneOffset
 
-class CoinChartMapperTest {
+class ForexChartMapperTest {
 
-    // Class under test
-    private val coinChartMapper = CoinChartMapper()
+    private lateinit var forexChartMapper: ForexChartMapper
+    private lateinit var gson: Gson
 
-    private val testZone = ZoneOffset.UTC
-    private val testToday = LocalDate.of(2023, 11, 15)
+    @Before
+    fun setup() {
+        forexChartMapper = ForexChartMapper()
+        gson = GsonBuilder()
+            .registerTypeAdapter(AlphaVantageTimeSeriesResponse::class.java, AlphaVantageTimeSeriesResponseAdapter())
+            .create()
+    }
 
     @Test
-    fun `When coin chart data is null should return default values`() {
+    fun `When api response is empty should return empty chart`() {
         // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = null
-        )
+        val jsonString = "{}"
+        val apiModel = gson.fromJson(jsonString, AlphaVantageTimeSeriesResponse::class.java)
 
-        val expectedCoinChart = CoinChart(
+        val expectedChart = ForexPairChart(
             currency = Currency.USD,
             priceHistory = persistentListOf(),
-            periodPriceChangePercentage = Percentage(null)
+            periodPriceChangePercentage = Percentage("0.00")
         )
 
         // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
+        val chart = forexChartMapper.mapTimeSeriesToChart(apiModel, Currency.USD)
 
         // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
+        assertThat(chart).isEqualTo(expectedChart)
     }
 
     @Test
-    fun `When price change percentage null values should return default percentage values`() {
+    fun `When time series key is missing should return empty chart`() {
         // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = null,
-                pastPrices = emptyList()
-            )
-        )
+        val jsonString = """
+            {
+              "Meta Data": {
+                "1. Information": "Forex Intraday",
+                "2. From Symbol": "EUR",
+                "3. To Symbol": "USD",
+                "4. Last Refreshed": "2023-11-15 10:00:00",
+                "5. Interval": "60min"
+              },
+              "Random Key": { }
+            }
+        """.trimIndent()
+        val apiModel = gson.fromJson(jsonString, AlphaVantageTimeSeriesResponse::class.java)
 
-        val expectedCoinChart = CoinChart(
+        val expectedChart = ForexPairChart(
             currency = Currency.USD,
             priceHistory = persistentListOf(),
-            periodPriceChangePercentage = Percentage(null)
+            periodPriceChangePercentage = Percentage("0.00")
         )
 
         // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
+        val chart = forexChartMapper.mapTimeSeriesToChart(apiModel, Currency.USD)
 
         // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
+        assertThat(chart).isEqualTo(expectedChart)
     }
 
     @Test
-    fun `When price change percentage is valid should return valid value`() {
+    fun `When valid OHLC data is provided should return valid chart with correct percentage change`() {
         // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "0.123",
-                pastPrices = emptyList()
-            )
-        )
+        val jsonString = """
+            {
+              "Meta Data": {
+                "1. Information": "Forex Intraday",
+                "2. From Symbol": "EUR",
+                "3. To Symbol": "USD",
+                "4. Last Refreshed": "2023-11-15 10:00:00",
+                "5. Interval": "60min"
+              },
+              "Time Series FX (60min)": {
+                "2023-11-15 10:00:00": {
+                  "1. open": "1.2450",
+                  "2. high": "1.2500",
+                  "3. low": "1.2400",
+                  "4. close": "1.2450"
+                },
+                "2023-11-15 09:00:00": {
+                  "1. open": "1.2350",
+                  "2. high": "1.2450",
+                  "3. low": "1.2300",
+                  "4. close": "1.2400"
+                }
+              }
+            }
+        """.trimIndent()
+        val apiModel = gson.fromJson(jsonString, AlphaVantageTimeSeriesResponse::class.java)
 
-        val expectedCoinChart = CoinChart(
-            currency = Currency.USD,
-            priceHistory = persistentListOf(),
-            periodPriceChangePercentage = Percentage("0.123")
-        )
+        // Expected percentage change: ((last.close - first.open) / first.open) * 100
+        // first is 09:00:00 (open = 1.2350), last is 10:00:00 (close = 1.2450)
+        // ((1.2450 - 1.2350) / 1.2350) * 100 = 0.8097... -> 0.81
+        val expectedPercentage = Percentage("0.81")
 
-        // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
-
-        // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
-    }
-
-    @Test
-    fun `When currency is provided should preserve currency in coin chart`() {
-        // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "0.123",
-                pastPrices = emptyList()
-            )
-        )
-
-        // Act
-        val gbpCoinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.GBP,
-            zone = testZone,
-            today = testToday
-        )
-        val eurCoinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.EUR,
-            zone = testZone,
-            today = testToday
-        )
-
-        // Assert
-        assertThat(gbpCoinChart.currency).isEqualTo(Currency.GBP)
-        assertThat(eurCoinChart.currency).isEqualTo(Currency.EUR)
-    }
-
-    @Test
-    fun `When past prices list is null should return empty list`() {
-        // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = null,
-                pastPrices = null
-            )
-        )
-
-        val expectedCoinChart = CoinChart(
-            currency = Currency.USD,
-            priceHistory = persistentListOf(),
-            periodPriceChangePercentage = Percentage(null)
-        )
-
-        // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
-
-        // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
-    }
-
-    @Test
-    fun `When past prices list has null values should filter out these values`() {
-        // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "1.24",
-                pastPrices = listOf(
-                    null,
-                    PastPrice("123.45", 1700000000L),
-                    null,
-                    null
-                )
-            )
-        )
-
-        val expectedCoinChart = CoinChart(
+        val expectedChart = ForexPairChart(
             currency = Currency.USD,
             priceHistory = persistentListOf(
-                PriceEntry(BigDecimal("123.45"), 1700000000L, "Yesterday 22:13")
+                OhlcEntry(BigDecimal("1.2350"), BigDecimal("1.2450"), BigDecimal("1.2300"), BigDecimal("1.2400"), 1700038800L),
+                OhlcEntry(BigDecimal("1.2450"), BigDecimal("1.2500"), BigDecimal("1.2400"), BigDecimal("1.2450"), 1700042400L)
             ),
-            periodPriceChangePercentage = Percentage("1.24")
+            periodPriceChangePercentage = expectedPercentage
         )
 
         // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
+        val chart = forexChartMapper.mapTimeSeriesToChart(apiModel, Currency.USD)
 
         // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
+        assertThat(chart.currency).isEqualTo(expectedChart.currency)
+        assertThat(chart.periodPriceChangePercentage.value).isEqualTo(expectedChart.periodPriceChangePercentage.value)
+        assertThat(chart.priceHistory).isEqualTo(expectedChart.priceHistory)
     }
 
     @Test
-    fun `When past prices has null amount should filter out these values`() {
+    fun `When OHLC data has invalid amount strings should filter out invalid values`() {
         // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "1.24",
-                pastPrices = listOf(
-                    PastPrice("123.45", 1700000000L),
-                    PastPrice(null, 1700003600L),
-                    PastPrice(null, 1700007200L)
-                )
-            )
-        )
-
-        val expectedCoinChart = CoinChart(
-            currency = Currency.USD,
-            priceHistory = persistentListOf(
-                PriceEntry(BigDecimal("123.45"), 1700000000L, "Yesterday 22:13")
-            ),
-            periodPriceChangePercentage = Percentage("1.24")
-        )
+        val jsonString = """
+            {
+              "Time Series FX (60min)": {
+                "2023-11-15 10:00:00": {
+                  "1. open": "abc",
+                  "2. high": "1.2500",
+                  "3. low": "1.2400",
+                  "4. close": "1.2450"
+                },
+                "2023-11-15 09:00:00": {
+                  "1. open": "1.2350",
+                  "2. high": "1.2450",
+                  "3. low": "1.2300",
+                  "4. close": "1.2400"
+                }
+              }
+            }
+        """.trimIndent()
+        val apiModel = gson.fromJson(jsonString, AlphaVantageTimeSeriesResponse::class.java)
 
         // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
+        val chart = forexChartMapper.mapTimeSeriesToChart(apiModel, Currency.USD)
 
-        // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
+        // Assert - The 10:00 entry should be filtered out due to invalid "open" string
+        assertThat(chart.priceHistory.size).isEqualTo(1)
+        assertThat(chart.priceHistory[0].open).isEqualTo(BigDecimal("1.2350"))
     }
 
     @Test
-    fun `When past prices has invalid amounts should filter out these values`() {
+    fun `When currency is provided should preserve currency in chart`() {
         // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "1.24",
-                pastPrices = listOf(
-                    PastPrice("123.45", 1700000000L),
-                    PastPrice("abc", 1700003600L),
-                    PastPrice("123.2x", 1700007200L),
-                    PastPrice("     ", 1700010800L),
-                    PastPrice("", 1700014400L),
-                    PastPrice("-123.45", 1700018000L)
-                )
-            )
-        )
-
-        val expectedCoinChart = CoinChart(
-            currency = Currency.USD,
-            priceHistory = persistentListOf(
-                PriceEntry(BigDecimal("123.45"), 1700000000L, "Yesterday 22:13")
-            ),
-            periodPriceChangePercentage = Percentage("1.24")
-        )
+        val jsonString = """
+            {
+              "Time Series FX (60min)": {
+                "2023-11-15 09:00:00": {
+                  "1. open": "1.2350",
+                  "2. high": "1.2450",
+                  "3. low": "1.2300",
+                  "4. close": "1.2400"
+                }
+              }
+            }
+        """.trimIndent()
+        val apiModel = gson.fromJson(jsonString, AlphaVantageTimeSeriesResponse::class.java)
 
         // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
+        val gbpChart = forexChartMapper.mapTimeSeriesToChart(apiModel, Currency.GBP)
+        val eurChart = forexChartMapper.mapTimeSeriesToChart(apiModel, Currency.EUR)
 
         // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
-    }
-
-    @Test
-    fun `When past price amount has whitespace and commas should remove these`() {
-        // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "1.24",
-                pastPrices = listOf(
-                    PastPrice("123,456.78", 1700000000L),
-                    PastPrice("  123,456.78", 1700003600L),
-                    PastPrice("123,456.78  ", 1700007200L),
-                    PastPrice("  123,456.78  ", 1700010800L),
-                    PastPrice("  123,456.78  ", 1700014400L)
-                )
-            )
-        )
-
-        val expectedCoinChart = CoinChart(
-            currency = Currency.USD,
-            priceHistory = persistentListOf(
-                PriceEntry(BigDecimal("123456.78"), 1700014400L, "02:13"),
-                PriceEntry(BigDecimal("123456.78"), 1700010800L, "01:13"),
-                PriceEntry(BigDecimal("123456.78"), 1700007200L, "00:13"),
-                PriceEntry(BigDecimal("123456.78"), 1700003600L, "Yesterday 23:13"),
-                PriceEntry(BigDecimal("123456.78"), 1700000000L, "Yesterday 22:13")
-            ),
-            periodPriceChangePercentage = Percentage("1.24")
-        )
-
-        // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
-
-        // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
-    }
-
-    @Test
-    fun `When coin chart has valid values should return valid expected coin chart`() {
-        // Arrange
-        val apiModel = CoinChartApiModel(
-            coinChartData = CoinChartData(
-                priceChangePercentage = "2.92",
-                pastPrices = listOf(
-                    PastPrice("123.45", 1700000000L),
-                    PastPrice("123.46", 1700003600L),
-                    PastPrice("123.47", 1700007200L),
-                    PastPrice("123.48", 1700010800L),
-                    PastPrice("123.49", 1700014400L)
-                )
-            )
-        )
-
-        val expectedCoinChart = CoinChart(
-            currency = Currency.USD,
-            priceHistory = persistentListOf(
-                PriceEntry(BigDecimal("123.49"), 1700014400L, "02:13"),
-                PriceEntry(BigDecimal("123.48"), 1700010800L, "01:13"),
-                PriceEntry(BigDecimal("123.47"), 1700007200L, "00:13"),
-                PriceEntry(BigDecimal("123.46"), 1700003600L, "Yesterday 23:13"),
-                PriceEntry(BigDecimal("123.45"), 1700000000L, "Yesterday 22:13")
-            ),
-            periodPriceChangePercentage = Percentage("2.92")
-        )
-
-        // Act
-        val coinChart = coinChartMapper.mapApiModelToModel(
-            apiModel = apiModel,
-            currency = Currency.USD,
-            zone = testZone,
-            today = testToday
-        )
-
-        // Assert
-        assertThat(coinChart).isEqualTo(expectedCoinChart)
+        assertThat(gbpChart.currency).isEqualTo(Currency.GBP)
+        assertThat(eurChart.currency).isEqualTo(Currency.EUR)
     }
 }

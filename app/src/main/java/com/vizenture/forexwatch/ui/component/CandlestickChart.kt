@@ -45,25 +45,26 @@ fun CandlestickChart(
                 setNoDataTextColor(textColor)
 
                 xAxis.apply {
-                    setPosition(XAxis.XAxisPosition.BOTTOM) // Fixed: use setPosition()
+                    setPosition(XAxis.XAxisPosition.BOTTOM)
                     setDrawGridLines(false)
-                    setTextColor(textColor)                 // Fixed: use setTextColor()
+                    setTextColor(textColor)
                     granularity = 1f
                     valueFormatter = object : ValueFormatter() {
                         private val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                         override fun getFormattedValue(value: Float): String {
-                            return dateFormat.format(Date(value.toLong()))
+                            // Multiply by 1000 because timestamp is in epoch seconds, but Date expects milliseconds
+                            return dateFormat.format(Date(value.toLong() * 1000L))
                         }
                     }
                 }
 
                 axisLeft.apply {
                     setDrawGridLines(true)
-                    setGridColor(gridColor)                 // Fixed: use setGridColor()
-                    setTextColor(textColor)                 // Fixed: use setTextColor()
+                    setGridColor(gridColor)
+                    setTextColor(textColor)
                     setDrawAxisLine(false)
-                    setSpaceTop(10f)                        // Fixed: use setSpaceTop()
-                    setSpaceBottom(10f)                     // Fixed: use setSpaceBottom()
+                    setSpaceTop(10f)
+                    setSpaceBottom(10f)
                 }
 
                 axisRight.isEnabled = false
@@ -80,9 +81,9 @@ fun CandlestickChart(
                 return@AndroidView
             }
 
-            val entries = priceHistory.mapIndexed { index, entry ->
+            val entries = priceHistory.map { entry ->
                 CandleEntry(
-                    index.toFloat(),
+                    entry.timestamp.toFloat(), // Use actual timestamp instead of list index
                     entry.high.toFloat(),
                     entry.low.toFloat(),
                     entry.open.toFloat(),
@@ -104,7 +105,7 @@ fun CandlestickChart(
 
             chart.data = CandleData(dataSet)
             chart.invalidate()
-            chart.animateX(500)
+            // Removed animateX(500) to prevent animation jank during Jetpack Compose recompositions
         }
     )
 }

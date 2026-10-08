@@ -20,16 +20,14 @@ import javax.inject.Singleton
 object RetrofitModule {
 
     @Provides
-    @Singleton
     fun provideForexApi(retrofit: Retrofit): ForexApi {
         return retrofit.create(ForexApi::class.java)
     }
 
     @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient, terminalManager: TerminalManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(Constants.getBaseUrl(terminalManager.getActiveTerminalId().toInt()))
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
