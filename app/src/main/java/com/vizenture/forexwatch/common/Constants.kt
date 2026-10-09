@@ -1,16 +1,18 @@
 package com.vizenture.forexwatch.common
 
 object Constants {
-    const val DEFAULT_PUBLIC_URL = "https://www.alphavantage.co/"
+    const val BASE_URL = "https://www.alphavantage.co/"
 
-    // Local bridge template for multi-terminal routing (e.g., ports 8081, 8082)
-    private const val TERMINAL_BRIDGE_URL_TEMPLATE = "http://127.0.0.1:808%d/"
+    // 10.0.2.2 is the special alias for the host machine's localhost in the Android Emulator.
+    // 127.0.0.1 on an emulator/device refers to the device itself, not the host machine running the MT4 terminals.
+    private const val TERMINAL_BRIDGE_URL_TEMPLATE = "http://10.0.2.2:808%d/"
 
-    fun getBaseUrl(terminalId: Int): String {
-        return if (terminalId > 0) {
+    // Default to false so the app fetches real data out-of-the-box until your local bridge infrastructure is active.
+    fun getBaseUrl(terminalId: Int, useLocalBridge: Boolean = false): String {
+        return if (useLocalBridge && terminalId > 0) {
             String.format(TERMINAL_BRIDGE_URL_TEMPLATE, terminalId)
         } else {
-            DEFAULT_PUBLIC_URL
+            BASE_URL
         }
     }
 

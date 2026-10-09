@@ -27,7 +27,8 @@ object RetrofitModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient, terminalManager: TerminalManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constants.getBaseUrl(terminalManager.getActiveTerminalId().toInt()))
+            // Defaults to public API (useLocalBridge = false) so the app actually fetches data
+            .baseUrl(Constants.getBaseUrl(terminalManager.getActiveTerminalId().toInt(), useLocalBridge = false))
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -41,33 +42,21 @@ object RetrofitModule {
                 .newBuilder()
                 .header("X-Terminal-Id", terminalManager.getActiveTerminalId())
                 .build()
-
             chain.proceed(newRequest)
         }
 
         val apiKeyInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
-            val originalUrl = originalRequest.url
-
-            // Alpha Vantage requires the API key as a query parameter, not a header
-            val newUrl = originalUrl.newBuilder()
+            val newUrl = originalRequest.url.newBuilder()
                 .addQueryParameter("apikey", BuildConfig.API_KEY)
                 .build()
-
-            val newRequest = originalRequest.newBuilder()
-                .url(newUrl)
-                .build()
-
+            val newRequest = originalRequest.newBuilder().url(newUrl).build()
             chain.proceed(newRequest)
         }
 
         val loggingInterceptor = HttpLoggingInterceptor()
-
-        if (BuildConfig.DEBUG) {
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        } else {
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
-        }
+        if (BuildConfig.DEBUG) loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        else loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
 
         return OkHttpClient.Builder()
             .addInterceptor(terminalInterceptor)

@@ -48,12 +48,19 @@ fun CandlestickChart(
                     setPosition(XAxis.XAxisPosition.BOTTOM)
                     setDrawGridLines(false)
                     setTextColor(textColor)
-                    granularity = 1f
+
+                    // Use the explicit setter to avoid unresolved reference errors
+                    setGranularityEnabled(true)
+                    granularity = 60f
+                    setLabelCount(5, true)
+
+                    val minTimestamp = priceHistory.minOfOrNull { it.timestamp } ?: 0L
                     valueFormatter = object : ValueFormatter() {
                         private val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                         override fun getFormattedValue(value: Float): String {
-                            // Multiply by 1000 because timestamp is in epoch seconds, but Date expects milliseconds
-                            return dateFormat.format(Date(value.toLong() * 1000L))
+                            // Shift back to original timestamp and convert to milliseconds
+                            val actualTimestamp = (value.toLong() + minTimestamp) * 1000L
+                            return dateFormat.format(Date(actualTimestamp))
                         }
                     }
                 }
@@ -81,9 +88,14 @@ fun CandlestickChart(
                 return@AndroidView
             }
 
+            // CRITICAL FIX: Shift timestamps to start from 0.
+            // MPAndroidChart suffers from floating-point precision loss in its ViewPortHandler matrix
+            // when X values are large numbers (like epoch seconds: 1,700,000,000).
+            // This causes the chart to render incorrectly or remain completely blank.
+            val minTimestamp = priceHistory.minOf { it.timestamp }
             val entries = priceHistory.map { entry ->
                 CandleEntry(
-                    entry.timestamp.toFloat(), // Use actual timestamp instead of list index
+                    (entry.timestamp - minTimestamp).toFloat(), // Shifted X coordinate
                     entry.high.toFloat(),
                     entry.low.toFloat(),
                     entry.open.toFloat(),
