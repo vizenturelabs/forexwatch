@@ -31,7 +31,8 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "API_KEY", getApiKey())
+        // FIXED: Added escaped quotes around the API key value
+        buildConfigField("String", "API_KEY", "\"${getApiKey()}\"")
     }
     buildTypes {
         getByName("debug") {
@@ -67,9 +68,7 @@ android {
         }
     }
     testOptions {
-        screenshotTests {
-            imageDifferenceThreshold = 0.005f // 0.5%
-        }
+        // MOVED: screenshotTests block removed from here
         managedDevices {
             localDevices {
                 create("pixel2api30") {
@@ -81,6 +80,11 @@ android {
             }
         }
     }
+}
+
+// MOVED: screenshotTests is a Project-level extension, so it must be declared outside the android {} block
+screenshotTests {
+    imageDifferenceThreshold = 0.005f // 0.5%
 }
 
 kotlin {
@@ -187,10 +191,17 @@ dependencies {
 fun getApiKey(): String {
     val apiKeyFile = rootProject.file("apikey.properties")
 
+    if (!apiKeyFile.exists()) {
+        throw GradleException("apikey.properties file not found in the project root! Please create it and add your Alpha Vantage API key.")
+    }
+
     val apikeyProperties = Properties()
-    apikeyProperties.load(apiKeyFile.inputStream())
+    apiKeyFile.inputStream().use {
+        apikeyProperties.load(it)
+    }
 
     return apikeyProperties.getProperty("API_KEY")
+        ?: throw GradleException("API_KEY property not found in apikey.properties!")
 }
 
 ksp {

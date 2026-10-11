@@ -1,8 +1,8 @@
 package com.vizenture.forexwatch.data.mapper
 
+import com.google.gson.JsonObject
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponse
 import com.vizenture.forexwatch.model.ForexPairChart
 import com.vizenture.forexwatch.model.ForexPairDetails
 import com.vizenture.forexwatch.model.OhlcEntry
@@ -11,6 +11,7 @@ import com.vizenture.forexwatch.model.Price
 import kotlinx.collections.immutable.toPersistentList
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -19,18 +20,26 @@ import javax.inject.Inject
 class ForexChartMapper @Inject constructor() {
 
     private val timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val dailyTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     fun mapTimeSeriesToChart(
-        apiModel: AlphaVantageTimeSeriesResponse,
+        apiModel: JsonObject,
         currency: Currency
     ): ForexPairChart {
-        val timeSeriesJson = apiModel.timeSeriesData ?: return emptyChart(currency)
+        // CRITICAL: Check for Alpha Vantage error messages
+        val errorMessage = apiModel.get("Note")?.asString
+            ?: apiModel.get("Error Message")?.asString
+            ?: apiModel.get("Information")?.asString
 
-        // Find the dynamic key (e.g., "Time Series FX (60min)" or "Time Series FX (Daily)")
-        val timeSeriesKey = timeSeriesJson.keySet().firstOrNull { it.startsWith("Time Series FX") }
-            ?: return emptyChart(currency)
+        if (errorMessage != null) {
+            throw Exception("Alpha Vantage API Error: $errorMessage")
+        }
 
-        val timeSeriesObject = timeSeriesJson.getAsJsonObject(timeSeriesKey) ?: return emptyChart(currency)
+        val timeSeriesKey = apiModel.keySet().firstOrNull { it.startsWith("Time Series FX") }
+            ?: throw Exception("Invalid API response: Time Series FX key not found")
+
+        val timeSeriesObject = apiModel.getAsJsonObject(timeSeriesKey)
+            ?: throw Exception("Invalid API response: Time Series object is null")
 
         val ohlcEntries = timeSeriesObject.entrySet().mapNotNull { (timestampStr, value) ->
             val candle = value.asJsonObject
@@ -39,8 +48,14 @@ class ForexChartMapper @Inject constructor() {
             val low = candle.get("3. low")?.asString?.toBigDecimalOrNull() ?: return@mapNotNull null
             val close = candle.get("4. close")?.asString?.toBigDecimalOrNull() ?: return@mapNotNull null
 
+            // FIX: Daily keys lack a time component, causing LocalDateTime.parse to fail and drop all daily entries.
+            // We must use LocalDate.parse() for daily data and convert it to the start of the day.
             val timestamp = runCatching {
-                LocalDateTime.parse(timestampStr, timeFormatter).toInstant(ZoneOffset.UTC).epochSecond
+                if (timestampStr.contains(" ")) {
+                    LocalDateTime.parse(timestampStr, timeFormatter).toInstant(ZoneOffset.UTC).epochSecond
+                } else {
+                    LocalDate.parse(timestampStr, dailyTimeFormatter).atStartOfDay(ZoneOffset.UTC).toEpochSecond()
+                }
             }.getOrNull() ?: return@mapNotNull null
 
             OhlcEntry(
@@ -50,7 +65,11 @@ class ForexChartMapper @Inject constructor() {
                 close = close,
                 timestamp = timestamp
             )
-        }.sortedBy { it.timestamp }.toPersistentList() // Ensure chronological order
+        }.sortedBy { it.timestamp }.toPersistentList()
+
+        if (ohlcEntries.isEmpty()) {
+            throw Exception("No valid OHLC data found in API response")
+        }
 
         val percentageChange = calculatePercentageChange(ohlcEntries)
 
@@ -83,11 +102,11 @@ class ForexChartMapper @Inject constructor() {
             bid = Price(bid.toPlainString(), currency, isJpyPair),
             ask = Price(ask.toPlainString(), currency, isJpyPair),
             spread = spread.setScale(1, RoundingMode.HALF_EVEN).toDouble(),
-            open24h = Price(currentPrice.toPlainString(), currency, isJpyPair), // Alpha Vantage doesn't provide 24h open in this endpoint
+            open24h = Price(currentPrice.toPlainString(), currency, isJpyPair),
             high24h = Price(currentPrice.toPlainString(), currency, isJpyPair),
             low24h = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            volume24h = 0.0, // Alpha Vantage doesn't provide volume for Forex in this endpoint
-            pipValue = 10.0, // Standard pip value for 1 standard lot
+            volume24h = 0.0,
+            pipValue = 10.0,
             isJpyPair = isJpyPair
         )
     }
@@ -100,13 +119,5 @@ class ForexChartMapper @Inject constructor() {
 
         val change = ((last - first) / first) * BigDecimal(100)
         return Percentage(change.setScale(2, RoundingMode.HALF_EVEN).toString())
-    }
-
-    private fun emptyChart(currency: Currency): ForexPairChart {
-        return ForexPairChart(
-            currency = currency,
-            priceHistory = emptyList<OhlcEntry>().toPersistentList(),
-            periodPriceChangePercentage = Percentage("0.00")
-        )
     }
 }

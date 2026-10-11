@@ -31,6 +31,10 @@ fun CandlestickChart(
     val textColor = MaterialTheme.colorScheme.onSurface.toArgb()
     val gridColor = MaterialTheme.colorScheme.outlineVariant.toArgb()
 
+    // FIX: Use a var to hold the minimum timestamp so the ValueFormatter (created in factory)
+    // can read the updated value from the update block.
+    var currentMinTs = 0L
+
     AndroidView(
         modifier = modifier
             .fillMaxWidth()
@@ -49,18 +53,28 @@ fun CandlestickChart(
                     setDrawGridLines(false)
                     setTextColor(textColor)
 
-                    // Use the explicit setter to avoid unresolved reference errors
                     setGranularityEnabled(true)
                     granularity = 60f
                     setLabelCount(5, true)
 
-                    val minTimestamp = priceHistory.minOfOrNull { it.timestamp } ?: 0L
                     valueFormatter = object : ValueFormatter() {
-                        private val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                        private val dateTimeFormat = SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())
+                        private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
                         override fun getFormattedValue(value: Float): String {
-                            // Shift back to original timestamp and convert to milliseconds
-                            val actualTimestamp = (value.toLong() + minTimestamp) * 1000L
-                            return dateFormat.format(Date(actualTimestamp))
+                            val actualTimestamp = (value.toLong() + currentMinTs) * 1000L
+                            val date = Date(actualTimestamp)
+
+                            // FIX: Replaced deprecated date.hours and date.minutes with Calendar
+                            val cal = java.util.Calendar.getInstance().apply { time = date }
+
+                            // If the time is exactly midnight (00:00), it's daily data. Show full date.
+                            // Otherwise, show month-day and time for intraday data.
+                            return if (cal.get(java.util.Calendar.HOUR_OF_DAY) == 0 && cal.get(java.util.Calendar.MINUTE) == 0) {
+                                dateFormat.format(date)
+                            } else {
+                                dateTimeFormat.format(date)
+                            }
                         }
                     }
                 }
@@ -88,14 +102,12 @@ fun CandlestickChart(
                 return@AndroidView
             }
 
-            // CRITICAL FIX: Shift timestamps to start from 0.
-            // MPAndroidChart suffers from floating-point precision loss in its ViewPortHandler matrix
-            // when X values are large numbers (like epoch seconds: 1,700,000,000).
-            // This causes the chart to render incorrectly or remain completely blank.
-            val minTimestamp = priceHistory.minOf { it.timestamp }
+            // Update the captured variable so the X-axis formatter knows the correct base timestamp
+            currentMinTs = priceHistory.minOf { it.timestamp }
+
             val entries = priceHistory.map { entry ->
                 CandleEntry(
-                    (entry.timestamp - minTimestamp).toFloat(), // Shifted X coordinate
+                    (entry.timestamp - currentMinTs).toFloat(), // Shifted X coordinate
                     entry.high.toFloat(),
                     entry.low.toFloat(),
                     entry.open.toFloat(),
@@ -117,7 +129,6 @@ fun CandlestickChart(
 
             chart.data = CandleData(dataSet)
             chart.invalidate()
-            // Removed animateX(500) to prevent animation jank during Jetpack Compose recompositions
         }
     )
 }

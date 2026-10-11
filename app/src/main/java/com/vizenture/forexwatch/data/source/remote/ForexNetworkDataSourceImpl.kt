@@ -1,8 +1,8 @@
 package com.vizenture.forexwatch.data.source.remote
 
+import com.google.gson.JsonObject
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
 import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageSearchResponse
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageTimeSeriesResponse
 import javax.inject.Inject
 
 class ForexNetworkDataSourceImpl @Inject constructor(
@@ -14,12 +14,12 @@ class ForexNetworkDataSourceImpl @Inject constructor(
             ?: throw Exception("Failed to fetch exchange rate")
     }
 
-    override suspend fun getForexIntraday(fromSymbol: String, toSymbol: String, interval: String): AlphaVantageTimeSeriesResponse {
+    override suspend fun getForexIntraday(fromSymbol: String, toSymbol: String, interval: String): JsonObject {
         return forexApi.getForexIntraday(fromSymbol = fromSymbol, toSymbol = toSymbol, interval = interval).body()
             ?: throw Exception("Failed to fetch intraday data")
     }
 
-    override suspend fun getForexDaily(fromSymbol: String, toSymbol: String): AlphaVantageTimeSeriesResponse {
+    override suspend fun getForexDaily(fromSymbol: String, toSymbol: String): JsonObject {
         return forexApi.getForexDaily(fromSymbol = fromSymbol, toSymbol = toSymbol).body()
             ?: throw Exception("Failed to fetch daily data")
     }

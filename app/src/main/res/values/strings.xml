@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">ForexWatch</string>
-    
+
     <!-- Navigation & General -->
     <string name="cd_top_bar_back">Back</string>
     <string name="cd_top_bar_favourite">Favourite</string>
@@ -62,6 +62,11 @@
     <string name="empty_state_search_subtitle">Search by name or symbol</string>
     <string name="empty_chart_message">No chart data available</string>
     <string name="empty_chart_message_short">No chart data</string>
+
+    <!-- NEW: Empty state for Market Screen when API fails/rate limits -->
+    <string name="market_empty_state_title">No Currency Pairs Available</string>
+    <string name="market_empty_state_subtitle">This might be due to:\n• API rate limit exceeded\n• Network connectivity issues\n• Invalid API key</string>
+    <string name="action_retry">Retry</string>
 
     <!-- Search -->
     <string name="search_coins_hint">Search pairs</string>

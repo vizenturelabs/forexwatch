@@ -1,5 +1,6 @@
 package com.vizenture.forexwatch.ui.screen.market
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vizenture.forexwatch.R
@@ -65,6 +66,9 @@ class MarketViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
+                    // Added logging to easily debug API failures or rate limiting from Logcat
+                    Log.e("MarketViewModel", "Error loading pairs: ${result.message}")
+
                     _uiState.update {
                         it.copy(
                             errorMessageIds = listOf(R.string.error_network_coins),
