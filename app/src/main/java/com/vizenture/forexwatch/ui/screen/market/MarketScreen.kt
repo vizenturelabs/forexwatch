@@ -64,7 +64,6 @@ import com.vizenture.forexwatch.ui.insets.AppWindowInsets
 import com.vizenture.forexwatch.ui.model.TimeOfDay
 import com.vizenture.forexwatch.ui.screen.market.component.MarketDropdownMenu
 import com.vizenture.forexwatch.ui.screen.market.component.MarketPairItem
-import com.vizenture.forexwatch.ui.screen.market.component.SearchPrompt
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
@@ -326,10 +325,7 @@ private fun MarketContent(
                     )
                 }
             )
-
-            item {
-                SearchPrompt(modifier = Modifier.padding(vertical = 24.dp))
-            }
+            // Disclaimer removed from here
         }
     }
 }

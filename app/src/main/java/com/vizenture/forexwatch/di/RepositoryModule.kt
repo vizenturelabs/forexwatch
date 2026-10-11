@@ -18,8 +18,10 @@ import com.vizenture.forexwatch.data.repository.reviewPrompt.ReviewPromptReposit
 import com.vizenture.forexwatch.data.repository.searchResults.ForexSearchResultsRepository
 import com.vizenture.forexwatch.data.repository.searchResults.ForexSearchResultsRepositoryImpl
 import com.vizenture.forexwatch.data.source.local.database.ForexLocalDataSource
+import com.vizenture.forexwatch.data.source.local.database.dao.CachedChartDao
 import com.vizenture.forexwatch.data.source.local.datastore.reviewanalytics.ReviewAnalyticsLocalDataSource
 import com.vizenture.forexwatch.data.source.remote.ForexNetworkDataSource
+import com.vizenture.forexwatch.domain.manager.TerminalManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -64,7 +66,14 @@ object RepositoryModule {
     fun provideForexPairChartRepository(
         forexNetworkDataSource: ForexNetworkDataSource,
         forexChartMapper: ForexChartMapper,
-    ): ForexPairChartRepository = ForexPairChartRepositoryImpl(forexNetworkDataSource, forexChartMapper)
+        cachedChartDao: CachedChartDao,
+        terminalManager: TerminalManager
+    ): ForexPairChartRepository = ForexPairChartRepositoryImpl(
+        forexNetworkDataSource,
+        forexChartMapper,
+        cachedChartDao,
+        terminalManager
+    )
 
     @Provides
     @Singleton

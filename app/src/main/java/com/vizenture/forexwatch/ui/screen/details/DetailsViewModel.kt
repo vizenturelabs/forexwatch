@@ -7,6 +7,7 @@ import com.vizenture.forexwatch.common.Constants.PARAM_PAIR_SYMBOL
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.source.local.database.model.FavouriteSymbol
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
+import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferencesRepository
 import com.vizenture.forexwatch.domain.manager.TerminalManager
 import com.vizenture.forexwatch.domain.usecase.details.GetForexPairChartUseCase
 import com.vizenture.forexwatch.domain.usecase.details.GetForexPairDetailsUseCase
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +33,7 @@ class DetailsViewModel @Inject constructor(
     private val isForexPairFavouriteUseCase: IsForexPairFavouriteUseCase,
     private val toggleIsForexPairFavouriteUseCase: ToggleIsForexPairFavouriteUseCase,
     private val terminalManager: TerminalManager,
+    private val userPreferencesRepository: UserPreferencesRepository, // FIX: Inject Repository, not the data class
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -61,13 +64,17 @@ class DetailsViewModel @Inject constructor(
             currency = currentCurrency
         )
 
-        val pairChartFlow = chartPeriodFlow.flatMapLatest { chartPeriod ->
+        // FIX: Map the repository flow to extract the refreshInterval, then combine with chartPeriodFlow
+        val refreshIntervalFlow = userPreferencesRepository.userPreferencesFlow.map { it.refreshInterval }
+
+        val pairChartFlow = combine(chartPeriodFlow, refreshIntervalFlow) { chartPeriod, refreshInterval ->
             getForexPairChartUseCase(
                 symbol = pairSymbol,
                 chartPeriod = chartPeriod,
-                currency = currentCurrency
+                currency = currentCurrency,
+                refreshIntervalMillis = refreshInterval.millis
             )
-        }
+        }.flatMapLatest { it }
 
         val isPairFavouriteFlow = isForexPairFavouriteUseCase(
             favouriteSymbol = FavouriteSymbol(symbol = pairSymbol, terminalId = terminalId)

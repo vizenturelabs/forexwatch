@@ -7,5 +7,11 @@ import com.vizenture.forexwatch.ui.model.ChartPeriod
 import kotlinx.coroutines.flow.Flow
 
 interface ForexPairChartRepository {
-    fun getForexPairChart(symbol: String, chartPeriod: ChartPeriod, currency: Currency): Flow<Result<ForexPairChart>>
+    // FIX: Added refreshIntervalMillis parameter to match implementation
+    fun getForexPairChart(
+        symbol: String,
+        chartPeriod: ChartPeriod,
+        currency: Currency,
+        refreshIntervalMillis: Long
+    ): Flow<Result<ForexPairChart>>
 }

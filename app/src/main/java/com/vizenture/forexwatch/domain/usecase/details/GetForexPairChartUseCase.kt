@@ -11,11 +11,13 @@ import javax.inject.Inject
 class GetForexPairChartUseCase @Inject constructor(
     private val repository: ForexPairChartRepository
 ) {
+    // FIX: Added refreshIntervalMillis parameter
     operator fun invoke(
         symbol: String,
         chartPeriod: ChartPeriod,
-        currency: Currency
+        currency: Currency,
+        refreshIntervalMillis: Long
     ): Flow<Result<ForexPairChart>> {
-        return repository.getForexPairChart(symbol, chartPeriod, currency)
+        return repository.getForexPairChart(symbol, chartPeriod, currency, refreshIntervalMillis)
     }
 }

@@ -1,5 +1,6 @@
 package com.vizenture.forexwatch.data.repository.pair
 
+import android.util.Log
 import com.vizenture.forexwatch.common.Constants
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.mapper.ForexChartMapper
@@ -30,9 +31,14 @@ class ForexPairRepositoryImpl @Inject constructor(
 
                 val tdSymbol = Constants.getStandardForexSymbol(fromSymbol, Constants.BASE_CURRENCY)
 
-                // FIX: Catch exceptions per pair so one failure doesn't crash the entire list
                 try {
                     val response = forexNetworkDataSource.getQuote(tdSymbol)
+
+                    // DIAGNOSTIC: Check if Twelve Data returned an explicit error
+                    if (response.status == "error") {
+                        Log.e("ForexPairRepo", "API Error for $tdSymbol: ${response.message}")
+                    }
+
                     forexChartMapper.mapQuoteToPairDetails(response, currency)?.let { details ->
                         CurrencyPair(
                             symbol = details.symbol,
@@ -45,15 +51,23 @@ class ForexPairRepositoryImpl @Inject constructor(
                             priceChangePercentage24h = Percentage(response.percentChange?.replace("%", "") ?: "0.00"),
                             isJpyPair = details.isJpyPair
                         )
+                    } ?: run {
+                        // DIAGNOSTIC: Mapper returned null, log the raw response state
+                        Log.e("ForexPairRepo", "Mapper returned null for $tdSymbol. Close: ${response.close}, Symbol: ${response.symbol}, Status: ${response.status}")
+                        null
                     }
-                } catch (_: Exception) { // FIX: Used underscore to ignore the unused exception parameter
-                    null // Skip this pair if it fails, continue with the rest
+                } catch (e: Exception) {
+                    // DIAGNOSTIC: Network or parsing exception
+                    Log.e("ForexPairRepo", "Exception fetching $tdSymbol: ${e.message}")
+                    null
                 }
             }
 
+            Log.d("ForexPairRepo", "Successfully mapped ${pairs.size} pairs out of ${Constants.MAJOR_PAIRS.size}")
             forexLocalDataSource.updateForexPairs(terminalId, pairs)
             Result.Success(pairs)
         } catch (e: Exception) {
+            Log.e("ForexPairRepo", "Critical error fetching pairs: ${e.message}")
             Result.Error("Failed to fetch forex pairs: ${e.message}")
         }
     }
@@ -66,7 +80,7 @@ class ForexPairRepositoryImpl @Inject constructor(
                     emit(Result.Success(pairs))
                 }
             } catch (e: Exception) {
-                // FIX: Included e.message to utilize the caught exception
+                Log.e("ForexPairRepo", "Failed to load cached pairs: ${e.message}")
                 emit(Result.Error("Failed to load cached pairs: ${e.message}"))
             }
         }

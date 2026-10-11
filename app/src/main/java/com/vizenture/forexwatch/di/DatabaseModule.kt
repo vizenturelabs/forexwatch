@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.vizenture.forexwatch.common.Constants
 import com.vizenture.forexwatch.data.source.local.database.ForexDatabase
+import com.vizenture.forexwatch.data.source.local.database.dao.CachedChartDao
 import com.vizenture.forexwatch.data.source.local.database.dao.CurrencyPairDao
 import com.vizenture.forexwatch.data.source.local.database.dao.FavouriteCurrencyPairDao
 import com.vizenture.forexwatch.data.source.local.database.dao.FavouriteSymbolDao
@@ -26,7 +27,8 @@ object DatabaseModule {
             ForexDatabase::class.java,
             Constants.FOREX_DATABASE_NAME
         )
-            .fallbackToDestructiveMigration()
+            // FIX: Added 'true' to explicitly confirm dropping all tables on destructive migration
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 
@@ -46,5 +48,14 @@ object DatabaseModule {
     @Singleton
     fun provideFavouriteSymbolDao(database: ForexDatabase): FavouriteSymbolDao {
         return database.favouriteSymbolDao()
+    }
+
+    // FIX: Added @Suppress("unused") to silence the IDE warning.
+    // Hilt uses this method via annotation processing, so it appears unused to the compiler.
+    @Suppress("unused")
+    @Provides
+    @Singleton
+    fun provideCachedChartDao(database: ForexDatabase): CachedChartDao {
+        return database.cachedChartDao()
     }
 }
