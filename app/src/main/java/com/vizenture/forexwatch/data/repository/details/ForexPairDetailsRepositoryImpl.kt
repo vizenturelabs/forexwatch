@@ -1,5 +1,6 @@
 package com.vizenture.forexwatch.data.repository.details
 
+import com.vizenture.forexwatch.common.Constants
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.mapper.ForexChartMapper
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
@@ -21,8 +22,11 @@ class ForexPairDetailsRepositoryImpl @Inject constructor(
                 val fromSymbol = symbol.substring(0, 3)
                 val toSymbol = symbol.substring(3, 6)
 
-                val response = forexNetworkDataSource.getExchangeRate(fromSymbol, toSymbol)
-                val details = forexChartMapper.mapExchangeRateToDetails(response, currency)
+                // FIX: Format symbol correctly for Twelve Data
+                val tdSymbol = Constants.getStandardForexSymbol(fromSymbol, toSymbol)
+
+                val response = forexNetworkDataSource.getQuote(tdSymbol)
+                val details = forexChartMapper.mapQuoteToPairDetails(response, currency)
 
                 if (details != null) {
                     emit(Result.Success(details))
@@ -30,7 +34,7 @@ class ForexPairDetailsRepositoryImpl @Inject constructor(
                     emit(Result.Error("Failed to parse details"))
                 }
             } catch (e: Exception) {
-                emit(Result.Error("Failed to fetch details"))
+                emit(Result.Error("Failed to fetch details: ${e.message}"))
             }
         }
     }

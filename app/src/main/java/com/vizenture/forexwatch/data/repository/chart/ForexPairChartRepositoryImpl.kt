@@ -1,5 +1,6 @@
 package com.vizenture.forexwatch.data.repository.chart
 
+import com.vizenture.forexwatch.common.Constants
 import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.mapper.ForexChartMapper
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
@@ -26,19 +27,24 @@ class ForexPairChartRepositoryImpl @Inject constructor(
                 val fromSymbol = symbol.substring(0, 3)
                 val toSymbol = symbol.substring(3, 6)
 
-                val response = when (chartPeriod) {
-                    ChartPeriod.Hour, ChartPeriod.Day -> {
-                        forexNetworkDataSource.getForexIntraday(fromSymbol, toSymbol, "60min")
-                    }
-                    else -> {
-                        forexNetworkDataSource.getForexDaily(fromSymbol, toSymbol)
-                    }
+                // FIX: Format symbol correctly for Twelve Data
+                val tdSymbol = Constants.getStandardForexSymbol(fromSymbol, toSymbol)
+
+                val interval = when (chartPeriod) {
+                    ChartPeriod.Hour -> "5min"
+                    ChartPeriod.Day -> "1h"
+                    ChartPeriod.Week -> "1day"
+                    ChartPeriod.Month -> "1day"
+                    ChartPeriod.ThreeMonth -> "1day"
+                    ChartPeriod.Year -> "1week"
+                    ChartPeriod.FiveYear -> "1month"
                 }
 
+                val response = forexNetworkDataSource.getTimeSeries(tdSymbol, interval)
                 val chart = forexChartMapper.mapTimeSeriesToChart(response, currency)
                 emit(Result.Success(chart))
             } catch (e: Exception) {
-                emit(Result.Error("Failed to fetch chart data"))
+                emit(Result.Error("Failed to fetch chart data: ${e.message}"))
             }
         }
     }

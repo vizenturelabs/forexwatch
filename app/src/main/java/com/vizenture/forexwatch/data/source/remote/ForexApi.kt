@@ -1,43 +1,31 @@
 package com.vizenture.forexwatch.data.source.remote
 
-import com.google.gson.JsonObject
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageSearchResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataQuoteResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataSearchResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataTimeSeriesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ForexApi {
 
-    @GET("query")
-    suspend fun getExchangeRate(
-        @Query("function") function: String = "CURRENCY_EXCHANGE_RATE",
-        @Query("from_symbol") fromSymbol: String,
-        @Query("to_symbol") toSymbol: String
-    ): Response<AlphaVantageExchangeRateResponse>
+    // 1. Quote (Current price, 24h high/low, percent change)
+    @GET("quote")
+    suspend fun getQuote(
+        @Query("symbol") symbol: String // e.g., "EUR/USD"
+    ): Response<TwelveDataQuoteResponse>
 
-    // Bypass @JsonAdapter bugs by returning raw JsonObject
-    @GET("query")
-    suspend fun getForexIntraday(
-        @Query("function") function: String = "FX_INTRADAY",
-        @Query("from_symbol") fromSymbol: String,
-        @Query("to_symbol") toSymbol: String,
-        @Query("interval") interval: String = "60min",
-        @Query("outputsize") outputsize: String = "compact"
-    ): Response<JsonObject>
+    // 2. Time Series (Charts)
+    @GET("time_series")
+    suspend fun getTimeSeries(
+        @Query("symbol") symbol: String,
+        @Query("interval") interval: String, // 5min, 1h, 1day, etc.
+        @Query("outputsize") outputsize: Int = 100
+    ): Response<TwelveDataTimeSeriesResponse>
 
-    // Bypass @JsonAdapter bugs by returning raw JsonObject
-    @GET("query")
-    suspend fun getForexDaily(
-        @Query("function") function: String = "FX_DAILY",
-        @Query("from_symbol") fromSymbol: String,
-        @Query("to_symbol") toSymbol: String,
-        @Query("outputsize") outputsize: String = "compact"
-    ): Response<JsonObject>
-
-    @GET("query")
+    // 3. Symbol Search
+    @GET("symbol_search")
     suspend fun searchSymbols(
-        @Query("function") function: String = "SYMBOL_SEARCH",
-        @Query("keywords") keywords: String
-    ): Response<AlphaVantageSearchResponse>
+        @Query("symbol") keywords: String
+    ): Response<TwelveDataSearchResponse>
 }

@@ -28,8 +28,11 @@ class ForexPairRepositoryImpl @Inject constructor(
             val pairs = Constants.MAJOR_PAIRS.mapNotNull { fromSymbol ->
                 if (fromSymbol == Constants.BASE_CURRENCY) return@mapNotNull null
 
-                val response = forexNetworkDataSource.getExchangeRate(fromSymbol, Constants.BASE_CURRENCY)
-                forexChartMapper.mapExchangeRateToDetails(response, currency)?.let { details ->
+                // FIX: Use the helper to get the correct standard pair (e.g., USD/JPY)
+                val tdSymbol = Constants.getStandardForexSymbol(fromSymbol, Constants.BASE_CURRENCY)
+
+                val response = forexNetworkDataSource.getQuote(tdSymbol)
+                forexChartMapper.mapQuoteToPairDetails(response, currency)?.let { details ->
                     CurrencyPair(
                         symbol = details.symbol,
                         terminalId = terminalId,
@@ -38,7 +41,7 @@ class ForexPairRepositoryImpl @Inject constructor(
                         bid = details.bid,
                         ask = details.ask,
                         spread = details.spread,
-                        priceChangePercentage24h = Percentage("0.00"), // Will be 0 for now
+                        priceChangePercentage24h = Percentage(response.percentChange?.replace("%", "") ?: "0.00"),
                         isJpyPair = details.isJpyPair
                     )
                 }
@@ -47,7 +50,7 @@ class ForexPairRepositoryImpl @Inject constructor(
             forexLocalDataSource.updateForexPairs(terminalId, pairs)
             Result.Success(pairs)
         } catch (e: Exception) {
-            Result.Error("Failed to fetch forex pairs")
+            Result.Error("Failed to fetch forex pairs: ${e.message}")
         }
     }
 
@@ -59,7 +62,8 @@ class ForexPairRepositoryImpl @Inject constructor(
                     emit(Result.Success(pairs))
                 }
             } catch (e: Exception) {
-                emit(Result.Error("Failed to load cached pairs"))
+                // FIX: Included e.message to utilize the caught exception
+                emit(Result.Error("Failed to load cached pairs: ${e.message}"))
             }
         }
     }

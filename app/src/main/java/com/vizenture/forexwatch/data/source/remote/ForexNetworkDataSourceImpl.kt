@@ -1,30 +1,25 @@
 package com.vizenture.forexwatch.data.source.remote
 
-import com.google.gson.JsonObject
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageSearchResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataQuoteResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataSearchResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataTimeSeriesResponse
 import javax.inject.Inject
 
 class ForexNetworkDataSourceImpl @Inject constructor(
     private val forexApi: ForexApi
 ) : ForexNetworkDataSource {
 
-    override suspend fun getExchangeRate(fromSymbol: String, toSymbol: String): AlphaVantageExchangeRateResponse {
-        return forexApi.getExchangeRate(fromSymbol = fromSymbol, toSymbol = toSymbol).body()
-            ?: throw Exception("Failed to fetch exchange rate")
+    override suspend fun getQuote(symbol: String): TwelveDataQuoteResponse {
+        return forexApi.getQuote(symbol = symbol).body()
+            ?: throw Exception("Failed to fetch quote")
     }
 
-    override suspend fun getForexIntraday(fromSymbol: String, toSymbol: String, interval: String): JsonObject {
-        return forexApi.getForexIntraday(fromSymbol = fromSymbol, toSymbol = toSymbol, interval = interval).body()
-            ?: throw Exception("Failed to fetch intraday data")
+    override suspend fun getTimeSeries(symbol: String, interval: String): TwelveDataTimeSeriesResponse {
+        return forexApi.getTimeSeries(symbol = symbol, interval = interval).body()
+            ?: throw Exception("Failed to fetch time series")
     }
 
-    override suspend fun getForexDaily(fromSymbol: String, toSymbol: String): JsonObject {
-        return forexApi.getForexDaily(fromSymbol = fromSymbol, toSymbol = toSymbol).body()
-            ?: throw Exception("Failed to fetch daily data")
-    }
-
-    override suspend fun searchSymbols(keywords: String): AlphaVantageSearchResponse {
+    override suspend fun searchSymbols(keywords: String): TwelveDataSearchResponse {
         return forexApi.searchSymbols(keywords = keywords).body()
             ?: throw Exception("Failed to search symbols")
     }

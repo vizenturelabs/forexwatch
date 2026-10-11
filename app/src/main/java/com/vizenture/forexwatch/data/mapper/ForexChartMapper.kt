@@ -1,8 +1,8 @@
 package com.vizenture.forexwatch.data.mapper
 
-import com.google.gson.JsonObject
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
-import com.vizenture.forexwatch.data.source.remote.model.AlphaVantageExchangeRateResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataQuoteResponse
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataTimeSeriesResponse
 import com.vizenture.forexwatch.model.ForexPairChart
 import com.vizenture.forexwatch.model.ForexPairDetails
 import com.vizenture.forexwatch.model.OhlcEntry
@@ -23,38 +23,25 @@ class ForexChartMapper @Inject constructor() {
     private val dailyTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     fun mapTimeSeriesToChart(
-        apiModel: JsonObject,
+        apiModel: TwelveDataTimeSeriesResponse,
         currency: Currency
     ): ForexPairChart {
-        // CRITICAL: Check for Alpha Vantage error messages
-        val errorMessage = apiModel.get("Note")?.asString
-            ?: apiModel.get("Error Message")?.asString
-            ?: apiModel.get("Information")?.asString
-
-        if (errorMessage != null) {
-            throw Exception("Alpha Vantage API Error: $errorMessage")
+        if (apiModel.status != "ok" || apiModel.values.isNullOrEmpty()) {
+            val errorMsg = apiModel.message ?: "Unknown API error"
+            throw Exception("Twelve Data API Error: $errorMsg")
         }
 
-        val timeSeriesKey = apiModel.keySet().firstOrNull { it.startsWith("Time Series FX") }
-            ?: throw Exception("Invalid API response: Time Series FX key not found")
+        val ohlcEntries = apiModel.values.mapNotNull { candle ->
+            val open = candle.open.toBigDecimalOrNull() ?: return@mapNotNull null
+            val high = candle.high.toBigDecimalOrNull() ?: return@mapNotNull null
+            val low = candle.low.toBigDecimalOrNull() ?: return@mapNotNull null
+            val close = candle.close.toBigDecimalOrNull() ?: return@mapNotNull null
 
-        val timeSeriesObject = apiModel.getAsJsonObject(timeSeriesKey)
-            ?: throw Exception("Invalid API response: Time Series object is null")
-
-        val ohlcEntries = timeSeriesObject.entrySet().mapNotNull { (timestampStr, value) ->
-            val candle = value.asJsonObject
-            val open = candle.get("1. open")?.asString?.toBigDecimalOrNull() ?: return@mapNotNull null
-            val high = candle.get("2. high")?.asString?.toBigDecimalOrNull() ?: return@mapNotNull null
-            val low = candle.get("3. low")?.asString?.toBigDecimalOrNull() ?: return@mapNotNull null
-            val close = candle.get("4. close")?.asString?.toBigDecimalOrNull() ?: return@mapNotNull null
-
-            // FIX: Daily keys lack a time component, causing LocalDateTime.parse to fail and drop all daily entries.
-            // We must use LocalDate.parse() for daily data and convert it to the start of the day.
             val timestamp = runCatching {
-                if (timestampStr.contains(" ")) {
-                    LocalDateTime.parse(timestampStr, timeFormatter).toInstant(ZoneOffset.UTC).epochSecond
+                if (candle.datetime.contains(" ")) {
+                    LocalDateTime.parse(candle.datetime, timeFormatter).toInstant(ZoneOffset.UTC).epochSecond
                 } else {
-                    LocalDate.parse(timestampStr, dailyTimeFormatter).atStartOfDay(ZoneOffset.UTC).toEpochSecond()
+                    LocalDate.parse(candle.datetime, dailyTimeFormatter).atStartOfDay(ZoneOffset.UTC).toEpochSecond()
                 }
             }.getOrNull() ?: return@mapNotNull null
 
@@ -80,31 +67,47 @@ class ForexChartMapper @Inject constructor() {
         )
     }
 
-    fun mapExchangeRateToDetails(
-        apiModel: AlphaVantageExchangeRateResponse,
+    fun mapQuoteToPairDetails(
+        apiModel: TwelveDataQuoteResponse,
         currency: Currency
     ): ForexPairDetails? {
-        val rateData = apiModel.exchangeRate ?: return null
+        // Ensure required fields are present
+        if (apiModel.status != "ok" || apiModel.close == null || apiModel.symbol == null) return null
 
-        val bid = rateData.bidPrice.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        val ask = rateData.askPrice.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        val currentPrice = rateData.rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        // FIX: Use safe calls (?.) for all nullable String properties
+        val currentPrice = apiModel.close?.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        val open = apiModel.open?.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        val high = apiModel.high?.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        val low = apiModel.low?.toBigDecimalOrNull() ?: BigDecimal.ZERO
 
-        val isJpyPair = rateData.toSymbol == "JPY" || rateData.fromSymbol == "JPY"
+        // Twelve Data free tier doesn't explicitly provide Bid/Ask in the quote endpoint.
+        // We approximate them using the current price.
+        val bid = currentPrice
+        val ask = currentPrice
+
+        // Safely unwrap symbol and split it
+        val symbolStr = apiModel.symbol ?: return null
+        val symbols = symbolStr.split("/")
+        if (symbols.size != 2) return null
+
+        val fromSymbol = symbols[0]
+        val toSymbol = symbols[1]
+        val isJpyPair = toSymbol == "JPY" || fromSymbol == "JPY"
+
         val pipMultiplier = if (isJpyPair) BigDecimal(100) else BigDecimal(10000)
         val spread = (ask - bid) * pipMultiplier
 
         return ForexPairDetails(
-            symbol = "${rateData.fromSymbol}${rateData.toSymbol}",
-            name = "${rateData.fromName} / ${rateData.toName}",
-            description = "Real-time exchange rate for ${rateData.fromSymbol} to ${rateData.toSymbol}",
+            symbol = "$fromSymbol$toSymbol",
+            name = apiModel.instrumentName ?: "$fromSymbol / $toSymbol",
+            description = "Real-time exchange rate for $fromSymbol to $toSymbol",
             currentPrice = Price(currentPrice.toPlainString(), currency, isJpyPair),
             bid = Price(bid.toPlainString(), currency, isJpyPair),
             ask = Price(ask.toPlainString(), currency, isJpyPair),
             spread = spread.setScale(1, RoundingMode.HALF_EVEN).toDouble(),
-            open24h = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            high24h = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            low24h = Price(currentPrice.toPlainString(), currency, isJpyPair),
+            open24h = Price(open.toPlainString(), currency, isJpyPair),
+            high24h = Price(high.toPlainString(), currency, isJpyPair),
+            low24h = Price(low.toPlainString(), currency, isJpyPair),
             volume24h = 0.0,
             pipValue = 10.0,
             isJpyPair = isJpyPair
