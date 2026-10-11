@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 // 1. Quote (Used for Market Screen & Details current price)
 data class TwelveDataQuoteResponse(
     val symbol: String?,
+    val name: String?, // Added: Twelve Data returns 'name' for quotes
     @SerializedName("instrument_name") val instrumentName: String?,
     val open: String?,
     val high: String?,

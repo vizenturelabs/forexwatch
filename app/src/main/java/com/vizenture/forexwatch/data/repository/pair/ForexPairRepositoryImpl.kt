@@ -28,22 +28,26 @@ class ForexPairRepositoryImpl @Inject constructor(
             val pairs = Constants.MAJOR_PAIRS.mapNotNull { fromSymbol ->
                 if (fromSymbol == Constants.BASE_CURRENCY) return@mapNotNull null
 
-                // FIX: Use the helper to get the correct standard pair (e.g., USD/JPY)
                 val tdSymbol = Constants.getStandardForexSymbol(fromSymbol, Constants.BASE_CURRENCY)
 
-                val response = forexNetworkDataSource.getQuote(tdSymbol)
-                forexChartMapper.mapQuoteToPairDetails(response, currency)?.let { details ->
-                    CurrencyPair(
-                        symbol = details.symbol,
-                        terminalId = terminalId,
-                        name = details.name,
-                        currentPrice = details.currentPrice,
-                        bid = details.bid,
-                        ask = details.ask,
-                        spread = details.spread,
-                        priceChangePercentage24h = Percentage(response.percentChange?.replace("%", "") ?: "0.00"),
-                        isJpyPair = details.isJpyPair
-                    )
+                // FIX: Catch exceptions per pair so one failure doesn't crash the entire list
+                try {
+                    val response = forexNetworkDataSource.getQuote(tdSymbol)
+                    forexChartMapper.mapQuoteToPairDetails(response, currency)?.let { details ->
+                        CurrencyPair(
+                            symbol = details.symbol,
+                            terminalId = terminalId,
+                            name = details.name,
+                            currentPrice = details.currentPrice,
+                            bid = details.bid,
+                            ask = details.ask,
+                            spread = details.spread,
+                            priceChangePercentage24h = Percentage(response.percentChange?.replace("%", "") ?: "0.00"),
+                            isJpyPair = details.isJpyPair
+                        )
+                    }
+                } catch (_: Exception) { // FIX: Used underscore to ignore the unused exception parameter
+                    null // Skip this pair if it fails, continue with the rest
                 }
             }
 

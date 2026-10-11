@@ -71,22 +71,21 @@ class ForexChartMapper @Inject constructor() {
         apiModel: TwelveDataQuoteResponse,
         currency: Currency
     ): ForexPairDetails? {
-        // Ensure required fields are present
-        if (apiModel.status != "ok" || apiModel.close == null || apiModel.symbol == null) return null
-
-        // FIX: Use safe calls (?.) for all nullable String properties
-        val currentPrice = apiModel.close?.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        val open = apiModel.open?.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        val high = apiModel.high?.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        val low = apiModel.low?.toBigDecimalOrNull() ?: BigDecimal.ZERO
-
-        // Twelve Data free tier doesn't explicitly provide Bid/Ask in the quote endpoint.
-        // We approximate them using the current price.
-        val bid = currentPrice
-        val ask = currentPrice
-
-        // Safely unwrap symbol and split it
+        // Validate required fields early to allow smart-casting to non-null
+        val closeStr = apiModel.close ?: return null
         val symbolStr = apiModel.symbol ?: return null
+
+        if (apiModel.status == "error") return null
+
+        val currentPrice = closeStr.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        val open = apiModel.open?.toBigDecimalOrNull() ?: currentPrice
+        val high = apiModel.high?.toBigDecimalOrNull() ?: currentPrice
+        val low = apiModel.low?.toBigDecimalOrNull() ?: currentPrice
+
+        // Twelve Data free tier quote endpoint doesn't provide Bid/Ask.
+        // Spread is effectively 0.0 since we only have the mid-price (close).
+        val spread = 0.0
+
         val symbols = symbolStr.split("/")
         if (symbols.size != 2) return null
 
@@ -94,17 +93,18 @@ class ForexChartMapper @Inject constructor() {
         val toSymbol = symbols[1]
         val isJpyPair = toSymbol == "JPY" || fromSymbol == "JPY"
 
-        val pipMultiplier = if (isJpyPair) BigDecimal(100) else BigDecimal(10000)
-        val spread = (ask - bid) * pipMultiplier
+        // Handle the name field cleanly without triggering elvis warnings if it's non-nullable
+        val pairName = apiModel.name?.takeIf { it.isNotBlank() } ?: "$fromSymbol / $toSymbol"
 
         return ForexPairDetails(
             symbol = "$fromSymbol$toSymbol",
-            name = apiModel.instrumentName ?: "$fromSymbol / $toSymbol",
+            name = pairName,
             description = "Real-time exchange rate for $fromSymbol to $toSymbol",
             currentPrice = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            bid = Price(bid.toPlainString(), currency, isJpyPair),
-            ask = Price(ask.toPlainString(), currency, isJpyPair),
-            spread = spread.setScale(1, RoundingMode.HALF_EVEN).toDouble(),
+            // Inlined currentPrice directly to resolve the "variable is same" warning
+            bid = Price(currentPrice.toPlainString(), currency, isJpyPair),
+            ask = Price(currentPrice.toPlainString(), currency, isJpyPair),
+            spread = spread,
             open24h = Price(open.toPlainString(), currency, isJpyPair),
             high24h = Price(high.toPlainString(), currency, isJpyPair),
             low24h = Price(low.toPlainString(), currency, isJpyPair),

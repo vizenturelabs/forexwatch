@@ -57,8 +57,12 @@ class MarketViewModel @Inject constructor(
         ).onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    _uiState.update {
-                        it.copy(
+                    _uiState.update { currentState ->
+                        // FIX: Only trigger a network refresh if the local database is completely empty (first run)
+                        if (result.data.isEmpty() && !currentState.isRefreshing) {
+                            refreshPairs()
+                        }
+                        currentState.copy(
                             pairs = result.data.toPersistentList(),
                             isLoading = false,
                             isRefreshing = false
@@ -83,7 +87,7 @@ class MarketViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
-        refreshPairs()
+        // REMOVED: refreshPairs() was causing double-fetches and hitting the 8 req/min rate limit instantly
     }
 
     fun refreshPairs() {
