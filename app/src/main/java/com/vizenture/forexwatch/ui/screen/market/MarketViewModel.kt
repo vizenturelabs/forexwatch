@@ -1,11 +1,10 @@
 package com.vizenture.forexwatch.ui.screen.market
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vizenture.forexwatch.R
 import com.vizenture.forexwatch.common.Result
-import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.common.MarketCategory
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.domain.manager.TerminalManager
 import com.vizenture.forexwatch.domain.usecase.market.GetForexPairsUseCase
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,8 +30,8 @@ class MarketViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         MarketUiState(
             pairs = persistentListOf(),
-            pairSort = PairSort.Volume,
-            timeOfDay = TimeOfDay.Morning, // Default value for now
+            category = MarketCategory.Major,
+            timeOfDay = TimeOfDay.Morning,
             marketChangePercentage24h = null,
             currency = Currency.USD,
             isRefreshing = false,
@@ -47,18 +47,17 @@ class MarketViewModel @Inject constructor(
 
     private fun initialiseUiState() {
         val terminalId = terminalManager.getActiveTerminalId().toInt()
-        val currentSort = _uiState.value.pairSort
+        val currentCategory = _uiState.value.category
         val currentCurrency = _uiState.value.currency
 
         getForexPairsUseCase(
             terminalId = terminalId,
-            pairSort = currentSort,
+            category = currentCategory,
             currency = currentCurrency
         ).onEach { result ->
             when (result) {
                 is Result.Success -> {
                     _uiState.update { currentState ->
-                        // FIX: Only trigger a network refresh if the local database is completely empty (first run)
                         if (result.data.isEmpty() && !currentState.isRefreshing) {
                             refreshPairs()
                         }
@@ -70,8 +69,7 @@ class MarketViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    // Added logging to easily debug API failures or rate limiting from Logcat
-                    Log.e("MarketViewModel", "Error loading pairs: ${result.message}")
+                    Timber.tag("MarketViewModel").e("Error loading pairs: ${result.message}")
 
                     _uiState.update {
                         it.copy(
@@ -86,20 +84,18 @@ class MarketViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
-
-        // REMOVED: refreshPairs() was causing double-fetches and hitting the 8 req/min rate limit instantly
     }
 
     fun refreshPairs() {
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
             val terminalId = terminalManager.getActiveTerminalId().toInt()
-            getForexPairsUseCase.refresh(terminalId, _uiState.value.pairSort, _uiState.value.currency)
+            getForexPairsUseCase.refresh(terminalId, _uiState.value.category, _uiState.value.currency)
         }
     }
 
-    fun updatePairSort(pairSort: PairSort) {
-        _uiState.update { it.copy(pairSort = pairSort) }
+    fun updateMarketCategory(category: MarketCategory) {
+        _uiState.update { it.copy(category = category) }
         refreshPairs()
     }
 

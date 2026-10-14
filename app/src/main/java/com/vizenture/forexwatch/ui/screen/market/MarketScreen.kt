@@ -56,9 +56,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vizenture.forexwatch.R
 import com.vizenture.forexwatch.data.source.local.database.model.CurrencyPair
-import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.common.MarketCategory
 import com.vizenture.forexwatch.ui.component.LoadingIndicator
-import com.vizenture.forexwatch.ui.component.PairSortChip
+import com.vizenture.forexwatch.ui.component.MarketCategoryChip
 import com.vizenture.forexwatch.ui.component.ScrollToTopFab
 import com.vizenture.forexwatch.ui.insets.AppWindowInsets
 import com.vizenture.forexwatch.ui.model.TimeOfDay
@@ -81,8 +81,8 @@ fun MarketScreen(
             onNavigateDetails(pair.symbol)
         },
         onNavigateSettings = onNavigateSettings,
-        onUpdatePairSort = { pairSort ->
-            viewModel.updatePairSort(pairSort)
+        onUpdateMarketCategory = { category ->
+            viewModel.updateMarketCategory(category)
         },
         onRefresh = {
             viewModel.refreshPairs()
@@ -99,7 +99,7 @@ fun MarketScreen(
     uiState: MarketUiState,
     onPairClick: (CurrencyPair) -> Unit,
     onNavigateSettings: () -> Unit,
-    onUpdatePairSort: (PairSort) -> Unit,
+    onUpdateMarketCategory: (MarketCategory) -> Unit,
     onRefresh: () -> Unit,
     onDismissError: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -169,8 +169,8 @@ fun MarketScreen(
                     MarketContent(
                         pairs = uiState.pairs,
                         onPairClick = onPairClick,
-                        pairSort = uiState.pairSort,
-                        onUpdatePairSort = onUpdatePairSort,
+                        category = uiState.category,
+                        onUpdateMarketCategory = onUpdateMarketCategory,
                         onRefresh = onRefresh,
                         lazyListState = listState
                     )
@@ -237,8 +237,8 @@ private fun MarketTopBar(
 private fun MarketContent(
     pairs: ImmutableList<CurrencyPair>,
     onPairClick: (CurrencyPair) -> Unit,
-    pairSort: PairSort,
-    onUpdatePairSort: (PairSort) -> Unit,
+    category: MarketCategory,
+    onUpdateMarketCategory: (MarketCategory) -> Unit,
     onRefresh: () -> Unit,
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
@@ -289,11 +289,11 @@ private fun MarketContent(
                         .horizontalScroll(rememberScrollState())
                         .padding(bottom = 8.dp)
                 ) {
-                    PairSort.entries.forEach { pairSortEntry ->
-                        PairSortChip(
-                            pairSort = pairSortEntry,
-                            selected = pairSortEntry == pairSort,
-                            onClick = { onUpdatePairSort(pairSortEntry) }
+                    MarketCategory.entries.forEach { categoryEntry ->
+                        MarketCategoryChip(
+                            category = categoryEntry,
+                            selected = categoryEntry == category,
+                            onClick = { onUpdateMarketCategory(categoryEntry) }
                         )
                     }
                 }

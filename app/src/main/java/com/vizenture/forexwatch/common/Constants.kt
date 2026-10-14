@@ -21,6 +21,8 @@ object Constants {
     const val MISSING_VALUE_PLACEHOLDER = "—"
 
     val MAJOR_PAIRS = listOf("EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "NZD")
+    val MINOR_PAIRS = listOf("EUR/GBP", "EUR/JPY", "GBP/JPY", "EUR/AUD", "EUR/CAD", "EUR/CHF", "GBP/CAD", "GBP/CHF", "AUD/CAD", "AUD/NZD")
+    val EXOTIC_PAIRS = listOf("USD/TRY", "USD/ZAR", "USD/MXN", "USD/BRL", "USD/NOK", "USD/SEK", "USD/SGD", "EUR/TRY", "USD/HKD")
     const val BASE_CURRENCY = "USD"
 
     // Helper to format symbols correctly for Twelve Data

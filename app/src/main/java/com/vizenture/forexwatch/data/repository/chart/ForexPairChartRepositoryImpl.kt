@@ -13,6 +13,7 @@ import com.vizenture.forexwatch.model.Percentage
 import com.vizenture.forexwatch.ui.model.ChartPeriod
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -41,7 +42,6 @@ class ForexPairChartRepositoryImpl @Inject constructor(
         val isCacheFresh = cached != null && (System.currentTimeMillis() - cached.lastUpdated) < refreshIntervalMillis
 
         if (isCacheFresh) {
-            // FIX: Removed '!!'. Kotlin smart-casts 'cached' to non-null here.
             emit(Result.Success(mapCachedToChart(cached, currency)))
             return@flow
         }
@@ -84,6 +84,12 @@ class ForexPairChartRepositoryImpl @Inject constructor(
             }
         }
     }
+        // OPTIMIZATION: Simplified boolean expression to prevent identical cache data from triggering redundant UI updates
+        .distinctUntilChanged { oldResult, newResult ->
+            oldResult is Result.Success &&
+                newResult is Result.Success &&
+                oldResult.data.priceHistory == newResult.data.priceHistory
+        }
 
     private fun mapCachedToChart(cached: CachedChart, currency: Currency): ForexPairChart {
         val first = cached.data.first().open
