@@ -31,6 +31,11 @@ class ForexLocalDataSourceImpl @Inject constructor(
         favouriteCurrencyPairDao.updateFavouriteForexPairs(terminalId, pairs)
     }
 
+    // NEW: Implementation for bookmarked symbols
+    override fun getFavouriteSymbols(terminalId: Int): Flow<List<FavouriteSymbol>> {
+        return favouriteSymbolDao.getFavouriteSymbols(terminalId)
+    }
+
     override fun isForexPairFavourite(symbol: String, terminalId: Int): Flow<Boolean> {
         return favouriteSymbolDao.isForexPairFavourite(symbol, terminalId)
     }

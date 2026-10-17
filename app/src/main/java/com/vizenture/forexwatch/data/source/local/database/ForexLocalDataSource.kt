@@ -12,6 +12,9 @@ interface ForexLocalDataSource {
     fun getFavouriteForexPairs(terminalId: Int): Flow<List<FavouriteCurrencyPair>>
     suspend fun updateFavouriteForexPairs(terminalId: Int, pairs: List<FavouriteCurrencyPair>)
 
+    // NEW: Expose the bookmarked symbols
+    fun getFavouriteSymbols(terminalId: Int): Flow<List<FavouriteSymbol>>
+
     fun isForexPairFavourite(symbol: String, terminalId: Int): Flow<Boolean>
     suspend fun isForexPairFavouriteOneShot(symbol: String, terminalId: Int): Boolean
     suspend fun insertFavouriteSymbol(favouriteSymbol: FavouriteSymbol)

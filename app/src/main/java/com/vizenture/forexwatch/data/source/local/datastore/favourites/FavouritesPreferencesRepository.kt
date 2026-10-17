@@ -1,7 +1,7 @@
 package com.vizenture.forexwatch.data.source.local.datastore.favourites
 
 import androidx.datastore.core.DataStore
-import com.vizenture.forexwatch.data.source.local.datastore.common.PairSort
+import com.vizenture.forexwatch.data.source.local.datastore.common.MarketCategory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -15,7 +15,7 @@ class FavouritesPreferencesRepository @Inject constructor(
     val favouritesPreferencesFlow: Flow<FavouritesPreferences> = favouritesPreferencesDataStore.data
         .catch { exception ->
             if (exception is IOException) {
-                Timber.e("Error reading favourites preferences", exception)
+                Timber.e(exception, "Error reading favourites preferences")
                 emit(FavouritesPreferences())
             } else {
                 throw exception
@@ -30,10 +30,10 @@ class FavouritesPreferencesRepository @Inject constructor(
         }
     }
 
-    suspend fun updateCoinSort(coinSort: PairSort) {
-        if (coinSort != favouritesPreferencesFlow.first().coinSort) {
+    suspend fun updateCategory(category: MarketCategory) {
+        if (category != favouritesPreferencesFlow.first().category) {
             favouritesPreferencesDataStore.updateData { currentPreferences ->
-                currentPreferences.copy(coinSort = coinSort)
+                currentPreferences.copy(category = category)
             }
         }
     }

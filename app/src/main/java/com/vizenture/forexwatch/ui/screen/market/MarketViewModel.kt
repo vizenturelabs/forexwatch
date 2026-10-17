@@ -7,6 +7,7 @@ import com.vizenture.forexwatch.common.Result
 import com.vizenture.forexwatch.data.source.local.datastore.common.MarketCategory
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.domain.manager.TerminalManager
+import com.vizenture.forexwatch.domain.preferences.UpdateMarketCategoryUseCase
 import com.vizenture.forexwatch.domain.usecase.market.GetForexPairsUseCase
 import com.vizenture.forexwatch.ui.model.TimeOfDay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MarketViewModel @Inject constructor(
     private val getForexPairsUseCase: GetForexPairsUseCase,
+    private val updateMarketCategoryUseCase: UpdateMarketCategoryUseCase, // Added
     private val terminalManager: TerminalManager
 ) : ViewModel() {
 
@@ -96,6 +98,12 @@ class MarketViewModel @Inject constructor(
 
     fun updateMarketCategory(category: MarketCategory) {
         _uiState.update { it.copy(category = category) }
+
+        // Save the new category to DataStore
+        viewModelScope.launch {
+            updateMarketCategoryUseCase(category)
+        }
+
         refreshPairs()
     }
 
