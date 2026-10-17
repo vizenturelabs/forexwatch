@@ -4,5 +4,7 @@ import com.vizenture.forexwatch.navigation.NavigationBarScreen
 
 data class MainActivityUiState(
     val startScreen: NavigationBarScreen = NavigationBarScreen.Market,
-    val isLoading: Boolean = false
+    val isDarkMode: Boolean = false,
+    val isDynamicColorEnabled: Boolean = false,
+    val isLoading: Boolean = true
 )

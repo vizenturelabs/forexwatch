@@ -78,13 +78,6 @@ class ForexChartMapper @Inject constructor() {
         if (apiModel.status == "error") return null
 
         val currentPrice = closeStr.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        val open = apiModel.open?.toBigDecimalOrNull() ?: currentPrice
-        val high = apiModel.high?.toBigDecimalOrNull() ?: currentPrice
-        val low = apiModel.low?.toBigDecimalOrNull() ?: currentPrice
-
-        // Twelve Data free tier quote endpoint doesn't provide Bid/Ask.
-        // Spread is effectively 0.0 since we only have the mid-price (close).
-        val spread = 0.0
 
         val symbols = symbolStr.split("/")
         if (symbols.size != 2) return null
@@ -92,6 +85,21 @@ class ForexChartMapper @Inject constructor() {
         val fromSymbol = symbols[0]
         val toSymbol = symbols[1]
         val isJpyPair = toSymbol == "JPY" || fromSymbol == "JPY"
+
+        val pipMultiplier = if (isJpyPair) BigDecimal(100) else BigDecimal(10000)
+
+        // OPTION 3: Typical spread approximation based on the specific currency pair
+        val typicalSpreadPips = getTypicalSpreadPips(fromSymbol, toSymbol)
+        val spreadInPrice = BigDecimal(typicalSpreadPips).divide(pipMultiplier, 6, RoundingMode.HALF_EVEN)
+
+        // Derive realistic Bid and Ask prices from the mid-price (currentPrice)
+        val halfSpread = spreadInPrice.divide(BigDecimal(2), 6, RoundingMode.HALF_EVEN)
+        val bid = currentPrice.subtract(halfSpread)
+        val ask = currentPrice.add(halfSpread)
+
+        val open = apiModel.open?.toBigDecimalOrNull() ?: currentPrice
+        val high = apiModel.high?.toBigDecimalOrNull() ?: currentPrice
+        val low = apiModel.low?.toBigDecimalOrNull() ?: currentPrice
 
         // Handle the name field cleanly without triggering elvis warnings if it's non-nullable
         val pairName = apiModel.name?.takeIf { it.isNotBlank() } ?: "$fromSymbol / $toSymbol"
@@ -101,10 +109,9 @@ class ForexChartMapper @Inject constructor() {
             name = pairName,
             description = "Real-time exchange rate for $fromSymbol to $toSymbol",
             currentPrice = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            // Inlined currentPrice directly to resolve the "variable is same" warning
-            bid = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            ask = Price(currentPrice.toPlainString(), currency, isJpyPair),
-            spread = spread,
+            bid = Price(bid.toPlainString(), currency, isJpyPair),
+            ask = Price(ask.toPlainString(), currency, isJpyPair),
+            spread = typicalSpreadPips,
             open24h = Price(open.toPlainString(), currency, isJpyPair),
             high24h = Price(high.toPlainString(), currency, isJpyPair),
             low24h = Price(low.toPlainString(), currency, isJpyPair),
@@ -112,6 +119,30 @@ class ForexChartMapper @Inject constructor() {
             pipValue = 10.0,
             isJpyPair = isJpyPair
         )
+    }
+
+    private fun getTypicalSpreadPips(fromSymbol: String, toSymbol: String): Double {
+        return when (fromSymbol) {
+            "EUR" -> when (toSymbol) {
+                "USD" -> 1.2
+                "GBP", "JPY" -> 1.8
+                else -> 2.5
+            }
+            "GBP" -> when (toSymbol) {
+                "USD" -> 1.5
+                "JPY" -> 2.5
+                else -> 2.5
+            }
+            "USD" -> when (toSymbol) {
+                "JPY" -> 1.2
+                "CHF" -> 1.5
+                "CAD" -> 1.8
+                else -> 2.5
+            }
+            "AUD" -> if (toSymbol == "USD") 1.4 else 2.5
+            "NZD" -> if (toSymbol == "USD") 1.8 else 2.5
+            else -> 2.5
+        }
     }
 
     private fun calculatePercentageChange(entries: List<OhlcEntry>): Percentage {

@@ -2,7 +2,9 @@ package com.vizenture.forexwatch.ui.screen.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,12 +22,12 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.material.icons.rounded.StarRate
-import androidx.compose.material.icons.rounded.WifiTethering
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,6 +35,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
@@ -74,6 +77,12 @@ fun SettingsScreen(
         },
         onUpdateIsStartScreenSheetShown = { showSheet ->
             viewModel.updateIsStartScreenSheetShown(showSheet)
+        },
+        onUpdateIsDarkMode = { isDarkMode ->
+            viewModel.updateIsDarkMode(isDarkMode)
+        },
+        onUpdateIsDynamicColorEnabled = { isEnabled ->
+            viewModel.updateIsDynamicColorEnabled(isEnabled)
         }
     )
 }
@@ -87,6 +96,8 @@ fun SettingsScreen(
     onUpdateIsCurrencySheetShown: (Boolean) -> Unit,
     onUpdateStartScreen: (StartScreen) -> Unit,
     onUpdateIsStartScreenSheetShown: (Boolean) -> Unit,
+    onUpdateIsDarkMode: (Boolean) -> Unit,
+    onUpdateIsDynamicColorEnabled: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val currencySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -118,6 +129,10 @@ fun SettingsScreen(
                     onUpdateIsCurrencySheetShown = onUpdateIsCurrencySheetShown,
                     startScreen = uiState.startScreen,
                     onUpdateIsStartScreenSheetShown = onUpdateIsStartScreenSheetShown,
+                    isDarkMode = uiState.isDarkMode,
+                    onUpdateIsDarkMode = onUpdateIsDarkMode,
+                    isDynamicColorEnabled = uiState.isDynamicColorEnabled,
+                    onUpdateIsDynamicColorEnabled = onUpdateIsDynamicColorEnabled,
                     modifier = Modifier.padding(scaffoldPadding)
                 )
 
@@ -168,6 +183,10 @@ fun SettingsContent(
     onUpdateIsCurrencySheetShown: (Boolean) -> Unit,
     startScreen: StartScreen,
     onUpdateIsStartScreenSheetShown: (Boolean) -> Unit,
+    isDarkMode: Boolean,
+    onUpdateIsDarkMode: (Boolean) -> Unit,
+    isDynamicColorEnabled: Boolean,
+    onUpdateIsDynamicColorEnabled: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uriHandler = LocalUriHandler.current
@@ -198,12 +217,51 @@ fun SettingsContent(
                 leadingIcon = when (startScreen) {
                     StartScreen.Market -> Icons.Rounded.BarChart
                     StartScreen.Favourites -> Icons.Rounded.Favorite
-                    StartScreen.Pulse -> Icons.Rounded.WifiTethering
                     StartScreen.Search -> Icons.Rounded.Search
                 },
                 trailingIcon = Icons.Rounded.ChevronRight,
                 onClick = { onUpdateIsStartScreenSheetShown(true) }
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "Dark Mode", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        text = "Use dark theme",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = isDarkMode,
+                    onCheckedChange = { onUpdateIsDarkMode(it) }
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "Dynamic Colors", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        text = "Use wallpaper colors",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = isDynamicColorEnabled,
+                    onCheckedChange = { onUpdateIsDynamicColorEnabled(it) }
+                )
+            }
         }
 
         SettingsGroup(title = stringResource(R.string.settings_group_about)) {

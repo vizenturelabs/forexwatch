@@ -8,6 +8,8 @@ data class SettingsUiState(
     val isCurrencySheetShown: Boolean = false,
     val startScreen: StartScreen = StartScreen.Market,
     val isStartScreenSheetShown: Boolean = false,
+    val isDarkMode: Boolean = false,
+    val isDynamicColorEnabled: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 )

@@ -10,6 +10,8 @@ data class UserPreferences(
     val currency: Currency = Currency.USD,
     val startScreen: StartScreen = StartScreen.Market,
     val refreshInterval: RefreshInterval = RefreshInterval.MIN_60,
+    val isDarkMode: Boolean = false,
+    val isDynamicColorEnabled: Boolean = false,
 )
 
 // FIX: Added @param: to explicitly target the constructor parameter
@@ -23,6 +25,5 @@ enum class Currency(@param:StringRes val nameId: Int) {
 enum class StartScreen(@param:StringRes val nameId: Int) {
     Market(R.string.market_screen),
     Favourites(R.string.favourites_screen),
-    Pulse(R.string.pulse_screen),
     Search(R.string.search_screen)
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
+import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferencesRepository
 import com.vizenture.forexwatch.domain.preferences.GetUserPreferencesUseCase
 import com.vizenture.forexwatch.domain.preferences.UpdateCurrencyUseCase
 import com.vizenture.forexwatch.domain.preferences.UpdateStartScreenUseCase
@@ -22,6 +23,7 @@ class SettingsViewModel @Inject constructor(
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
     private val updateStartScreenUseCase: UpdateStartScreenUseCase,
     private val updateCurrencyUseCase: UpdateCurrencyUseCase,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState(isLoading = true))
     val uiState = _uiState.asStateFlow()
@@ -38,6 +40,8 @@ class SettingsViewModel @Inject constructor(
                 it.copy(
                     startScreen = userPreferences.startScreen,
                     currency = userPreferences.currency,
+                    isDarkMode = userPreferences.isDarkMode,
+                    isDynamicColorEnabled = userPreferences.isDynamicColorEnabled,
                     isLoading = false,
                     errorMessage = null
                 )
@@ -61,6 +65,18 @@ class SettingsViewModel @Inject constructor(
     fun updateStartScreen(startScreen: StartScreen) {
         viewModelScope.launch {
             updateStartScreenUseCase(startScreen = startScreen)
+        }
+    }
+
+    fun updateIsDarkMode(isDarkMode: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateIsDarkMode(isDarkMode)
+        }
+    }
+
+    fun updateIsDynamicColorEnabled(isEnabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateIsDynamicColorEnabled(isEnabled)
         }
     }
 

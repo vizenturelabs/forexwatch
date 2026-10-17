@@ -35,9 +35,10 @@ class MainActivityViewModel @Inject constructor(
                         startScreen = when (userPreferences.startScreen) {
                             StartScreen.Market -> NavigationBarScreen.Market
                             StartScreen.Favourites -> NavigationBarScreen.Favourites
-                            StartScreen.Pulse -> NavigationBarScreen.Pulse
                             StartScreen.Search -> NavigationBarScreen.Search
                         },
+                        isDarkMode = userPreferences.isDarkMode,
+                        isDynamicColorEnabled = userPreferences.isDynamicColorEnabled,
                         isLoading = false
                     )
                 }

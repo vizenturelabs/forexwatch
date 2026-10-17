@@ -33,11 +33,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val viewModel: MainActivityViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-            AppTheme {
-                val viewModel: MainActivityViewModel = hiltViewModel()
-                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+            AppTheme(
+                isDarkMode = uiState.isDarkMode,
+                isDynamicColorEnabled = uiState.isDynamicColorEnabled
+            ) {
                 if (!uiState.isLoading) {
                     AppNavHost(
                         navController = navController,

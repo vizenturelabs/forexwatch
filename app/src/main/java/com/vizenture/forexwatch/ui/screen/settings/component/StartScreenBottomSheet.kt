@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.WifiTethering
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
@@ -41,11 +40,6 @@ fun StartScreenBottomSheet(
                 startScreen = StartScreen.Favourites
             ),
             StartScreenOption(
-                icon = Icons.Rounded.WifiTethering,
-                labelId = StartScreen.Pulse.nameId,
-                startScreen = StartScreen.Pulse
-            ),
-            StartScreenOption(
                 icon = Icons.Rounded.Search,
                 labelId = StartScreen.Search.nameId,
                 startScreen = StartScreen.Search
@@ -72,6 +66,6 @@ fun StartScreenBottomSheet(
 
 private data class StartScreenOption(
     val icon: ImageVector,
-    @StringRes val labelId: Int,
+    @param:StringRes val labelId: Int,
     val startScreen: StartScreen,
 )

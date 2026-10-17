@@ -11,10 +11,11 @@ import javax.inject.Inject
 class UserPreferencesRepository @Inject constructor(
     private val userPreferencesDataStore: DataStore<UserPreferences>,
 ) {
+
     val userPreferencesFlow: Flow<UserPreferences> = userPreferencesDataStore.data
         .catch { exception ->
             if (exception is IOException) {
-                Timber.e("Error reading user preferences", exception)
+                Timber.e(exception, "Error reading user preferences")
                 emit(UserPreferences())
             } else {
                 throw exception
@@ -33,6 +34,22 @@ class UserPreferencesRepository @Inject constructor(
         if (startScreen != userPreferencesFlow.first().startScreen) {
             userPreferencesDataStore.updateData { currentPreferences ->
                 currentPreferences.copy(startScreen = startScreen)
+            }
+        }
+    }
+
+    suspend fun updateIsDarkMode(isDarkMode: Boolean) {
+        if (isDarkMode != userPreferencesFlow.first().isDarkMode) {
+            userPreferencesDataStore.updateData { currentPreferences ->
+                currentPreferences.copy(isDarkMode = isDarkMode)
+            }
+        }
+    }
+
+    suspend fun updateIsDynamicColorEnabled(isDynamicColorEnabled: Boolean) {
+        if (isDynamicColorEnabled != userPreferencesFlow.first().isDynamicColorEnabled) {
+            userPreferencesDataStore.updateData { currentPreferences ->
+                currentPreferences.copy(isDynamicColorEnabled = isDynamicColorEnabled)
             }
         }
     }
