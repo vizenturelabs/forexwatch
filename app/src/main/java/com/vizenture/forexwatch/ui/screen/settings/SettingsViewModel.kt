@@ -2,11 +2,9 @@ package com.vizenture.forexwatch.ui.screen.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
 import com.vizenture.forexwatch.data.source.local.datastore.global.UserPreferencesRepository
 import com.vizenture.forexwatch.domain.preferences.GetUserPreferencesUseCase
-import com.vizenture.forexwatch.domain.preferences.UpdateCurrencyUseCase
 import com.vizenture.forexwatch.domain.preferences.UpdateStartScreenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +20,6 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
     private val updateStartScreenUseCase: UpdateStartScreenUseCase,
-    private val updateCurrencyUseCase: UpdateCurrencyUseCase,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState(isLoading = true))
@@ -39,7 +36,6 @@ class SettingsViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     startScreen = userPreferences.startScreen,
-                    currency = userPreferences.currency,
                     isDarkMode = userPreferences.isDarkMode,
                     isDynamicColorEnabled = userPreferences.isDynamicColorEnabled,
                     isLoading = false,
@@ -54,12 +50,6 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun updateCurrency(currency: Currency) {
-        viewModelScope.launch {
-            updateCurrencyUseCase(currency = currency)
-        }
     }
 
     fun updateStartScreen(startScreen: StartScreen) {
@@ -80,19 +70,8 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateIsCurrencySheetShown(showSheet: Boolean) {
-        if (isAnyBottomSheetOpen() && showSheet) return
-
-        _uiState.update { it.copy(isCurrencySheetShown = showSheet) }
-    }
-
     fun updateIsStartScreenSheetShown(showSheet: Boolean) {
-        if (isAnyBottomSheetOpen() && showSheet) return
-
+        if (_uiState.value.isStartScreenSheetShown && showSheet) return
         _uiState.update { it.copy(isStartScreenSheetShown = showSheet) }
-    }
-
-    private fun isAnyBottomSheetOpen(): Boolean {
-        return _uiState.value.isCurrencySheetShown || _uiState.value.isStartScreenSheetShown
     }
 }

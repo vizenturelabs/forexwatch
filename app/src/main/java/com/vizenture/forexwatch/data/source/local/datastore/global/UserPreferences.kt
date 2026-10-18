@@ -7,18 +7,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserPreferences(
-    val currency: Currency = Currency.USD,
     val startScreen: StartScreen = StartScreen.Market,
     val refreshInterval: RefreshInterval = RefreshInterval.MIN_60,
     val isDarkMode: Boolean = false,
     val isDynamicColorEnabled: Boolean = false,
 )
 
-// FIX: Added @param: to explicitly target the constructor parameter
-enum class Currency(@param:StringRes val nameId: Int) {
-    USD(R.string.currency_usd),
-    GBP(R.string.currency_gbp),
-    EUR(R.string.currency_eur)
+enum class Currency {
+    USD,
+    GBP,
+    EUR
 }
 
 // FIX: Added @param: to explicitly target the constructor parameter

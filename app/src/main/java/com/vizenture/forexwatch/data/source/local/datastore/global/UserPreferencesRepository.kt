@@ -22,14 +22,6 @@ class UserPreferencesRepository @Inject constructor(
             }
         }
 
-    suspend fun updateCurrency(currency: Currency) {
-        if (currency != userPreferencesFlow.first().currency) {
-            userPreferencesDataStore.updateData { currentPreferences ->
-                currentPreferences.copy(currency = currency)
-            }
-        }
-    }
-
     suspend fun updateStartScreen(startScreen: StartScreen) {
         if (startScreen != userPreferencesFlow.first().startScreen) {
             userPreferencesDataStore.updateData { currentPreferences ->

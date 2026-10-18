@@ -11,12 +11,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Launch
-import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Code
-import androidx.compose.material.icons.rounded.CurrencyPound
-import androidx.compose.material.icons.rounded.Euro
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Search
@@ -45,12 +42,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vizenture.forexwatch.BuildConfig
 import com.vizenture.forexwatch.R
-import com.vizenture.forexwatch.data.source.local.datastore.global.Currency
 import com.vizenture.forexwatch.data.source.local.datastore.global.StartScreen
 import com.vizenture.forexwatch.ui.component.ErrorState
 import com.vizenture.forexwatch.ui.component.LoadingIndicator
 import com.vizenture.forexwatch.ui.insets.AppWindowInsets
-import com.vizenture.forexwatch.ui.screen.settings.component.CurrencyBottomSheet
 import com.vizenture.forexwatch.ui.screen.settings.component.SettingsGroup
 import com.vizenture.forexwatch.ui.screen.settings.component.SettingsItem
 import com.vizenture.forexwatch.ui.screen.settings.component.StartScreenBottomSheet
@@ -66,12 +61,6 @@ fun SettingsScreen(
     SettingsScreen(
         uiState = uiState,
         onNavigateUp = onNavigateUp,
-        onUpdateCurrency = { currency ->
-            viewModel.updateCurrency(currency)
-        },
-        onUpdateIsCurrencySheetShown = { showSheet ->
-            viewModel.updateIsCurrencySheetShown(showSheet)
-        },
         onUpdateStartScreen = { startScreen ->
             viewModel.updateStartScreen(startScreen)
         },
@@ -92,15 +81,12 @@ fun SettingsScreen(
 fun SettingsScreen(
     uiState: SettingsUiState,
     onNavigateUp: () -> Unit,
-    onUpdateCurrency: (Currency) -> Unit,
-    onUpdateIsCurrencySheetShown: (Boolean) -> Unit,
     onUpdateStartScreen: (StartScreen) -> Unit,
     onUpdateIsStartScreenSheetShown: (Boolean) -> Unit,
     onUpdateIsDarkMode: (Boolean) -> Unit,
     onUpdateIsDynamicColorEnabled: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val currencySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val startScreenSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
@@ -125,8 +111,6 @@ fun SettingsScreen(
 
             else -> {
                 SettingsContent(
-                    currency = uiState.currency,
-                    onUpdateIsCurrencySheetShown = onUpdateIsCurrencySheetShown,
                     startScreen = uiState.startScreen,
                     onUpdateIsStartScreenSheetShown = onUpdateIsStartScreenSheetShown,
                     isDarkMode = uiState.isDarkMode,
@@ -135,25 +119,6 @@ fun SettingsScreen(
                     onUpdateIsDynamicColorEnabled = onUpdateIsDynamicColorEnabled,
                     modifier = Modifier.padding(scaffoldPadding)
                 )
-
-                if (uiState.isCurrencySheetShown) {
-                    CurrencyBottomSheet(
-                        sheetState = currencySheetState,
-                        selectedCurrency = uiState.currency,
-                        onCurrencySelected = { currency ->
-                            onUpdateCurrency(currency)
-
-                            scope.launch {
-                                currencySheetState.hide()
-                            }.invokeOnCompletion {
-                                if (!currencySheetState.isVisible) {
-                                    onUpdateIsCurrencySheetShown(false)
-                                }
-                            }
-                        },
-                        onDismissRequest = { onUpdateIsCurrencySheetShown(false) }
-                    )
-                }
 
                 if (uiState.isStartScreenSheetShown) {
                     StartScreenBottomSheet(
@@ -179,8 +144,6 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsContent(
-    currency: Currency,
-    onUpdateIsCurrencySheetShown: (Boolean) -> Unit,
     startScreen: StartScreen,
     onUpdateIsStartScreenSheetShown: (Boolean) -> Unit,
     isDarkMode: Boolean,
@@ -199,18 +162,6 @@ fun SettingsContent(
             .background(MaterialTheme.colorScheme.surface)
     ) {
         SettingsGroup(title = stringResource(R.string.settings_group_preferences)) {
-            SettingsItem(
-                title = stringResource(R.string.settings_title_currency),
-                subtitle = stringResource(currency.nameId),
-                leadingIcon = when (currency) {
-                    Currency.USD -> Icons.Rounded.AttachMoney
-                    Currency.GBP -> Icons.Rounded.CurrencyPound
-                    Currency.EUR -> Icons.Rounded.Euro
-                },
-                trailingIcon = Icons.Rounded.ChevronRight,
-                onClick = { onUpdateIsCurrencySheetShown(true) }
-            )
-
             SettingsItem(
                 title = stringResource(R.string.settings_title_start_screen),
                 subtitle = stringResource(startScreen.nameId),
