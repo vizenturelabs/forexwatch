@@ -6,21 +6,18 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.screenshot)
 }
 
 android {
     namespace = "com.vizenture.forexwatch"
     compileSdk = 37
 
-    experimentalProperties["android.experimental.enableScreenshotTest"] = true
-
     defaultConfig {
         applicationId = "com.vizenture.forexwatch"
         minSdk = 26
         targetSdk = 37
-        versionCode = 28
-        versionName = "1.5.0"
+        versionCode = 1
+        versionName = "1.0.0"
         ndk {
             debugSymbolLevel = "FULL"
         }
@@ -31,7 +28,6 @@ android {
             useSupportLibrary = true
         }
 
-        // FIXED: Added escaped quotes around the API key value
         buildConfigField("String", "API_KEY", "\"${getApiKey()}\"")
     }
     buildTypes {
@@ -68,7 +64,6 @@ android {
         }
     }
     testOptions {
-        // MOVED: screenshotTests block removed from here
         managedDevices {
             localDevices {
                 create("pixel2api30") {
@@ -82,21 +77,9 @@ android {
     }
 }
 
-// MOVED: screenshotTests is a Project-level extension, so it must be declared outside the android {} block
-screenshotTests {
-    imageDifferenceThreshold = 0.005f // 0.5%
-}
-
 kotlin {
     jvmToolchain(17)
 }
-
-tasks.withType<Test>()
-    .matching { it.name.contains("ScreenshotTest", ignoreCase = true) }
-    .configureEach {
-        systemProperty("user.language", "en")
-        systemProperty("user.country", "US")
-    }
 
 dependencies {
     // Core
@@ -181,11 +164,6 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    // Screenshot testing
-    screenshotTestImplementation(platform(libs.androidx.compose.bom))
-    screenshotTestImplementation(libs.screenshot.validation.api)
-    screenshotTestImplementation(libs.androidx.compose.ui.tooling)
 }
 
 fun getApiKey(): String {

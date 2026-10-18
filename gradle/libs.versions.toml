@@ -26,7 +26,6 @@ retrofit = "3.0.0"
 room = "2.8.4"
 rules = "1.7.0"
 runner = "1.7.0"
-screenshot = "0.0.1-alpha15"
 timber = "5.0.1"
 truth = "1.4.5"
 
@@ -77,7 +76,6 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 play-review = { module = "com.google.android.play:review", version.ref = "play-review" }
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-screenshot-validation-api = { group = "com.android.tools.screenshot", name = "screenshot-validation-api", version.ref = "screenshot" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 truth-java8-extension = { module = "com.google.truth.extensions:truth-java8-extension", version.ref = "truth" }
@@ -89,4 +87,3 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot" }

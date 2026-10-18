@@ -29,7 +29,7 @@ fun EmptyTopBar(
             }
         },
         title = {},
-        colors = TopAppBarDefaults.largeTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
         modifier = modifier

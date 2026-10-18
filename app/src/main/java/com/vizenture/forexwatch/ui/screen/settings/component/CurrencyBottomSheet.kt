@@ -66,7 +66,7 @@ fun CurrencyBottomSheet(
 
 private data class CurrencyOption(
     val icon: ImageVector,
-    @StringRes val labelId: Int,
+    @param:StringRes val labelId: Int,
     val currency: Currency,
 )
 

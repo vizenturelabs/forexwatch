@@ -5,7 +5,7 @@ import com.vizenture.forexwatch.R
 
 sealed class NavigationBarScreen(
     val route: String,
-    @StringRes val nameResourceId: Int
+    @param:StringRes val nameResourceId: Int
 ) {
     data object Market : NavigationBarScreen(
         route = "market_screen",
@@ -15,11 +15,6 @@ sealed class NavigationBarScreen(
     data object Favourites : NavigationBarScreen(
         route = "favourites_screen",
         nameResourceId = R.string.favourites_screen
-    )
-
-    data object Pulse : NavigationBarScreen(
-        route = "pulse_screen",
-        nameResourceId = R.string.pulse_screen
     )
 
     data object Search : NavigationBarScreen(

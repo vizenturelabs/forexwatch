@@ -4,8 +4,8 @@ import androidx.annotation.StringRes
 import com.vizenture.forexwatch.R
 
 enum class ChartPeriod(
-    @StringRes val shortNameId: Int,
-    @StringRes val longNameId: Int,
+    @param:StringRes val shortNameId: Int,
+    @param:StringRes val longNameId: Int,
     val stringName: String
 ) {
     Hour(

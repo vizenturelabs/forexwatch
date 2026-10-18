@@ -191,7 +191,7 @@ fun DetailsTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.largeTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
             scrolledContainerColor = MaterialTheme.colorScheme.background
         ),
