@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#152241</color>
-    <color name="background">#152241</color>
-    <color name="primary_container">#384670</color>
-    <color name="drawable_lighter">#6F6C88</color>
-    <color name="drawable_darker">#3F3d56</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="tone_one">#97636b</color>
-    <color name="tone_two">#FFB6B6</color>
-    <color name="tone_three">#A0616A</color>
+    <color name="ic_launcher_background">#26A69A</color> <!-- TradingView Green -->
+    <color name="background">#000000</color> <!-- Matches Compose dark_background -->
+    <color name="primary_container">#121212</color> <!-- Matches Compose dark_surface -->
+    <color name="drawable_lighter">#17C683</color> <!-- PositiveGreen -->
+    <color name="drawable_darker">#EA3943</color> <!-- NegativeRed -->
+    <color name="white">#FFFFFF</color> <!-- Standard Colors -->
+    <color name="black">#000000</color> <!-- Standard Colors -->
+    <color name="tone_one">#17C683</color> <!-- PositiveGreen -->
+    <color name="tone_two">#EA3943</color> <!-- NegativeRed -->
+    <color name="tone_three">#BDBDBD</color> <!-- Neutral Gray (from onSurfaceVariant) -->
 </resources>
