@@ -43,8 +43,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideFavouriteForexPairRepository(
-        forexLocalDataSource: ForexLocalDataSource, // Removed networkDataSource and chartMapper
-    ): FavouriteForexPairRepository = FavouriteForexPairRepositoryImpl(forexLocalDataSource)
+        forexLocalDataSource: ForexLocalDataSource,
+        cachedChartDao: CachedChartDao
+    ): FavouriteForexPairRepository = FavouriteForexPairRepositoryImpl(forexLocalDataSource, cachedChartDao)
 
     @Provides
     @Singleton

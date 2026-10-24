@@ -46,7 +46,6 @@ import com.vizenture.forexwatch.model.PriceEntry
 import com.vizenture.forexwatch.ui.model.ScrubData
 import com.vizenture.forexwatch.ui.theme.NegativeRed
 import com.vizenture.forexwatch.ui.theme.PositiveGreen
-import com.vizenture.forexwatch.ui.theme.ZeroWhite
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.math.BigDecimal
@@ -60,6 +59,7 @@ private const val SCRUB_FADED_LINE_ALPHA = 0.3f
 private const val SCRUB_GLOW_ALPHA = 0.4f
 private val GRAPH_LINE_STROKE_WIDTH = 3.dp
 
+@Suppress("unused")
 @Composable
 fun ScrubPriceGraph(
     priceHistory: ImmutableList<PriceEntry>,
@@ -70,7 +70,7 @@ fun ScrubPriceGraph(
 ) {
     val prices = remember(priceHistory) { priceHistory.map { it.price }.toImmutableList() }
 
-    val baseLineColor = remember(priceChangePercentage) { priceGraphColor(priceChangePercentage) }
+    val baseLineColor = priceGraphColor(priceChangePercentage)
 
     val progress = remember(priceHistory, isGraphAnimated) {
         Animatable(if (isGraphAnimated) 0f else 1f)
@@ -262,7 +262,7 @@ fun StaticPriceGraph(
     priceChangePercentage: Percentage,
     modifier: Modifier = Modifier,
 ) {
-    val lineColor = remember(priceChangePercentage) { priceGraphColor(priceChangePercentage) }
+    val lineColor = priceGraphColor(priceChangePercentage)
 
     val fillColor = lineColor.copy(alpha = GRAPH_FILL_ALPHA)
 
@@ -285,6 +285,7 @@ fun StaticPriceGraph(
  * A line graph for non-price data (e.g. Fear & Greed history) where the caller
  * supplies the [lineColor] directly rather than deriving it from a percentage.
  */
+@Suppress("unused")
 @Composable
 fun StaticLineGraph(
     values: ImmutableList<BigDecimal>,
@@ -374,12 +375,18 @@ private fun PriceGraphCanvas(
     }
 }
 
-private fun priceGraphColor(percentage: Percentage): Color =
-    when {
+@Composable
+private fun priceGraphColor(percentage: Percentage): Color {
+    // Uses a theme-aware neutral color for 0% change or missing data.
+    // This ensures visibility in both Light and Dark modes, and supports Dynamic Color.
+    val neutralColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+    return when {
         percentage.isPositive -> PositiveGreen
         percentage.isNegative -> NegativeRed
-        else -> ZeroWhite
+        else -> neutralColor
     }
+}
 
 private fun calculateScrubIndex(
     xPosition: Float,

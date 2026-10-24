@@ -1,9 +1,14 @@
 package com.vizenture.forexwatch.ui.screen.favourites
 
 import com.vizenture.forexwatch.data.source.local.database.model.FavouriteCurrencyPair
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-sealed interface FavouritesUiState {
-    data class Success(val favourites: List<FavouriteCurrencyPair>) : FavouritesUiState
-    data class Error(val message: String?) : FavouritesUiState
-    data object Loading : FavouritesUiState
-}
+data class FavouritesUiState(
+    val favouritePairs: ImmutableList<FavouriteCurrencyPair> = persistentListOf(),
+    val isFavouritesCondensed: Boolean = false,
+    val isFavouritePairsEmpty: Boolean = true,
+    val isRefreshing: Boolean = false,
+    val isLoading: Boolean = false,
+    val errorMessageIds: List<Int> = persistentListOf(),
+)
