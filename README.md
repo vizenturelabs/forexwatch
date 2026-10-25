@@ -52,12 +52,6 @@ The app follows Google's official architecture guidance, utilizing a layered app
 - Search and filter through hundreds of Forex pairs by symbol or name.
 - Create and manage personalized watchlists of favorite currency pairs.
 
-<!-- # 🤝 Contributing -->
-
-<!-- # 📥 Contact -->
-
-<!-- # ❤️ Acknowledgements -->
-
 ## 🔖 **License**
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
