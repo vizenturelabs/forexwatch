@@ -44,10 +44,6 @@ The app follows Google's official architecture guidance, utilizing a layered app
 - Domain Layer: Contains use cases that orchestrate business logic, such as transforming Alpha Vantage time-series data.
 - Data Layer: Repositories abstract the data sources, seamlessly combining remote REST API calls with Room for offline caching.
 
-<p align="center">
-   <img src="https://github.com/shorthouse/CoinWatch/assets/73708076/d931301f-80da-4cb7-9824-bdf1d4cdfaa3" width="750">
-</p>
-
 ## ⭐ **Features**
 
 - Monitor real-time bid/ask prices and percentage changes for major Forex currency pairs.
@@ -55,14 +51,6 @@ The app follows Google's official architecture guidance, utilizing a layered app
 - Integrate seamlessly with the twelvedata API for comprehensive historical and intraday market data.
 - Search and filter through hundreds of Forex pairs by symbol or name.
 - Create and manage personalized watchlists of favorite currency pairs.
-
-## 🧬 **Testing**
-
-ForexWatch features an extensive test suite, using the following:
- - JUnit for local tests
- - Jetpack Compose testing APIs for instrumented tests
- - Truth for assertions
- - MockK for mocks
 
 <!-- # 🤝 Contributing -->
 
