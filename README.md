@@ -16,12 +16,14 @@
 
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
 
-# 📱 Download
-<!-- <a href='https://play.google.com/store/apps/details?id=dev.shorthouse.coinwatch&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
-    <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height='80'/>
-</a> -->
+## 📥 **Download**
+<div style="display: flex; align-items: center; gap: 15px;">
+  <a href="https://github.com/vizenture/forexwatch/releases">
+    <img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png" alt="Get it on GitHub" height="96" />
+  </a>
+</div>  
 
-# 🛠 Built With 
+## 🛠️ **Built with (love)** 
 - Kotlin
 - Jetpack Compose
 - Retrofit
@@ -37,7 +39,7 @@ The app is built using the latest [Android architecture components](https://deve
 - Static code analysis using Ktlint
 
 # 🧱 Architecture 
-The design of CoinWatch follows a few key principles:
+The design of ForexWatch follows a few key principles:
 1. Unidirectional Data Flow (UDF) - State flows in one direction, and events that modify the data flow in the opposite direction.
 2. Single Source of Truth (SSOT) - The SSOT is the owner of data, and only the SSOT can modify or mutate it.
 3. Drive UI from immutable data models - App data is contained within persistent data models and drives UI components.
