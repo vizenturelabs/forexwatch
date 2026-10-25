@@ -1,6 +1,7 @@
-<!-- <p align="center">
-   <img src="https://github.com/user-attachments/assets/3cc55b66-c2e5-43b1-a56e-60574e8c79bc"/>
-</p> -->
+<div align="center">
+<img width="512" height="512" alt="ic_launcher-playstore" src="https://github.com/user-attachments/assets/40106218-5f38-4213-b036-cb3e1c59ec59" />
+</div>
+
 
 # ForexWatch
 [![Android Weekly](https://img.shields.io/badge/News-Android%20Weekly%20%23636-040273?logo=android&logoColor=%233DDC84)](https://androidweekly.net/issues/issue-636)
