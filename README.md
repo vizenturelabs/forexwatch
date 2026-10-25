@@ -4,7 +4,7 @@
 
 # ForexWatch - Open-Source Android Forex App
 
-ForexWatch is providing real-time market prices, price histories, and market data. 
+ForexWatch is providing real-time market prices, price histories, and market data.
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
 
 ## 📥 **Download**
@@ -31,7 +31,7 @@ The app is built using the latest [Android architecture components](https://deve
 - Material Design 3
 - Static code analysis using Ktlint
 
-# 🧱 **Architecture**
+## 🧱 **Architecture**
 
 ForexWatch is designed around modern Android architecture principles, ensuring scalability and seamless data handling for high-frequency Forex updates.
 
