@@ -33,12 +33,16 @@ The app is built using the latest [Android architecture components](https://deve
 
 # 🧱 **Architecture**
 
-The design of ForexWatch follows a few key principles:
-1. Unidirectional Data Flow (UDF) - State flows in one direction, and events that modify the data flow in the opposite direction.
-2. Single Source of Truth (SSOT) - The SSOT is the owner of data, and only the SSOT can modify or mutate it.
-3. Drive UI from immutable data models - App data is contained within persistent data models and drives UI components.
+ForexWatch is designed around modern Android architecture principles, ensuring scalability and seamless data handling for high-frequency Forex updates.
 
-A high-level overview of the app's architecture is displayed below. The architecture follows [Google's official architecture guidance](https://developer.android.com/topic/architecture).
+1. Unidirectional Data Flow (UDF) - UI events trigger actions that update the state, which is then observed by the UI components.
+2. Single Source of Truth (SSOT) - The local Room database acts as the primary source for the UI, while the repository handles syncing with the Alpha Vantage API.
+3. Drive UI from immutable data models - Application state is represented by immutable data classes and exposed via Kotlin Flow, preventing race conditions during rapid market updates.
+
+The app follows Google's official architecture guidance, utilizing a layered approach:
+- UI Layer: Built with Jetpack Compose, strictly observing state changes and dispatching events.
+- Domain Layer: Contains use cases that orchestrate business logic, such as transforming Alpha Vantage time-series data.
+- Data Layer: Repositories abstract the data sources, seamlessly combining remote REST API calls with Room for offline caching.
 
 <p align="center">
    <img src="https://github.com/shorthouse/CoinWatch/assets/73708076/d931301f-80da-4cb7-9824-bdf1d4cdfaa3" width="750">
@@ -46,10 +50,11 @@ A high-level overview of the app's architecture is displayed below. The architec
 
 ## ⭐ **Features**
 
-- Get a list of real-time prices and price changes of the top Forex (Major, Minor, Exotic)
-- Analyse Forex currencies in detail with animated price history graphs and market stats data
-- Search through tens of Forex pairs by name or symbol
-- Create a personalized list of favourite Forex pairs
+- Monitor real-time bid/ask prices and percentage changes for major Forex currency pairs.
+- Visualize historical price action with animated charts and technical indicators.
+- Integrate seamlessly with the twelvedata API for comprehensive historical and intraday market data.
+- Search and filter through hundreds of Forex pairs by symbol or name.
+- Create and manage personalized watchlists of favorite currency pairs.
 
 ## 🧬 **Testing**
 
