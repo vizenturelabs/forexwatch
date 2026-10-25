@@ -5,8 +5,8 @@
 
 # ForexWatch
 [![Android Weekly](https://img.shields.io/badge/News-Android%20Weekly%20%23636-040273?logo=android&logoColor=%233DDC84)](https://androidweekly.net/issues/issue-636)
-[![Android CI Workflow](https://github.com/shorthouse/CoinWatch/actions/workflows/android.yml/badge.svg)](https://github.com/shorthouse/CoinWatch/actions)
-[![Release](https://img.shields.io/badge/Release-1.2.9-1397CB)](https://github.com/shorthouse/CoinWatch/releases)
+[![Android CI Workflow](https://github.com/shorthouse/CoinWatch/actions/workflows/android.yml/badge.svg)](https://github.com/shorthouse/ForexWatch/actions)
+[![Release](https://img.shields.io/badge/Release-1.2.9-1397CB)](https://github.com/shorthouse/ForexWatch/releases)
 [![License Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-%23820e82)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Medium shorthousedev](https://img.shields.io/badge/Medium-shorthousedev-%23FF5F1F)](https://medium.com/@shorthousedev)
 [![GitHub shorthouse](https://img.shields.io/badge/GitHub-shorthouse-%23D70040)](https://github.com/shorthouse)
