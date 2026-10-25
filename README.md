@@ -2,13 +2,12 @@
 <img width="128" height="128" alt="ic_launcher-playstore" src="https://github.com/user-attachments/assets/e66dd330-8229-492c-8496-b24a68ead3a6" />
 </div>
 
-
-## **ForexWatch**
-ForexWatch is an Android Forex app providing real-time market prices, price histories, and market data.
+# ForexWatch - Android Forex app providing real-time market prices, price histories, and market data.
 
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
 
 ## 📥 **Download**
+
 <div style="display: flex; align-items: center; gap: 15px;">
   <a href="https://github.com/vizenture/forexwatch/releases">
     <img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png" alt="Get it on GitHub" height="96" />
@@ -16,6 +15,7 @@ The app is built using the latest [Android architecture components](https://deve
 </div>
 
 ## 🛠️ **Built with (love)**
+
 - Kotlin
 - Jetpack Compose
 - Retrofit
@@ -31,6 +31,7 @@ The app is built using the latest [Android architecture components](https://deve
 - Static code analysis using Ktlint
 
 # 🧱 **Architecture**
+
 The design of ForexWatch follows a few key principles:
 1. Unidirectional Data Flow (UDF) - State flows in one direction, and events that modify the data flow in the opposite direction.
 2. Single Source of Truth (SSOT) - The SSOT is the owner of data, and only the SSOT can modify or mutate it.
@@ -43,12 +44,14 @@ A high-level overview of the app's architecture is displayed below. The architec
 </p>
 
 ## ⭐ **Features**
+
 - Get a list of real-time prices and price changes of the top Forex (Major, Minor, Exotic)
 - Analyse Forex currencies in detail with animated price history graphs and market stats data
 - Search through tens of Forex pairs by name or symbol
 - Create a personalized list of favourite Forex pairs
 
 ## 🧬 **Testing**
+
 ForexWatch features an extensive test suite, using the following:
  - JUnit for local tests
  - Jetpack Compose testing APIs for instrumented tests
