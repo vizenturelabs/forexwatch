@@ -2,8 +2,9 @@
 <img width="128" height="128" alt="ic_launcher-playstore" src="https://github.com/user-attachments/assets/e66dd330-8229-492c-8496-b24a68ead3a6" />
 </div>
 
-# ForexWatch - Android Forex app providing real-time market prices, price histories, and market data.
+# ForexWatch - Open-Source Android Forex App
 
+ForexWatch is providing real-time market prices, price histories, and market data. 
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
 
 ## 📥 **Download**
