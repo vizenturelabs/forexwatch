@@ -1,5 +1,5 @@
 <div align="center">
-<img width="512" height="512" alt="ic_launcher-playstore" src="https://github.com/user-attachments/assets/40106218-5f38-4213-b036-cb3e1c59ec59" />
+<img width="128" height="128" alt="ic_launcher-playstore" src="https://github.com/user-attachments/assets/40106218-5f38-4213-b036-cb3e1c59ec59" />
 </div>
 
 
