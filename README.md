@@ -21,9 +21,9 @@ The app is built using the latest [Android architecture components](https://deve
   <a href="https://github.com/vizenture/forexwatch/releases">
     <img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png" alt="Get it on GitHub" height="96" />
   </a>
-</div>  
+</div>
 
-## 🛠️ **Built with (love)** 
+## 🛠️ **Built with (love)**
 - Kotlin
 - Jetpack Compose
 - Retrofit
@@ -38,7 +38,7 @@ The app is built using the latest [Android architecture components](https://deve
 - Material Design 3
 - Static code analysis using Ktlint
 
-# 🧱 Architecture 
+# 🧱 **Architecture**
 The design of ForexWatch follows a few key principles:
 1. Unidirectional Data Flow (UDF) - State flows in one direction, and events that modify the data flow in the opposite direction.
 2. Single Source of Truth (SSOT) - The SSOT is the owner of data, and only the SSOT can modify or mutate it.
@@ -50,32 +50,26 @@ A high-level overview of the app's architecture is displayed below. The architec
    <img src="https://github.com/shorthouse/CoinWatch/assets/73708076/d931301f-80da-4cb7-9824-bdf1d4cdfaa3" width="750">
 </p>
 
-# ⭐ Features
-- Get a list of real-time prices and price changes of the top cryptocurrencies
-- Analyse coins in detail with animated price history graphs and market stats data 
-- Search through thousands of cryptocurrencies by name or symbol
-- Create a personalized list of favourite cryptocurrencies 
+## ⭐ **Features**
+- Get a list of real-time prices and price changes of the top Forex (Major, Minor, Exotic)
+- Analyse Forex currencies in detail with animated price history graphs and market stats data
+- Search through tens of Forex pairs by name or symbol
+- Create a personalized list of favourite Forex pairs
 
-# 🧬 Testing 
+## 🧬 **Testing**
 ForexWatch features an extensive test suite, using the following:
  - JUnit for local tests
  - Jetpack Compose testing APIs for instrumented tests
  - Truth for assertions
  - MockK for mocks
 
-# 🤝 Contributing 
-Contributions to the project are welcome and highly encouraged! To get started, please check out the [contributing guidelines](https://github.com/shorthouse/CoinWatch/blob/main/CONTRIBUTING.md).
+<!-- # 🤝 Contributing -->
 
-<!-- # 📥 Contact 
-Do you have ideas to improve the app or a query for the developer?
+<!-- # 📥 Contact -->
 
-Please get in touch via email - shorthousedev@gmail.com -->
+<!-- # ❤️ Acknowledgements -->
 
-<!-- # ❤️ Acknowledgements 
- - Coin data provided by [CoinRanking API](https://developers.coinranking.com/api)
- - Empty state images provided by [unDraw](https://undraw.co/illustrations) -->
-
-<!-- # 🔖 License 
+## 🔖 **License**
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -88,4 +82,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-``` -->
+```
