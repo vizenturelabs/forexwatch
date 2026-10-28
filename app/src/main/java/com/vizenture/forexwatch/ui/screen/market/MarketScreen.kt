@@ -21,7 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,10 +42,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -62,7 +60,6 @@ import com.vizenture.forexwatch.ui.component.MarketCategoryChip
 import com.vizenture.forexwatch.ui.component.ScrollToTopFab
 import com.vizenture.forexwatch.ui.insets.AppWindowInsets
 import com.vizenture.forexwatch.ui.model.TimeOfDay
-import com.vizenture.forexwatch.ui.screen.market.component.MarketDropdownMenu
 import com.vizenture.forexwatch.ui.screen.market.component.MarketPairItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -109,6 +106,7 @@ fun MarketScreen(
     val listState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     val pullRefreshState = rememberPullToRefreshState()
+
     val showScrollToTopFab by remember {
         derivedStateOf {
             listState.firstVisibleItemIndex > 1
@@ -164,7 +162,6 @@ fun MarketScreen(
                 uiState.isLoading -> {
                     LoadingIndicator()
                 }
-
                 else -> {
                     MarketContent(
                         pairs = uiState.pairs,
@@ -176,6 +173,7 @@ fun MarketScreen(
                     )
                 }
             }
+
             if (uiState.errorMessageIds.isNotEmpty()) {
                 val errorMessage = stringResource(uiState.errorMessageIds.first())
 
@@ -196,33 +194,25 @@ private fun MarketTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
-    var menuExpanded by remember { mutableStateOf(false) }
-
     TopAppBar(
         title = {
             Column(modifier = Modifier.animateContentSize()) {
                 Text(
                     text = stringResource(R.string.time_of_day_prefix_good) +
-                        " " + timeOfDay.name.lowercase(),
+                        "" + timeOfDay.name.lowercase(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
         actions = {
-            IconButton(onClick = { menuExpanded = !menuExpanded }) {
+            IconButton(onClick = onNavigateSettings) {
                 Icon(
-                    imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = stringResource(R.string.cd_more),
+                    imageVector = Icons.Rounded.Settings,
+                    contentDescription = stringResource(R.string.settings_screen),
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-
-            MarketDropdownMenu(
-                expanded = menuExpanded,
-                onDismissRequest = { menuExpanded = false },
-                onNavigateSettings = onNavigateSettings
-            )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
@@ -257,21 +247,27 @@ private fun MarketContent(
                 modifier = Modifier.size(64.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
             Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = stringResource(R.string.market_empty_state_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = stringResource(R.string.market_empty_state_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
+
             Spacer(modifier = Modifier.height(24.dp))
+
             Button(onClick = onRefresh) {
                 Text(stringResource(R.string.action_retry))
             }
@@ -298,23 +294,21 @@ private fun MarketContent(
                     }
                 }
             }
+
             items(
                 count = pairs.size,
                 key = { pairs[it].symbol },
                 itemContent = { index ->
                     val pairListItem = pairs[index]
-
                     val cardShape = when (index) {
                         0 -> MaterialTheme.shapes.medium.copy(
                             bottomStart = CornerSize(0.dp),
                             bottomEnd = CornerSize(0.dp)
                         )
-
                         pairs.lastIndex -> MaterialTheme.shapes.medium.copy(
                             topStart = CornerSize(0.dp),
                             topEnd = CornerSize(0.dp)
                         )
-
                         else -> RoundedCornerShape(0.dp)
                     }
 
@@ -325,7 +319,6 @@ private fun MarketContent(
                     )
                 }
             )
-            // Disclaimer removed from here
         }
     }
 }
