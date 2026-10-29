@@ -7,14 +7,6 @@
 ForexWatch is providing real-time market prices, price histories, and market data.
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
 
-## 📥 **Download**
-
-<div style="display: flex; align-items: center; gap: 15px;">
-  <a href="https://github.com/vizenture/forexwatch/releases">
-    <img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png" alt="Get it on GitHub" height="96" />
-  </a>
-</div>
-
 ## 🛠️ **Built with (love)**
 
 - Kotlin
@@ -51,6 +43,24 @@ The app follows Google's official architecture guidance, utilizing a layered app
 - Integrate seamlessly with the twelvedata API for comprehensive historical and intraday market data.
 - Search and filter through hundreds of Forex pairs by symbol or name.
 - Create and manage personalized watchlists of favorite currency pairs.
+
+## 📥 **Download**
+
+<div style="display: flex; align-items: center; gap: 15px;">
+  <a href="https://github.com/vizenture/forexwatch/releases">
+    <img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png" alt="Get it on GitHub" height="96" />
+  </a>
+</div>
+
+## 🚀 **Coming soon..**
+
+- [ ] Fully compliant with Google Play policies
+- [ ] Twelve Data API selection due to traffic restriction
+- [ ] Animated icons in the persistent horizontal menu
+- [ ] Real/historical time series included in the chart
+- [ ] App update notification for new version
+- [X] Pure black background with the OLED Dark Mode 
+- [X] Dynamic color for a cohesive visual experience
 
 ## 🔖 **License**
 ```
