@@ -72,6 +72,13 @@
     <string name="search_coins_hint">Search pairs</string>
     <string name="cant_find_coin_prompt">Can\'t find the pair you\'re looking for?</string>
     <string name="search_coin_prompt">Try using the search function!</string>
+    <string name="search_placeholder">Search forex pairs</string>
+    <string name="cd_search_back">Navigate back</string>
+    <string name="cd_search_clear">Clear search query</string>
+    <string name="search_query_empty_state_title">Search for a pair</string>
+    <string name="search_query_empty_state_message">Enter a currency symbol or name to find forex pairs</string>
+    <string name="search_results_empty_state_title">No results found</string>
+    <string name="search_results_empty_state_message">Try a different search term</string>
 
     <!-- Errors -->
     <string name="error_occurred">An error has occurred</string>

@@ -32,6 +32,7 @@ fun AppNavHost(
             NavigationBarScaffold(
                 startScreen = navigationBarStartScreen,
                 onNavigateDetails = { pairSymbol: String ->
+                    // Routes to DetailsScreen for any pair, regardless of bookmark status
                     navController.navigate(Screen.Details.route + "/$pairSymbol")
                 },
                 onNavigateSettings = {

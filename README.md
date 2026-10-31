@@ -28,19 +28,19 @@ The app is built using the latest [Android architecture components](https://deve
 ForexWatch is designed around modern Android architecture principles, ensuring scalability and seamless data handling for high-frequency Forex updates.
 
 1. Unidirectional Data Flow (UDF) - UI events trigger actions that update the state, which is then observed by the UI components.
-2. Single Source of Truth (SSOT) - The local Room database acts as the primary source for the UI, while the repository handles syncing with the Alpha Vantage API.
+2. Single Source of Truth (SSOT) - The local Room database acts as the primary source for the UI, while the repository handles syncing with the Twelve Data API.
 3. Drive UI from immutable data models - Application state is represented by immutable data classes and exposed via Kotlin Flow, preventing race conditions during rapid market updates.
 
 The app follows Google's official architecture guidance, utilizing a layered approach:
 - UI Layer: Built with Jetpack Compose, strictly observing state changes and dispatching events.
-- Domain Layer: Contains use cases that orchestrate business logic, such as transforming Alpha Vantage time-series data.
+- Domain Layer: Contains use cases that orchestrate business logic, such as transforming Twelve Data time-series data.
 - Data Layer: Repositories abstract the data sources, seamlessly combining remote REST API calls with Room for offline caching.
 
 ## ⭐ **Features**
 
 - Monitor real-time bid/ask prices and percentage changes for major Forex currency pairs.
 - Visualize historical price action with animated charts and technical indicators.
-- Integrate seamlessly with the twelvedata API for comprehensive historical and intraday market data.
+- Integrate seamlessly with the Twelve Data API for comprehensive historical and intraday market data.
 - Search and filter through hundreds of Forex pairs by symbol or name.
 - Create and manage personalized watchlists of favorite currency pairs.
 

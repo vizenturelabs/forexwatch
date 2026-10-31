@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -38,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.vizenture.forexwatch.ui.review.launchInAppReview
 import com.vizenture.forexwatch.ui.screen.favourites.FavouritesScreen
 import com.vizenture.forexwatch.ui.screen.market.MarketScreen
+import com.vizenture.forexwatch.ui.screen.search.SearchScreen
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
@@ -54,8 +56,8 @@ fun NavigationBarScaffold(
     val navigationBarScreens = remember {
         persistentListOf(
             NavigationBarScreen.Market,
-            NavigationBarScreen.Favourites
-            // Pulse and Search are temporarily disabled
+            NavigationBarScreen.Favourites,
+            NavigationBarScreen.Search
         )
     }
 
@@ -140,7 +142,12 @@ private fun NavigationBarNavHost(
         composable(route = NavigationBarScreen.Favourites.route) {
             FavouritesScreen(onNavigateDetails = onNavigateDetails)
         }
-        // Pulse and Search composables removed
+        composable(route = NavigationBarScreen.Search.route) {
+            SearchScreen(
+                onNavigateDetails = onNavigateDetails,
+                onNavigateUp = { navController.popBackStack() }
+            )
+        }
     }
 }
 
@@ -167,7 +174,8 @@ private fun RowScope.AddNavigationBarItem(
                 imageVector = when (screen) {
                     NavigationBarScreen.Market -> Icons.Rounded.BarChart
                     NavigationBarScreen.Favourites -> Icons.Rounded.Favorite
-                    else -> Icons.Rounded.BarChart // Fallback for disabled screens
+                    NavigationBarScreen.Search -> Icons.Rounded.Search
+                    else -> Icons.Rounded.BarChart
                 },
                 contentDescription = null
             )
