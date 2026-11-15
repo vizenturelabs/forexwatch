@@ -124,8 +124,10 @@
     <string name="currency_gbp" translatable="false">GBP</string>
     <string name="currency_eur" translatable="false">EUR</string>
 
-    <!-- Greetings -->
+    <!-- Greetings & Market Status -->
     <string name="time_of_day_prefix_good">Good</string>
+    <string name="market_status_open">Forex Market is Open</string>
+    <string name="market_status_closed">Forex Market is Closed</string>
 
     <!-- Sorting -->
     <string name="market_coin_sort_volume">Volume</string>

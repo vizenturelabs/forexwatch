@@ -11,6 +11,7 @@ data class MarketUiState(
     val pairs: ImmutableList<CurrencyPair>,
     val category: MarketCategory,
     val timeOfDay: TimeOfDay,
+    val isMarketOpen: Boolean,
     val marketChangePercentage24h: Percentage?,
     val currency: Currency,
     val isRefreshing: Boolean = false,

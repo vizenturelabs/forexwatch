@@ -117,6 +117,7 @@ fun MarketScreen(
         topBar = {
             MarketTopBar(
                 timeOfDay = uiState.timeOfDay,
+                isMarketOpen = uiState.isMarketOpen,
                 onNavigateSettings = onNavigateSettings,
                 scrollBehavior = scrollBehavior
             )
@@ -190,6 +191,7 @@ fun MarketScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun MarketTopBar(
     timeOfDay: TimeOfDay,
+    isMarketOpen: Boolean,
     onNavigateSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
@@ -199,9 +201,16 @@ private fun MarketTopBar(
             Column(modifier = Modifier.animateContentSize()) {
                 Text(
                     text = stringResource(R.string.time_of_day_prefix_good) +
-                        "" + timeOfDay.name.lowercase(),
+                        " " + timeOfDay.name.lowercase(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = stringResource(
+                        if (isMarketOpen) R.string.market_status_open else R.string.market_status_closed
+                    ),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (isMarketOpen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                 )
             }
         },

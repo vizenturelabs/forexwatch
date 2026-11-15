@@ -13,19 +13,25 @@ import com.vizenture.forexwatch.ui.model.TimeOfDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.DayOfWeek
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.minutes
 
 @HiltViewModel
 class MarketViewModel @Inject constructor(
     private val getForexPairsUseCase: GetForexPairsUseCase,
-    private val updateMarketCategoryUseCase: UpdateMarketCategoryUseCase, // Added
+    private val updateMarketCategoryUseCase: UpdateMarketCategoryUseCase,
     private val terminalManager: TerminalManager
 ) : ViewModel() {
 
@@ -33,7 +39,8 @@ class MarketViewModel @Inject constructor(
         MarketUiState(
             pairs = persistentListOf(),
             category = MarketCategory.Major,
-            timeOfDay = TimeOfDay.Morning,
+            timeOfDay = TimeOfDay.current(),
+            isMarketOpen = isForexMarketOpen(),
             marketChangePercentage24h = null,
             currency = Currency.USD,
             isRefreshing = false,
@@ -41,10 +48,39 @@ class MarketViewModel @Inject constructor(
             isLoading = true
         )
     )
+
     val uiState = _uiState.asStateFlow()
 
     init {
         initialiseUiState()
+        observeTimeChanges()
+    }
+
+    private fun observeTimeChanges() {
+        viewModelScope.launch {
+            while (isActive) {
+                delay(1.minutes) // Update every minute
+                _uiState.update {
+                    it.copy(
+                        timeOfDay = TimeOfDay.current(),
+                        isMarketOpen = isForexMarketOpen()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun isForexMarketOpen(): Boolean {
+        // Forex market is generally open 24/5 (Sunday 22:00 UTC to Friday 22:00 UTC)
+        val now = ZonedDateTime.now(ZoneId.of("UTC"))
+        val day = now.dayOfWeek
+        val hour = now.hour
+        return when (day) {
+            DayOfWeek.SATURDAY -> false
+            DayOfWeek.SUNDAY -> hour >= 22
+            DayOfWeek.FRIDAY -> hour < 22
+            else -> true
+        }
     }
 
     private fun initialiseUiState() {
