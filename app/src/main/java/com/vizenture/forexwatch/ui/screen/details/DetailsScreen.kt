@@ -39,6 +39,7 @@ import com.vizenture.forexwatch.R
 import com.vizenture.forexwatch.model.ForexPairChart
 import com.vizenture.forexwatch.model.ForexPairDetails
 import com.vizenture.forexwatch.ui.component.ErrorState
+import com.vizenture.forexwatch.ui.component.IndicatorPoint
 import com.vizenture.forexwatch.ui.component.LoadingIndicator
 import com.vizenture.forexwatch.ui.insets.AppWindowInsets
 import com.vizenture.forexwatch.ui.model.ChartPeriod
@@ -51,6 +52,8 @@ fun DetailsScreen(
     onNavigateUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val selectedIndicator by viewModel.selectedIndicator.collectAsStateWithLifecycle()
+    val indicatorData by viewModel.indicatorData.collectAsStateWithLifecycle()
 
     DetailsScreen(
         uiState = uiState,
@@ -58,7 +61,10 @@ fun DetailsScreen(
         onClickFavouritePair = { viewModel.toggleIsPairFavourite() },
         onClickChartPeriod = { chartPeriod ->
             viewModel.updateChartPeriod(chartPeriod)
-        }
+        },
+        selectedIndicator = selectedIndicator,
+        onSelectIndicator = { viewModel.updateSelectedIndicator(it) },
+        indicatorData = indicatorData
     )
 }
 
@@ -69,6 +75,9 @@ fun DetailsScreen(
     onNavigateUp: () -> Unit,
     onClickFavouritePair: () -> Unit,
     onClickChartPeriod: (ChartPeriod) -> Unit,
+    selectedIndicator: TechnicalIndicator,
+    onSelectIndicator: (TechnicalIndicator) -> Unit,
+    indicatorData: List<IndicatorPoint>,
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(),
 ) {
@@ -105,6 +114,9 @@ fun DetailsScreen(
                     pairChart = uiState.pairChart,
                     chartPeriod = uiState.chartPeriod,
                     onClickChartPeriod = onClickChartPeriod,
+                    selectedIndicator = selectedIndicator,
+                    onSelectIndicator = onSelectIndicator,
+                    indicatorData = indicatorData,
                     scrollState = scrollState,
                     modifier = Modifier.padding(scaffoldPadding)
                 )
@@ -206,6 +218,9 @@ fun DetailsContent(
     pairChart: ForexPairChart,
     chartPeriod: ChartPeriod,
     onClickChartPeriod: (ChartPeriod) -> Unit,
+    selectedIndicator: TechnicalIndicator,
+    onSelectIndicator: (TechnicalIndicator) -> Unit,
+    indicatorData: List<IndicatorPoint>,
     scrollState: ScrollState,
     modifier: Modifier = Modifier,
 ) {
@@ -217,13 +232,14 @@ fun DetailsContent(
             .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
     ) {
         ForexPairChartCard(
-            currentPrice = pairDetails.currentPrice,
+            pairDetails = pairDetails,
             pairChart = pairChart,
             chartPeriod = chartPeriod,
-            onClickChartPeriod = onClickChartPeriod
+            onClickChartPeriod = onClickChartPeriod,
+            selectedIndicator = selectedIndicator,
+            onSelectIndicator = onSelectIndicator,
+            indicatorData = indicatorData
         )
-
-        // ForexMarketStatsCard removed as it is not applicable for Forex pairs
     }
 }
 

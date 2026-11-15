@@ -117,7 +117,15 @@ class ForexChartMapper @Inject constructor() {
             low24h = Price(low.toPlainString(), currency, isJpyPair),
             volume24h = 0.0,
             pipValue = 10.0,
-            isJpyPair = isJpyPair
+            isJpyPair = isJpyPair,
+            // NEW: Map Raw Quote Data fields
+            previousClose = Price(
+                apiModel.previousClose?.toBigDecimalOrNull()?.toPlainString() ?: currentPrice.toPlainString(),
+                currency,
+                isJpyPair
+            ),
+            absoluteChange = apiModel.change ?: "0.00",
+            lastUpdateTime = apiModel.datetime ?: "N/A"
         )
     }
 

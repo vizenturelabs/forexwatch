@@ -1,10 +1,12 @@
 package com.vizenture.forexwatch.data.source.remote
 
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataIndicatorResponse
 import com.vizenture.forexwatch.data.source.remote.model.TwelveDataQuoteResponse
 import com.vizenture.forexwatch.data.source.remote.model.TwelveDataSearchResponse
 import com.vizenture.forexwatch.data.source.remote.model.TwelveDataTimeSeriesResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ForexApi {
@@ -28,4 +30,15 @@ interface ForexApi {
     suspend fun searchSymbols(
         @Query("symbol") keywords: String
     ): Response<TwelveDataSearchResponse>
+
+    // 4. Technical Indicators (SMA, EMA, RSI, etc.)
+    // FIX: Added dynamic endpoint routing for technical indicators
+    @GET("{endpoint}")
+    suspend fun getTechnicalIndicator(
+        @Path("endpoint") endpoint: String, // e.g., "sma", "ema", "rsi"
+        @Query("symbol") symbol: String,
+        @Query("interval") interval: String,
+        @Query("time_period") timePeriod: Int,
+        @Query("outputsize") outputsize: Int = 100
+    ): Response<TwelveDataIndicatorResponse>
 }

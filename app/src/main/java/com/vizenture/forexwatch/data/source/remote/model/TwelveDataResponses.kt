@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 // 1. Quote (Used for Market Screen & Details current price)
 data class TwelveDataQuoteResponse(
     val symbol: String?,
-    val name: String?, // Added: Twelve Data returns 'name' for quotes
+    val name: String?,
     @SerializedName("instrument_name") val instrumentName: String?,
     val open: String?,
     val high: String?,
@@ -13,7 +13,7 @@ data class TwelveDataQuoteResponse(
     val close: String?,
     @SerializedName("previous_close") val previousClose: String?,
     val change: String?,
-    @SerializedName("percent_change") val percentChange: String?, // e.g., "-0.270%"
+    @SerializedName("percent_change") val percentChange: String?,
     val datetime: String?,
     val timestamp: Long?,
     val status: String?,
@@ -25,7 +25,7 @@ data class TwelveDataTimeSeriesResponse(
     val meta: TwelveDataMeta?,
     val values: List<TwelveDataCandle>?,
     val status: String?,
-    val message: String? // Error message if status != "ok"
+    val message: String?
 )
 
 data class TwelveDataMeta(
@@ -36,7 +36,7 @@ data class TwelveDataMeta(
 )
 
 data class TwelveDataCandle(
-    val datetime: String, // "2023-10-26" or "2023-10-26 14:00:00"
+    val datetime: String,
     val open: String,
     val high: String,
     val low: String,
@@ -56,3 +56,23 @@ data class TwelveDataSearchResult(
     val exchange: String?,
     @SerializedName("instrument_type") val instrumentType: String?
 )
+
+// 4. Technical Indicators (Used for Chart Overlays)
+data class TwelveDataIndicatorResponse(
+    val values: List<IndicatorValue>?,
+    val status: String?,
+    val message: String?
+)
+
+// FIX: Twelve Data returns indicator-specific field names (sma, ema, rsi),
+// NOT a generic "value" field. Added all possible fields and a computed
+// property that returns whichever one is present.
+data class IndicatorValue(
+    val datetime: String,
+    val sma: String?,
+    val ema: String?,
+    val rsi: String?
+) {
+    val value: String?
+        get() = sma ?: ema ?: rsi
+}

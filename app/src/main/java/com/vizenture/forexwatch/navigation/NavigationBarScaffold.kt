@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.BarChart
+import androidx.compose.material.icons.rounded.CandlestickChart
 import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.QueryStats
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -172,10 +172,9 @@ private fun RowScope.AddNavigationBarItem(
         icon = {
             Icon(
                 imageVector = when (screen) {
-                    NavigationBarScreen.Market -> Icons.Rounded.BarChart
+                    NavigationBarScreen.Market -> Icons.Rounded.CandlestickChart
                     NavigationBarScreen.Favourites -> Icons.Rounded.Favorite
-                    NavigationBarScreen.Search -> Icons.Rounded.Search
-                    else -> Icons.Rounded.BarChart
+                    NavigationBarScreen.Search -> Icons.Rounded.QueryStats
                 },
                 contentDescription = null
             )

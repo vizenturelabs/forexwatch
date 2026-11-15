@@ -13,5 +13,9 @@ data class ForexPairDetails(
     val low24h: Price,
     val volume24h: Double,
     val pipValue: Double,
-    val isJpyPair: Boolean = false
+    val isJpyPair: Boolean,
+    // Category 1: Raw Quote Data
+    val previousClose: Price,
+    val absoluteChange: String,
+    val lastUpdateTime: String
 )

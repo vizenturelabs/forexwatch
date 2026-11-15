@@ -50,12 +50,9 @@ fun SearchScreen(
     onUpdateQuery: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val queryState = when (uiState) {
-        is SearchUiState.Idle -> uiState.queryState
-        is SearchUiState.Success -> uiState.queryState
-        is SearchUiState.Error -> uiState.queryState
-        is SearchUiState.Loading -> ""
-    }
+    // FIX: Always use uiState.queryState.
+    // Previously, Loading returned "", which cleared the SearchBar text and caused infinite recompositions/crashes.
+    val queryState = uiState.queryState
 
     Column(modifier = modifier.fillMaxSize()) {
         SearchBar(

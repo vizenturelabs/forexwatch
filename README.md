@@ -57,10 +57,10 @@ The app follows Google's official architecture guidance, utilizing a layered app
 - [ ] Fully compliant with Google Play policies
 - [ ] Twelve Data API selection due to traffic restriction
 - [ ] Animated icons in the persistent horizontal menu
-- [ ] Real/historical time series included with the chart
-- [ ] Multiple Technical Indicators selection with the chart
+- [X] Real/historical time series included with the chart
+- [X] Multiple Technical Indicators selection with the chart
 - [ ] App update notification for new version
-- [X] Pure black background with the OLED Dark Mode 
+- [X] Pure black background with the OLED Dark Mode
 - [X] Dynamic color for a cohesive visual experience
 
 ## 🔖 **License**

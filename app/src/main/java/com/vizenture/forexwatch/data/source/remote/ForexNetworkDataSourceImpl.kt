@@ -1,5 +1,6 @@
 package com.vizenture.forexwatch.data.source.remote
 
+import com.vizenture.forexwatch.data.source.remote.model.TwelveDataIndicatorResponse
 import com.vizenture.forexwatch.data.source.remote.model.TwelveDataQuoteResponse
 import com.vizenture.forexwatch.data.source.remote.model.TwelveDataSearchResponse
 import com.vizenture.forexwatch.data.source.remote.model.TwelveDataTimeSeriesResponse
@@ -22,5 +23,20 @@ class ForexNetworkDataSourceImpl @Inject constructor(
     override suspend fun searchSymbols(keywords: String): TwelveDataSearchResponse {
         return forexApi.searchSymbols(keywords = keywords).body()
             ?: throw Exception("Failed to search symbols")
+    }
+
+    // FIX: Implemented the missing technical indicator network call
+    override suspend fun getTechnicalIndicator(
+        symbol: String,
+        interval: String,
+        endpoint: String,
+        timePeriod: Int
+    ): TwelveDataIndicatorResponse {
+        return forexApi.getTechnicalIndicator(
+            endpoint = endpoint,
+            symbol = symbol,
+            interval = interval,
+            timePeriod = timePeriod
+        ).body() ?: throw Exception("Failed to fetch technical indicator")
     }
 }
